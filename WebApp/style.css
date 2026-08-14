@@ -42,7 +42,7 @@ body {
     height: 3vmin;
     border-radius: 50%;
     transition: .3s;
-    border: 0.2vmin solid red;
+    border: 0.3vmin solid;
     z-index: 2;
 }
 
@@ -71,6 +71,26 @@ body {
         transform: translate(-50%, -50%) scale(1);
     }
     
+}
+
+@keyframes buttonHover {
+    
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(0.9);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
 }
 
 .data-frame {
@@ -107,7 +127,30 @@ body {
     background-image: url("./images/LuggageBig.png");
     background-size: cover;
     background-position: 50% -50%;
-    margin-right: 10px;
+    margin-right: 0.1vmin;
+}
+
+.settings-entry input[type=checkbox] {
+    width: 1.5vmin;
+}
+
+.settings-buttons {
+    display: flex;
+    margin-left: 10%;
+    width: 80%;
+    gap: 10%;
+}
+
+button {
+    width: 12vmin;
+    font-size: 1.2vmin;
+    border: none;
+}
+
+button:hover {
+    cursor: pointer;
+    animation-name: buttonHover;
+    animation-duration: 0.8s;
 }
 
 #item-popup {

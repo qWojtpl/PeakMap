@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEAK Map</title>
+    <meta name="description" content="PEAK Game - Daily Map & Item Locations">
+    <meta name="keywords" content="PEAK,PEAK Game,PEAK,PEAK Map,Daily map,Daily,PEAK Daily Map">
+    <meta property="og:title" content="PEAK Game - Daily Map & Item Locations">
+    <meta property="og:description" content="Check the daily map with item locations for the PEAK game. Updated daily!">
+    <meta property="og:type" content="website">
+    <meta name="robots" content="index, follow">
+    <title>PEAK Daily Map</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
@@ -17,8 +23,16 @@
                 </label>
                 <input type="checkbox" id="luggage-checkbox" onchange="switchLuggage(this)" checked>
             </div>
-            <button onclick="previousLevel()">Previous level</button>
-            <button onclick="nextLevel()">Next level</button>
+            <div class="settings-entry">
+                <label for="belltowers-checkbox">
+                    <span></span>Belltowers
+                </label>
+                <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
+            </div>
+            <div class="settings-buttons">
+                <button onclick="previousLevel()">Previous level</button>
+                <button onclick="nextLevel()">Next level</button>
+            </div>
         </div>
         <div id="item-popup">
             <span id="item-popup-image"></span>
@@ -26,5 +40,6 @@
         </div>
     </div>
     <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="createLuggage(this)"></iframe>
+    <iframe id="belltowers-frame" class="data-frame" src="./data/level_0_belltowers.json" onload="createBelltowers(this)"></iframe>
 </body>
 </html>

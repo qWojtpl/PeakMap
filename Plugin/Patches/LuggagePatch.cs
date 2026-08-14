@@ -15,7 +15,7 @@ public class LuggagePatch
     [HarmonyPostfix]
     public static void AwakePostfix(Luggage __instance)
     {
-        LuggageDataManager.LuggageList.Add(new LuggageInfo
+        LuggageDataManager.LuggageList.Add(new ObjectInfo
         {
             Name = __instance.name,
             Position = __instance.transform.position

@@ -14,25 +14,33 @@ public static class ScreenshotManager
     private static readonly List<Vector3> CameraPositions = new()
     {
         new Vector3(0f, 100f, -500f),
-        new Vector3(0f, 300f, 200f),
+        new Vector3(0f, 500f, 200f),
+        new Vector3(0f, 600f, 750f),
+        new Vector3(0f, 1050f, 1450f),
     };
 
     private static readonly List<Vector3> CameraRotations = new()
     {
         new Vector3(0f, 0f, 0f),
+        new Vector3(45f, 0f, 0f),
         new Vector3(0f, 0f, 0f),
+        new Vector3(75f, 0f, 0f),
     };
 
     private static readonly List<float> CameraFOVs = new()
     {
         45f,
+        90f,
+        90f,
         90f
     };
 
     public static readonly List<float> LevelWidths = new()
     {
         100f,
-        400f
+        400f,
+        800f,
+        1000f
     };
 
     private static int ResolutionWidth { get; set; } = 7680;
@@ -51,9 +59,14 @@ public static class ScreenshotManager
         GameObject heavyGameObject = Singleton<MapHandler>.Instance?.segments?[level]?.segmentParent;
         if (heavyGameObject != null)
         {
+            GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
+            
+            LevelWidths[level] = campfire.transform.position.z;
+            
+            PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level]);
+            
             PhotonNetwork.IsMessageQueueRunning = false;
             heavyGameObject.SetActive(true);
-            Debug.Log("activating", heavyGameObject);
             PhotonNetwork.IsMessageQueueRunning = true;
         }
         else

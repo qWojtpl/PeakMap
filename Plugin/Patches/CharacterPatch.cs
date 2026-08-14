@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+
 using HarmonyLib;
 using PeakMap.Managers;
 
@@ -12,10 +12,11 @@ public class CharacterPatch
     [HarmonyPostfix]
     public static void StartPostfix()
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
             ScreenshotManager.TakeScreenshot(i);
             LuggageDataManager.CreateLuggageData(i);
+            BelltowersDataManager.CreateBelltowersData(i);
         }
     }
     
