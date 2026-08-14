@@ -33,6 +33,9 @@
       <Reference Include="UnityEngine.ImageConversionModule">
         <HintPath>bin\UnityEngine.ImageConversionModule.dll</HintPath>
       </Reference>
+      <Reference Include="Zorro.Core.Runtime">
+        <HintPath>bin\Zorro.Core.Runtime.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>

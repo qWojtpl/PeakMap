@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -22,10 +23,17 @@ public static class LuggageDataManager
                 info.PositionOnScreen = positionOnScreen;
             }
         }
+
+        float previousWidth = -500;
+        if(level > 0) {
+            previousWidth = ScreenshotManager.LevelWidths[level - 1];
+        }
         
         File.WriteAllText(
             Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + "_luggage.json"), 
-            JsonConvert.SerializeObject(LuggageList.Where(n => n.PositionOnScreen != null))
+            JsonConvert.SerializeObject(LuggageList
+                .Where(n => n.Position.z <= ScreenshotManager.LevelWidths[level] && n.Position.z > previousWidth)
+                .Where(n => n.PositionOnScreen != null))
         );
         
     }

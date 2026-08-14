@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    overflow-y: hidden;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+}
+
+.image-container .level-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.point {
+    position: absolute;
+    left: calc((var(--x) / 7630) * 100%);
+    top: calc((var(--y) / 4320) * 100%);
+    transform: translate(-50%, -50%);
+    background-size: cover;
+    background-position: 50% -50%;
+    backdrop-filter: blur(10px);
+    width: 1.5vw;
+    height: 1.5vw;
+    border-radius: 1vw;
+    transition: .3s;
+    border: 0.2vw solid red;
+    z-index: 1;
+}
+
+.point:hover {
+    cursor: pointer;
+    animation-name: pointHover;
+    animation-duration: 0.8s;
+    z-index: 2;
+}
+
+@keyframes pointHover {
+
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    20% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    
+}
+
+.data-frame {
+    display: none;
+}

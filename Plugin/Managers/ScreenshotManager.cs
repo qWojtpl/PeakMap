@@ -1,42 +1,68 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Photon.Pun;
 using UnityEngine;
+using Zorro.Core;
 
 namespace PeakMap.Managers;
 
 public static class ScreenshotManager
 {
-    
-    private static bool _screenShotEnabled = true;
 
     private static readonly List<Vector3> CameraPositions = new()
     {
-        new Vector3(0f, 100f, -300f),
+        new Vector3(0f, 100f, -500f),
+        new Vector3(0f, 300f, 200f),
     };
 
     private static readonly List<Vector3> CameraRotations = new()
     {
         new Vector3(0f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
     };
 
     private static readonly List<float> CameraFOVs = new()
     {
-        60f
+        45f,
+        90f
+    };
+
+    public static readonly List<float> LevelWidths = new()
+    {
+        100f,
+        400f
     };
 
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
+    
+    private static List<int> _takenScreenshots = new();
 
     public static void TakeScreenshot(int level)
     {
-        if (!_screenShotEnabled)
+        if (_takenScreenshots.Contains(level))
         {
             return;
         }
         
-        _screenShotEnabled = false;
+        GameObject heavyGameObject = Singleton<MapHandler>.Instance?.segments?[level]?.segmentParent;
+        if (heavyGameObject != null)
+        {
+            PhotonNetwork.IsMessageQueueRunning = false;
+            heavyGameObject.SetActive(true);
+            Debug.Log("activating", heavyGameObject);
+            PhotonNetwork.IsMessageQueueRunning = true;
+        }
+        else
+        {
+            return;
+        }
         
+        _takenScreenshots.Add(level);
+
         GameObject tempCamObj = CreateTempCameraGameObject(level);
         Camera tempCam = CreateTempCamera(level, tempCamObj);
         
@@ -100,6 +126,7 @@ public static class ScreenshotManager
         Camera tempCam = tempCamObj.AddComponent<Camera>();
         tempCam.clearFlags = CameraClearFlags.Skybox;
         tempCam.fieldOfView = CameraFOVs[level];
+        tempCam.aspect = (float)ResolutionWidth / ResolutionHeight;
         return tempCam;
     }
     

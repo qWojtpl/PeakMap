@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEAK Map</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="image-container" id="container">
+        <img class="level-image" src="data/level_0.png" alt="Map">
+    </div>
+    <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="updateLuggage(this)"></iframe>
+</body>
+</html>
