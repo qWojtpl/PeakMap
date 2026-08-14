@@ -19,6 +19,6 @@ public class LuggageInfo
     public float[] PositionArray => new[] {Position.x, Position.y, Position.z };
     
     [JsonProperty("PositionOnScreen")]
-    public int[] PositionOnScreenArray => PositionOnScreen.HasValue ? new[] { (int) PositionOnScreen.Value.x, (int) PositionOnScreen.Value.y } : null;
+    public float[] PositionOnScreenArray => PositionOnScreen.HasValue ? new[] { PositionOnScreen.Value.x, PositionOnScreen.Value.y } : null;
 
 }

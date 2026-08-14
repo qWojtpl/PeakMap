@@ -9,8 +9,22 @@
 </head>
 <body>
     <div class="image-container" id="container">
-        <img class="level-image" src="data/level_0.png" alt="Map">
+        <img class="level-image" id="map" src="./data/level_0.png" alt="Map">
+        <div id="settings">
+            <div class="settings-entry">
+                <label for="luggage-checkbox">
+                    <span></span>Luggage
+                </label>
+                <input type="checkbox" id="luggage-checkbox" onchange="switchLuggage(this)" checked>
+            </div>
+            <button onclick="previousLevel()">Previous level</button>
+            <button onclick="nextLevel()">Next level</button>
+        </div>
+        <div id="item-popup">
+            <span id="item-popup-image"></span>
+            <p id="item-popup-name"></p>
+        </div>
     </div>
-    <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="updateLuggage(this)"></iframe>
+    <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="createLuggage(this)"></iframe>
 </body>
 </html>
