@@ -49,6 +49,15 @@ public static class ScreenshotManager
     
     private static List<int> _takenScreenshots = new();
 
+    public static void SetupWidth(int level)
+    {
+        GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
+            
+        LevelWidths[level] = campfire.transform.position.z;
+            
+        PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level]);
+    }
+    
     public static void TakeScreenshot(int level)
     {
         if (_takenScreenshots.Contains(level))
@@ -59,12 +68,6 @@ public static class ScreenshotManager
         GameObject heavyGameObject = Singleton<MapHandler>.Instance?.segments?[level]?.segmentParent;
         if (heavyGameObject != null)
         {
-            GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
-            
-            LevelWidths[level] = campfire.transform.position.z;
-            
-            PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level]);
-            
             PhotonNetwork.IsMessageQueueRunning = false;
             heavyGameObject.SetActive(true);
             PhotonNetwork.IsMessageQueueRunning = true;
