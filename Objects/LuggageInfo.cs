@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace PeakMap.Objects;
@@ -6,10 +7,18 @@ namespace PeakMap.Objects;
 public class LuggageInfo
 {
     
-    public static List<LuggageInfo> LuggageList = new();
-    
     public string Name { get; set; }
-    public Vector3 Position { get; set; }
-    public Vector2 PositionOnScreen { get; set; }
     
+    [JsonIgnore]
+    public Vector3 Position { get; set; }
+    
+    [JsonIgnore]
+    public Vector2? PositionOnScreen { get; set; }
+    
+    [JsonProperty("Position")]
+    public float[] PositionArray => new[] {Position.x, Position.y, Position.z };
+    
+    [JsonProperty("PositionOnScreen")]
+    public int[] PositionOnScreenArray => PositionOnScreen.HasValue ? new[] { (int) PositionOnScreen.Value.x, (int) PositionOnScreen.Value.y } : null;
+
 }

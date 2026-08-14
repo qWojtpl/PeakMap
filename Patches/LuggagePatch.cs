@@ -1,4 +1,5 @@
 using HarmonyLib;
+using PeakMap.Managers;
 using PeakMap.Objects;
 
 namespace PeakMap.Patches;
@@ -14,7 +15,7 @@ public class LuggagePatch
     [HarmonyPostfix]
     public static void AwakePostfix(Luggage __instance)
     {
-        LuggageInfo.LuggageList.Add(new LuggageInfo
+        LuggageDataManager.LuggageList.Add(new LuggageInfo
         {
             Name = __instance.GetName(),
             Position = __instance.transform.position

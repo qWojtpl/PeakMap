@@ -22,20 +22,21 @@ public class ScreenshotManager
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
+    private static float CameraFOV { get; set; } = 60f;
 
-    public static void TakeScreenshot(int position)
+    public static void TakeScreenshot(int level)
     {
         if (!ScreenshotsEnabled)
         {
             return;
         }
         ScreenshotsEnabled = false;
-        GameObject tempCamObj = new GameObject("TempScreenshotCamera");
-        tempCamObj.transform.position = CameraPositions[position];
-        tempCamObj.transform.eulerAngles = CameraRotations[position];
         
+        GameObject tempCamObj = CreateTempCamera(0);
+
         Camera tempCam = tempCamObj.AddComponent<Camera>();
         tempCam.clearFlags = CameraClearFlags.Skybox;
+        tempCam.fieldOfView = CameraFOV;
         
         RenderTexture renderTexture = new RenderTexture(ResolutionWidth, ResolutionHeight, ResolutionDepth);
         tempCam.targetTexture = renderTexture;
@@ -48,7 +49,7 @@ public class ScreenshotManager
         screenshot.Apply();
         
         byte[] bytes = screenshot.EncodeToPNG();
-        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + position + ".png");
+        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + ".png");
         File.WriteAllBytes(fullPath, bytes);
         
         tempCam.targetTexture = null;
@@ -57,6 +58,42 @@ public class ScreenshotManager
         Object.Destroy(renderTexture);
         Object.Destroy(screenshot);
         Object.Destroy(tempCamObj);
+    }
+
+    public static bool GetObjectScreenPosition(int level, Vector3 objectPosition, out Vector2 screenPosition)
+    {
+        GameObject tempCamObj = CreateTempCamera(0);
+
+        Camera tempCam = tempCamObj.AddComponent<Camera>();
+        tempCam.clearFlags = CameraClearFlags.Skybox;
+        tempCam.fieldOfView = CameraFOV;
+
+        Vector3 viewportPoint = tempCam.WorldToViewportPoint(objectPosition);
+        
+        Object.DestroyImmediate(tempCamObj);
+        if (viewportPoint is { z: > 0, x: >= 0f and <= 1f, y: >= 0f and <= 1f })
+        {
+            screenPosition = new Vector2
+            (
+                viewportPoint.x * ResolutionWidth, 
+                ResolutionHeight - viewportPoint.y * ResolutionHeight
+            );
+            return true;
+        }
+        
+        screenPosition = default;
+        return false;
+    }
+
+    private static GameObject CreateTempCamera(int level)
+    {
+        return new GameObject("TempCamera")
+        {
+            transform = {
+                position = CameraPositions[level],
+                eulerAngles = CameraRotations[level]
+            }
+        };
     }
     
 }

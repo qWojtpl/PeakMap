@@ -15,6 +15,7 @@ public class FrisbeePatch
     public static void OnEnablePostfix()
     {
         ScreenshotManager.TakeScreenshot(0);
+        LuggageDataManager.CreateLuggageData(0);
     }
     
 }
