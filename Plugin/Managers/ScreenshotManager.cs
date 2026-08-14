@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using Photon.Pun;
 using UnityEngine;
 using Zorro.Core;
@@ -14,17 +12,18 @@ public static class ScreenshotManager
     private static readonly List<Vector3> CameraPositions = new()
     {
         new Vector3(0f, 100f, -500f),
-        new Vector3(0f, 500f, 200f),
-        new Vector3(0f, 600f, 750f),
-        new Vector3(0f, 1050f, 1450f),
+        new Vector3(0f, 100f, 75f),
+        new Vector3(),
+        new Vector3(0f, 100f, 350f),
+        new Vector3()
     };
 
     private static readonly List<Vector3> CameraRotations = new()
     {
         new Vector3(0f, 0f, 0f),
-        new Vector3(45f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(75f, 0f, 0f),
+        new Vector3(30f, 0f, 0f),
+        new Vector3(20f, 0f, 0f),
+        new Vector3(89.9f, -90f, 0f),
     };
 
     private static readonly List<float> CameraFOVs = new()
@@ -35,27 +34,29 @@ public static class ScreenshotManager
         90f
     };
 
-    public static readonly List<float> LevelWidths = new()
-    {
-        100f,
-        400f,
-        800f,
-        1000f
-    };
-
+    public static readonly List<float> LevelWidths = new() { 0, 0, 0, 0 };
+    public static readonly List<float> LevelHeights = new() { 0, 0, 0, 0 };
+        
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
     
     private static List<int> _takenScreenshots = new();
 
-    public static void SetupWidth(int level)
+    public static void SetupLevelDimensions(int level)
     {
         GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
+
+        if (campfire == null)
+        {
+            return;
+        }
             
+        CameraPositions[level + 1] += new Vector3(0f, campfire.transform.position.y + 100, campfire.transform.position.z + 25f);
         LevelWidths[level] = campfire.transform.position.z;
+        LevelHeights[level] = campfire.transform.position.y;
             
-        PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level]);
+        PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level] + ", with height " + LevelHeights[level]);
     }
     
     public static void TakeScreenshot(int level)
@@ -64,12 +65,15 @@ public static class ScreenshotManager
         {
             return;
         }
-        
-        GameObject heavyGameObject = Singleton<MapHandler>.Instance?.segments?[level]?.segmentParent;
-        if (heavyGameObject != null)
+
+        MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[level];
+        GameObject mapObject = segment?.segmentParent;
+        if (mapObject != null)
         {
             PhotonNetwork.IsMessageQueueRunning = false;
-            heavyGameObject.SetActive(true);
+            mapObject.SetActive(true);
+            segment.wallNext?.SetActive(false);
+            segment.wallPrevious?.SetActive(false);
             PhotonNetwork.IsMessageQueueRunning = true;
         }
         else
@@ -99,9 +103,9 @@ public static class ScreenshotManager
         tempCam.targetTexture = null;
         RenderTexture.active = null;
         
-        Object.Destroy(renderTexture);
-        Object.Destroy(screenshot);
-        Object.Destroy(tempCamObj);
+        Object.DestroyImmediate(renderTexture);
+        Object.DestroyImmediate(screenshot);
+        Object.DestroyImmediate(tempCamObj);
     }
 
     public static bool GetObjectScreenPosition(int level, Vector3 objectPosition, out Vector2 screenPosition)

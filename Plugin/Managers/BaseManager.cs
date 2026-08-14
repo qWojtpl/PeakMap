@@ -28,8 +28,9 @@ public abstract class BaseManager
         File.WriteAllText(
             Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + "_" + fileSuffix + ".json"), 
             JsonConvert.SerializeObject(objects
+                .Where(n => n.PositionOnScreen != null)
                 .Where(n => n.Position.z <= ScreenshotManager.LevelWidths[level] && n.Position.z > previousWidth)
-                .Where(n => n.PositionOnScreen != null))
+                .Where(n => n.Position.y <= ScreenshotManager.LevelHeights[level] + 10f))
         );
         
     }

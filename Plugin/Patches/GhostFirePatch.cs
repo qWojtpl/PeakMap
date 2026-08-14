@@ -16,7 +16,7 @@ public class GhostFirePatch
         {
             return;
         }
-        BelltowersDataManager.BelltowerList.Add(new ObjectInfo()
+        BelltowersDataManager.BelltowerList.Add(new ObjectInfo
         {
             Name = __instance.name,
             Position = __instance.transform.position

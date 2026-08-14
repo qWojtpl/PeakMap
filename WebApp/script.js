@@ -25,10 +25,7 @@ function createLuggage(frame) {
 }
 
 function removeLuggage() {
-    const container = document.getElementById("container");
-    for(let i = 0; i < luggage.length; i++) {
-        container.removeChild(luggage[i]);
-    }
+    removePoints(luggage);
     luggage = [];
 }
 
@@ -63,10 +60,7 @@ function createBelltowers(frame) {
 }
 
 function removeBelltowers() {
-    const container = document.getElementById("container");
-    for(let i = 0; i < belltowers.length; i++) {
-        container.removeChild(belltowers[i]);
-    }
+    removePoints(belltowers);
     belltowers = [];
 }
 
@@ -97,6 +91,17 @@ function createPoint(x, y, name, borderColor, image) {
     });
     container.appendChild(element);
     return element;
+}
+
+function removePoint(point) {
+    const container = document.getElementById("container");
+    container.removeChild(point);
+}
+
+function removePoints(pointsToRemove) {
+    for(let i = 0; i < pointsToRemove.length; i++) {
+        removePoint(pointsToRemove[i]);
+    }
 }
 
 function previousLevel() {
