@@ -17,7 +17,7 @@ public class LuggagePatch
     {
         LuggageDataManager.LuggageList.Add(new LuggageInfo
         {
-            Name = __instance.GetName(),
+            Name = __instance.name,
             Position = __instance.transform.position
         });
     }

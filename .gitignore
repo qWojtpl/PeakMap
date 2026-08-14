@@ -1,5 +1,5 @@
-.idea/*
-obj/*
-bin/*
+Plugin/.idea/*
+Plugin/obj/*
+Plugin/bin/*
 *.sln
 *.user

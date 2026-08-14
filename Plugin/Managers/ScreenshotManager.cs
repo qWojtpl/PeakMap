@@ -4,39 +4,41 @@ using UnityEngine;
 
 namespace PeakMap.Managers;
 
-public class ScreenshotManager
+public static class ScreenshotManager
 {
     
-    private static bool ScreenshotsEnabled = true;
+    private static bool _screenShotEnabled = true;
 
-    private static List<Vector3> CameraPositions = new()
+    private static readonly List<Vector3> CameraPositions = new()
     {
         new Vector3(0f, 100f, -300f),
     };
 
-    private static List<Vector3> CameraRotations = new()
+    private static readonly List<Vector3> CameraRotations = new()
     {
         new Vector3(0f, 0f, 0f),
+    };
+
+    private static readonly List<float> CameraFOVs = new()
+    {
+        60f
     };
 
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
-    private static float CameraFOV { get; set; } = 60f;
 
     public static void TakeScreenshot(int level)
     {
-        if (!ScreenshotsEnabled)
+        if (!_screenShotEnabled)
         {
             return;
         }
-        ScreenshotsEnabled = false;
         
-        GameObject tempCamObj = CreateTempCamera(0);
-
-        Camera tempCam = tempCamObj.AddComponent<Camera>();
-        tempCam.clearFlags = CameraClearFlags.Skybox;
-        tempCam.fieldOfView = CameraFOV;
+        _screenShotEnabled = false;
+        
+        GameObject tempCamObj = CreateTempCameraGameObject(level);
+        Camera tempCam = CreateTempCamera(level, tempCamObj);
         
         RenderTexture renderTexture = new RenderTexture(ResolutionWidth, ResolutionHeight, ResolutionDepth);
         tempCam.targetTexture = renderTexture;
@@ -62,11 +64,8 @@ public class ScreenshotManager
 
     public static bool GetObjectScreenPosition(int level, Vector3 objectPosition, out Vector2 screenPosition)
     {
-        GameObject tempCamObj = CreateTempCamera(0);
-
-        Camera tempCam = tempCamObj.AddComponent<Camera>();
-        tempCam.clearFlags = CameraClearFlags.Skybox;
-        tempCam.fieldOfView = CameraFOV;
+        GameObject tempCamObj = CreateTempCameraGameObject(level);
+        Camera tempCam = CreateTempCamera(level, tempCamObj);
 
         Vector3 viewportPoint = tempCam.WorldToViewportPoint(objectPosition);
         
@@ -85,7 +84,7 @@ public class ScreenshotManager
         return false;
     }
 
-    private static GameObject CreateTempCamera(int level)
+    private static GameObject CreateTempCameraGameObject(int level)
     {
         return new GameObject("TempCamera")
         {
@@ -94,6 +93,14 @@ public class ScreenshotManager
                 eulerAngles = CameraRotations[level]
             }
         };
+    }
+
+    private static Camera CreateTempCamera(int level, GameObject tempCamObj)
+    {
+        Camera tempCam = tempCamObj.AddComponent<Camera>();
+        tempCam.clearFlags = CameraClearFlags.Skybox;
+        tempCam.fieldOfView = CameraFOVs[level];
+        return tempCam;
     }
     
 }

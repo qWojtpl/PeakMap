@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace PeakMap.Managers;
 
-public class LuggageDataManager
+public static class LuggageDataManager
 {
     
-    public static List<LuggageInfo> LuggageList = new();
+    public static readonly List<LuggageInfo> LuggageList = new();
 
     public static void CreateLuggageData(int level)
     {
