@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>10.0</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>bin\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>bin\Assembly-CSharp.dll</HintPath>
+      </Reference>
+      <Reference Include="BepInEx">
+        <HintPath>bin\BepInEx.dll</HintPath>
+      </Reference>
+      <Reference Include="PhotonUnityNetworking">
+        <HintPath>bin\PhotonUnityNetworking.dll</HintPath>
+      </Reference>
+      <Reference Include="PhotonUnityNetworking.Utilities">
+        <HintPath>bin\PhotonUnityNetworking.Utilities.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>bin\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>bin\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>bin\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
