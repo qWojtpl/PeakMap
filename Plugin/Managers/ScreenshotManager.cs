@@ -23,7 +23,7 @@ public static class ScreenshotManager
         new Vector3(0f, 0f, 0f),
         new Vector3(30f, 0f, 0f),
         new Vector3(20f, 0f, 0f),
-        new Vector3(89.9f, -90f, 0f),
+        new Vector3(89.9f, -89.9f, 0f),
     };
 
     private static readonly List<float> CameraFOVs = new()

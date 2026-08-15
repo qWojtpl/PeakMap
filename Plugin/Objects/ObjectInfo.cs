@@ -7,6 +7,9 @@ namespace PeakMap.Objects;
 public class ObjectInfo
 {
     
+    [JsonIgnore]
+    public int? InstanceID { get; set; }
+    
     public string Name { get; set; }
     
     [JsonIgnore]
