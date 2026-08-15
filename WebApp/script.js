@@ -25,6 +25,7 @@ function createLuggage(frame) {
     }
     for(let i = 0; i < json.length; i++) {
         luggage[i] = createPoint(
+            "luggage" + currentLevel,
             json[i].PositionOnScreen[0], 
             json[i].PositionOnScreen[1], 
             json[i].Name,
@@ -34,16 +35,15 @@ function createLuggage(frame) {
     }
 }
 
-function removeLuggage() {
-    removePoints(luggage);
-    luggage = [];
+function removeLuggage(level) {
+    removePoints("luggage" + level);
 }
 
 function switchLuggage(checkbox) {
     if(checkbox.checked) {
         createLuggage(document.getElementById("luggage-frame"));
     } else {
-        removeLuggage();
+        removeLuggage(currentLevel);
     }
     updateZoom();
 }
@@ -61,6 +61,7 @@ function createBelltowers(frame) {
     }
     for(let i = 0; i < json.length; i++) {
         belltowers[i] = createPoint(
+            "belltower" + currentLevel,
             json[i].PositionOnScreen[0], 
             json[i].PositionOnScreen[1], 
             json[i].Name,
@@ -70,25 +71,25 @@ function createBelltowers(frame) {
     }
 }
 
-function removeBelltowers() {
-    removePoints(belltowers);
-    belltowers = [];
+function removeBelltowers(level) {
+    removePoints("belltower" + level);
 }
 
 function switchBelltowers(checkbox) {
     if(checkbox.checked) {
         createBelltowers(document.getElementById("belltowers-frame"));
     } else {
-        removeBelltowers();
+        removeBelltowers(currentLevel);
     }
     updateZoom();
 }
 
 // General
 
-function createPoint(x, y, name, borderColor, image) {
+function createPoint(clazz, x, y, name, borderColor, image) {
     const container = document.getElementById("container");
     const element = document.createElement("div");
+    element.classList.add(clazz);
     element.classList.add("point");
     element.style = `--x: ${x}; --y: ${y}`;
     element.style.borderColor = borderColor;
@@ -105,15 +106,12 @@ function createPoint(x, y, name, borderColor, image) {
     return element;
 }
 
-function removePoint(point) {
+function removePoints(clazz) {
     const container = document.getElementById("container");
-    container.removeChild(point);
-}
-
-function removePoints(pointsToRemove) {
-    for(let i = 0; i < pointsToRemove.length; i++) {
-        removePoint(pointsToRemove[i]);
-    }
+    const elements = Array.from(document.getElementsByClassName(clazz));
+    elements.forEach(element => {
+        container.removeChild(element);
+    });
 }
 
 function previousLevel() {
@@ -133,13 +131,21 @@ function loadLevel(level) {
         loadLevel(0);
         return;
     }
+    
+    console.log("Loading level: " + level);
+
+    const buttons = document.getElementsByTagName("button");
+    for(let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
+
     zoom = 1;
     zoomTop = 0;
     zoomLeft = 0;
     updateZoom();
 
-    removeLuggage();
-    removeBelltowers();
+    removeLuggage(currentLevel);
+    removeBelltowers(currentLevel);
     currentLevel = level;
     
     let map = document.getElementById("map");
@@ -148,10 +154,13 @@ function loadLevel(level) {
     newImage.onload = function() {
         requestAnimationFrame(() => {
             map.src = this.src;
-            document.getElementById("luggage-frame").src = "./data/level_" + level + "_luggage.json"; 
-            document.getElementById("belltowers-frame").src = "./data/level_" + level + "_belltowers.json"; 
             requestAnimationFrame(() => {
                 map.loading = false;
+                document.getElementById("luggage-frame").src = "./data/level_" + level + "_luggage.json"; 
+                document.getElementById("belltowers-frame").src = "./data/level_" + level + "_belltowers.json"; 
+                for(let i = 0; i < buttons.length; i++) {
+                    buttons[i].disabled = false;
+                }
             });
         });
     }

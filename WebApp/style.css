@@ -181,10 +181,17 @@ body {
     width: 3vmin;
     height: 3vmin;
     display: inline-block;
-    background-image: url("./images/LuggageSmall.png");
     background-size: cover;
     background-position: 50% -50%;
     margin-right: 0.1vmin;
+}
+
+.settings-entry label[for="luggage-checkbox"] span {
+    background-image: url("./images/LuggageSmall.png");
+}
+
+.settings-entry label[for="belltowers-checkbox"] span {
+    background-image: url("./images/Belltower.png");
 }
 
 .settings-entry input[type=checkbox] {
