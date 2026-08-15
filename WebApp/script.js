@@ -203,13 +203,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function updateZoom() {
     const container = document.getElementById("container");
+    
+    if(zoom == 1) {
+        zoomLeft = 0;
+        zoomTop = 0;
+    } else {
+        const parent = container.parentElement || document.body;
+        const rect = parent.getBoundingClientRect();
+        
+        const maxShiftX = (rect.width * (zoom - 1)) / 2;
+        const maxShiftY = (rect.height * (zoom - 1)) / 2;
+        zoomLeft = Math.max(-maxShiftX, Math.min(maxShiftX, zoomLeft));
+        zoomTop = Math.max(-maxShiftY, Math.min(maxShiftY, zoomTop));
+    }
+    
     container.style.transform = `scale(${zoom})`;
     container.style.top = `${zoomTop}px`;
     container.style.left = `${zoomLeft}px`;
 
     let points = document.getElementsByClassName("point");
-    let size = 3 - zoom / 2;
-    if(size < 0.3) {
+    let size = 4 - zoom;
+    if(size < 1) {
         size = 1;
     }
     for(let i = 0; i < points.length; i++) {
