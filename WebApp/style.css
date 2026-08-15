@@ -149,7 +149,7 @@ body {
 
 #settings {
     width: 25vmin;
-    height: 20vmin;
+    height: fit-content;
     z-index: 4;
     position: absolute;
     backdrop-filter: blur(15px);
@@ -192,6 +192,8 @@ body {
     margin-right: 10%;
     width: 75%;
     gap: 5%;
+    margin-top: 1vmin;
+    margin-bottom: 2vmin;
 }
 
 button {
