@@ -13,14 +13,14 @@ body {
     font-size: 1.5vmin;
 }
 
-.image-container {
+.standard-container {
     position: relative;
     display: inline-block;
     max-width: 100vw;
     max-height: 100vh;
 }
 
-.image-container .level-image {
+#map {
     display: block;
     width: auto;
     height: auto;
@@ -28,6 +28,56 @@ body {
     max-height: 100vh;
     object-fit: contain;
     z-index: 1;
+}
+
+#container:has(#map[loading=true])::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#container:has(#map[loading=true])::after {
+    content: "";
+    position: fixed;
+    top: 10%;
+    left: 90%;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+
+    background-image: url("./images/BingBong.png");
+    background-position: -50% -50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation-name: mapLoading;
+    animation-duration: .8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes mapLoading {
+
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+
+}
+
+#container {
+    cursor: grab;
 }
 
 .point {
@@ -106,6 +156,7 @@ body {
     border-radius: 2px;
     border: 1px solid black;
     top: 0;
+    left: 0;
 }
 
 .settings-entry {
@@ -117,14 +168,15 @@ body {
     width: 50%;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 1vmin;
+    margin-left: 1vmin;
 }
 
 .settings-entry label span {
     width: 3vmin;
     height: 3vmin;
     display: inline-block;
-    background-image: url("./images/LuggageBig.png");
+    background-image: url("./images/LuggageSmall.png");
     background-size: cover;
     background-position: 50% -50%;
     margin-right: 0.1vmin;
@@ -137,14 +189,18 @@ body {
 .settings-buttons {
     display: flex;
     margin-left: 10%;
-    width: 80%;
-    gap: 10%;
+    margin-right: 10%;
+    width: 75%;
+    gap: 5%;
 }
 
 button {
     width: 12vmin;
     font-size: 1.2vmin;
     border: none;
+    background-color: #98CA3C;
+    color: white;
+    text-transform: uppercase;
 }
 
 button:hover {
@@ -159,7 +215,7 @@ button:hover {
     z-index: 4;
     position: absolute;
     border-radius: 2px;
-    background-color: rgba(75, 73, 73, 0.447);
+    background-color: rgba(75, 73, 73, 0.7);
     top: 3vmin;
     right: 3vmin;
     transition: .3s;
