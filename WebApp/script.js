@@ -9,7 +9,7 @@ function createInfo(frame) {
     const rawText = frameDocument.documentElement.textContent;
     const json = JSON.parse(rawText);
     let date = new Date(json.DataTimestamp * 1000);
-    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString("pl-PL");
+    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString("pl-PL") + " " + date.toLocaleTimeString();
 }
 
 // Luggage
@@ -191,11 +191,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if(zoom == 1) {
             return;
         }
-        let deltaX = (dragStartX - e.screenX) / 10;
+        let deltaX = dragStartX - e.screenX;
         zoomLeft -= deltaX;
         
-        let deltaY = (dragStartY - e.screenY) / 10;
+        let deltaY = dragStartY - e.screenY;
         zoomTop -= deltaY;
+
+        dragStartX = e.screenX;
+        dragStartY = e.screenY;
 
         updateZoom();
     });
