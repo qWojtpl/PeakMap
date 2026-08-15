@@ -2,6 +2,16 @@
 let currentLevel = 0;
 const maxLevel = 3;
 
+// Info
+
+function createInfo(frame) {
+    const frameDocument = frame.contentDocument || frame.contentWindow.document;
+    const rawText = frameDocument.documentElement.textContent;
+    const json = JSON.parse(rawText);
+    let date = new Date(json.DataTimestamp * 1000);
+    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString("pl-PL");
+}
+
 // Luggage
 
 let luggage = [];
@@ -35,6 +45,7 @@ function switchLuggage(checkbox) {
     } else {
         removeLuggage();
     }
+    updateZoom();
 }
 
 // Belltowers
@@ -70,6 +81,7 @@ function switchBelltowers(checkbox) {
     } else {
         removeBelltowers();
     }
+    updateZoom();
 }
 
 // General

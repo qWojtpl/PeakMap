@@ -1,6 +1,7 @@
 <div align="center">
-<h1>PEAK</h1>
+<h1>PeakMap</h1>
 <h3>Daily Map & Item Locations</h3>
+<h4>From the PEAK game</h4>
 <span>To use web application, click here:</span>
 <h3><a href="https://qwojtpl.github.io/PeakMap/">https://qwojtpl.github.io/PeakMap/</a></h3>
 </div>

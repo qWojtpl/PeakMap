@@ -19,6 +19,7 @@
             <img id="map" src="./data/level_0.png" alt="Map">
         </div>
         <div id="settings">
+            <p>Last updated: <b id="settings-lastupdated">...</b></p>
             <div class="settings-entry">
                 <label for="luggage-checkbox">
                     <span></span>Luggage
@@ -41,6 +42,7 @@
             <p id="item-popup-name"></p>
         </div>
     </div>
+    <iframe id="info-frame" class="data-frame" src="./data/info.json" onload="createInfo(this)"></iframe>
     <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="createLuggage(this)"></iframe>
     <iframe id="belltowers-frame" class="data-frame" src="./data/level_0_belltowers.json" onload="createBelltowers(this)"></iframe>
 </body>

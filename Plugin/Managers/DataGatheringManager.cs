@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using Newtonsoft.Json;
+using PeakMap.Objects;
 using Zorro.Core;
 
 namespace PeakMap.Managers;
@@ -36,6 +40,12 @@ public class DataGatheringManager
         {
             ScreenshotManager.TakeScreenshot(i);
         }
+        
+        File.WriteAllText(Path.Combine(PeakMapPlugin.ModFolder, "info.json"), JsonConvert.SerializeObject(new GatherInfo
+        {
+            DataTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        }));
+        
     }
     
 }
