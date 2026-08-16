@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap');
+
 body {
     margin: 0;
     padding: 0;
@@ -8,9 +10,10 @@ body {
     justify-content: center;
     align-items: center;
     background-color: black;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 500;
-    font-size: 1.5vmin;
+    font-family: "Darumadrop One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.8vmin;
 }
 
 .standard-container {
@@ -212,13 +215,20 @@ body {
     margin-bottom: 2vmin;
 }
 
+#settings p {
+    margin-top: 0;
+}
+
 button {
     width: 12vmin;
-    font-size: 1.2vmin;
+    font-size: 1.5vmin;
     border: none;
     background-color: #98CA3C;
     color: white;
     text-transform: uppercase;
+    font-family: "Darumadrop One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 button:hover {

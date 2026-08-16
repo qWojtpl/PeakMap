@@ -8,8 +8,50 @@ function createInfo(frame) {
     const frameDocument = frame.contentDocument || frame.contentWindow.document;
     const rawText = frameDocument.documentElement.textContent;
     const json = JSON.parse(rawText);
-    let date = new Date(json.DataTimestamp * 1000);
-    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+    let lastUpdateDate = new Date(json.DataTimestamp * 1000);
+    document.getElementById("settings-lastupdated").innerText = lastUpdateDate.toLocaleDateString() + " " + lastUpdateDate.toLocaleTimeString();
+    const nextUpdate = document.getElementById("settings-nextupdate");
+
+    const now = new Date();
+
+    const todayUpdate = new Date(now);
+    todayUpdate.setUTCHours(17, 0, 0, 0);
+
+    const expectedUpdate = new Date(todayUpdate);
+
+    if(now < todayUpdate) {
+        expectedUpdate.setUTCDate(expectedUpdate.getUTCDate() - 1);
+    }
+
+    if(lastUpdateDate < expectedUpdate) {
+        nextUpdate.innerText = "SOON!";
+        return;
+    }
+
+    let targetDate = new Date(todayUpdate);
+
+    if(now >= targetDate) {
+        targetDate.setUTCDate(targetDate.getUTCDate() + 1);
+    }
+
+    setInterval(() => {
+        const currentTime = new Date();
+        let diff = targetDate - currentTime;
+
+        if(diff <= 0) {
+            nextUpdate.innerText = "Refresh the page";
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const pad = num => String(num).padStart(2, '0');
+
+        nextUpdate.innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    }, 1000);
+    
 }
 
 // Luggage
