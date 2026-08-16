@@ -48,6 +48,7 @@ function updateZoom() {
     if(zoom == 1) {
         zoomLeft = 0;
         zoomTop = 0;
+        document.getElementById("zoom-reminder").style.display = "block";
     } else {
         const parent = container.parentElement || document.body;
         const rect = parent.getBoundingClientRect();
@@ -56,6 +57,7 @@ function updateZoom() {
         const maxShiftY = (rect.height * (zoom - 1)) / 2;
         zoomLeft = Math.max(-maxShiftX, Math.min(maxShiftX, zoomLeft));
         zoomTop = Math.max(-maxShiftY, Math.min(maxShiftY, zoomTop));
+        document.getElementById("zoom-reminder").style.display = "none";
     }
     
     container.style.transform = `scale(${zoom})`;

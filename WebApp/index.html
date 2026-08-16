@@ -11,10 +11,10 @@
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="QNCRIzPD4SkC8V-Y51eY_HJwPH26hTj6nAIS-qhSShU" />
     <title>PEAK Daily Map</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1">
     <script src="scripts/zoom.js"></script>
     <script src="scripts/nocache.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=1"></script>
 </head>
 <body>
     <div class="standard-container">
@@ -56,6 +56,9 @@
         <div id="item-popup">
             <span id="item-popup-image"></span>
             <p id="item-popup-name"></p>
+        </div>
+        <div id="zoom-reminder">
+            <h2>Use scroll and mouse to zoom in</h2>
         </div>
     </div>
     <iframe id="info-frame" class="data-frame" src="./data/info.json" onload="createInfo(this)"></iframe>

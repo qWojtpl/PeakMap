@@ -261,3 +261,30 @@ button:hover {
     background-size: cover;
     background-position: 50% -50%;
 }
+
+#zoom-reminder {
+    position: absolute;
+    bottom: 0;
+    right: 1vmin;
+    transition: 1s;
+    animation-name: reminder;
+    animation-duration: 4s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes reminder {
+
+    0% {
+        color: black;
+    }
+
+    50% {
+        color: rgb(186, 186, 0);
+    }
+
+    100% {
+        color: black;
+    }
+
+}
