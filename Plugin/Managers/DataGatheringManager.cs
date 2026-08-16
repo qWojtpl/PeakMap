@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using PeakMap.Objects;
+using UnityEngine;
 using Zorro.Core;
 
 namespace PeakMap.Managers;
@@ -34,6 +35,8 @@ public class DataGatheringManager
         {
             LuggageDataManager.CreateLuggageData(i);
             BelltowersDataManager.CreateBelltowersData(i);
+            CapybaraDataManager.CreateCapybaraData(i);
+            TombDataManager.CreateTombData(i);
         }
 
         for (int i = 0; i < 4; i++)
@@ -45,6 +48,8 @@ public class DataGatheringManager
         {
             DataTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         }));
+        
+        Application.Quit();
         
     }
     

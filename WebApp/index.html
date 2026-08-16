@@ -9,6 +9,7 @@
     <meta property="og:description" content="Check the daily map with item locations for the PEAK game. Updated daily!">
     <meta property="og:type" content="website">
     <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="QNCRIzPD4SkC8V-Y51eY_HJwPH26hTj6nAIS-qhSShU" />
     <title>PEAK Daily Map</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
@@ -32,6 +33,18 @@
                 </label>
                 <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
             </div>
+            <div class="settings-entry">
+                <label for="capybara-checkbox">
+                    <span></span>Capybara
+                </label>
+                <input type="checkbox" id="capybara-checkbox" onchange="switchCapybara(this)" checked>
+            </div>
+            <div class="settings-entry">
+                <label for="tomb-checkbox">
+                    <span></span>Tomb
+                </label>
+                <input type="checkbox" id="tomb-checkbox" onchange="switchTomb(this)" checked>
+            </div>
             <div class="settings-buttons">
                 <button onclick="previousLevel()">Previous level</button>
                 <button onclick="nextLevel()">Next level</button>
@@ -45,5 +58,7 @@
     <iframe id="info-frame" class="data-frame" src="./data/info.json" onload="createInfo(this)"></iframe>
     <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="createLuggage(this)"></iframe>
     <iframe id="belltowers-frame" class="data-frame" src="./data/level_0_belltowers.json" onload="createBelltowers(this)"></iframe>
+    <iframe id="capybara-frame" class="data-frame" src="./data/level_0_capybara.json" onload="createCapybara(this)"></iframe>
+    <iframe id="tomb-frame" class="data-frame" src="./data/level_0_tomb.json" onload="createTomb(this)"></iframe>
 </body>
 </html>

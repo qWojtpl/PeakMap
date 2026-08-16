@@ -9,7 +9,7 @@ function createInfo(frame) {
     const rawText = frameDocument.documentElement.textContent;
     const json = JSON.parse(rawText);
     let date = new Date(json.DataTimestamp * 1000);
-    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString("pl-PL") + " " + date.toLocaleTimeString();
+    document.getElementById("settings-lastupdated").innerText = date.toLocaleDateString() + " " + date.toLocaleTimeString();
 }
 
 // Luggage
@@ -84,6 +84,79 @@ function switchBelltowers(checkbox) {
     updateZoom();
 }
 
+// Capybara
+
+let capybara = [];
+
+function createCapybara(frame) {
+    const frameDocument = frame.contentDocument || frame.contentWindow.document;
+    const rawText = frameDocument.documentElement.textContent;
+    const json = JSON.parse(rawText);
+    if(!document.getElementById("capybara-checkbox").checked) {
+        return;
+    }
+    for(let i = 0; i < json.length; i++) {
+        capybara[i] = createPoint(
+            "capybara" + currentLevel,
+            json[i].PositionOnScreen[0], 
+            json[i].PositionOnScreen[1], 
+            json[i].Name,
+            "brown",
+            `${json[i].Name}.png`
+        );
+    }
+}
+
+function removeCapybara(level) {
+    removePoints("capybara" + level);
+}
+
+function switchCapybara(checkbox) {
+    if(checkbox.checked) {
+        createCapybara(document.getElementById("capybara-frame"));
+    } else {
+        removeCapybara(currentLevel);
+    }
+    updateZoom();
+}
+
+// Tomb
+
+let tomb = [];
+
+function createTomb(frame) {
+    const frameDocument = frame.contentDocument || frame.contentWindow.document;
+    const rawText = frameDocument.documentElement.textContent;
+    const json = JSON.parse(rawText);
+    if(!document.getElementById("tomb-checkbox").checked) {
+        return;
+    }
+    for(let i = 0; i < json.length; i++) {
+        tomb[i] = createPoint(
+            "tomb" + currentLevel,
+            json[i].PositionOnScreen[0], 
+            json[i].PositionOnScreen[1], 
+            json[i].Name,
+            "gold",
+            `${json[i].Name}.png`
+        );
+    }
+}
+
+function removeTomb(level) {
+    removePoints("tomb" + level);
+}
+
+function switchTomb(checkbox) {
+    if(checkbox.checked) {
+        createTomb(document.getElementById("tomb-frame"));
+    } else {
+        removeTomb(currentLevel);
+    }
+    updateZoom();
+}
+
+
 // General
 
 function createPoint(clazz, x, y, name, borderColor, image) {
@@ -112,6 +185,13 @@ function removePoints(clazz) {
     elements.forEach(element => {
         container.removeChild(element);
     });
+}
+
+function removeAll(level) {
+    removeLuggage(level);
+    removeBelltowers(level);
+    removeCapybara(level);
+    removeTomb(level);
 }
 
 function previousLevel() {
@@ -144,8 +224,8 @@ function loadLevel(level) {
     zoomLeft = 0;
     updateZoom();
 
-    removeLuggage(currentLevel);
-    removeBelltowers(currentLevel);
+    removeAll(currentLevel);
+
     currentLevel = level;
     
     let map = document.getElementById("map");
@@ -158,6 +238,8 @@ function loadLevel(level) {
                 map.loading = false;
                 document.getElementById("luggage-frame").src = "./data/level_" + level + "_luggage.json"; 
                 document.getElementById("belltowers-frame").src = "./data/level_" + level + "_belltowers.json"; 
+                document.getElementById("capybara-frame").src = "./data/level_" + level + "_capybara.json"; 
+                document.getElementById("tomb-frame").src = "./data/level_" + level + "_tomb.json"; 
                 for(let i = 0; i < buttons.length; i++) {
                     buttons[i].disabled = false;
                 }

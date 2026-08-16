@@ -18,6 +18,9 @@
       <Reference Include="BepInEx">
         <HintPath>bin\BepInEx.dll</HintPath>
       </Reference>
+      <Reference Include="PhotonRealtime">
+        <HintPath>bin\PhotonRealtime.dll</HintPath>
+      </Reference>
       <Reference Include="PhotonUnityNetworking">
         <HintPath>bin\PhotonUnityNetworking.dll</HintPath>
       </Reference>

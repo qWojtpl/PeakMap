@@ -22,7 +22,7 @@ public static class ScreenshotManager
     {
         new Vector3(0f, 0f, 0f),
         new Vector3(30f, 0f, 0f),
-        new Vector3(20f, 0f, 0f),
+        new Vector3(23f, 0f, 0f),
         new Vector3(89.9f, -89.9f, 0f),
     };
 
@@ -53,7 +53,7 @@ public static class ScreenshotManager
         }
             
         CameraPositions[level + 1] += new Vector3(0f, campfire.transform.position.y + 100, campfire.transform.position.z + 25f);
-        LevelWidths[level] = campfire.transform.position.z;
+        LevelWidths[level] = campfire.transform.position.z + 10f;
         LevelHeights[level] = campfire.transform.position.y;
             
         PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level] + ", with height " + LevelHeights[level]);

@@ -9,8 +9,10 @@ namespace PeakMap.Managers;
 
 public abstract class BaseManager
 {
+    
     protected static void CreateData(int level, List<ObjectInfo> objects, string fileSuffix)
     {
+        
         foreach (ObjectInfo info in objects)
         {
             Vector2 positionOnScreen = new Vector2();

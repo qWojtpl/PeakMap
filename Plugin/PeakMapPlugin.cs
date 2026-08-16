@@ -14,7 +14,7 @@ public class PeakMapPlugin : BaseUnityPlugin
     
     private void Awake()
     {
-        ModFolder = Path.GetDirectoryName(Info.Location);
+        ModFolder = Path.GetDirectoryName(Info.Location.Replace("PeakMap.dll", "output\\"));
         Log = Logger;
         _harmony = new Harmony("PeakMapPlugin");
         _harmony.PatchAll();

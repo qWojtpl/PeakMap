@@ -194,6 +194,10 @@ body {
     background-image: url("./images/Belltower.png");
 }
 
+.settings-entry label[for="capybara-checkbox"] span {
+    background-image: url("./images/Capybara.png");
+}
+
 .settings-entry input[type=checkbox] {
     width: 1.5vmin;
 }
