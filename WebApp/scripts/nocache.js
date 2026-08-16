@@ -11,5 +11,7 @@ function getURLAddition() {
     return "?nocache=" + cacheIdentifier;
 }
 
-patchElements(document.getElementsByTagName("iframe"));
-patchElements(document.getElementsByTagName("img"));
+document.addEventListener("DOMContentLoaded", () => {
+    patchElements(document.getElementsByTagName("iframe"));
+    patchElements(document.getElementsByTagName("img"));
+});

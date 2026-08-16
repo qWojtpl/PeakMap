@@ -13,8 +13,8 @@
 - [x] Belltowers
 - [ ] Capybaras
 - [ ] Mushrooms
-- [x] Shore, Tropics, Roots, Alpine, Mesa, Caldera, Gloom
-- [ ] The Klin, The Cidatel
+- [x] Shore, Tropics, Roots, Alpine, Mesa, Caldera, Gloom, The Cidatel
+- [ ] The Klin
 
 ## Plugin
 - BepInEx-based plugin

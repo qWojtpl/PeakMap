@@ -13,6 +13,7 @@
     <title>PEAK Daily Map</title>
     <link rel="stylesheet" href="style.css">
     <script src="scripts/zoom.js"></script>
+    <script src="scripts/nocache.js"></script>
     <script src="script.js"></script>
 </head>
 <body>
@@ -47,8 +48,8 @@
                 <input type="checkbox" id="tomb-checkbox" onchange="switchTomb(this)" checked>
             </div>
             <div class="settings-buttons">
-                <button onclick="previousLevel()">Previous level</button>
-                <button onclick="nextLevel()">Next level</button>
+                <button onclick="previousLevel()">Previous biome</button>
+                <button onclick="nextLevel()">Next biome</button>
             </div>
         </div>
         <div id="item-popup">
@@ -61,6 +62,5 @@
     <iframe id="belltowers-frame" class="data-frame" src="./data/level_0_belltowers.json" onload="createBelltowers(this)"></iframe>
     <iframe id="capybara-frame" class="data-frame" src="./data/level_0_capybara.json" onload="createCapybara(this)"></iframe>
     <iframe id="tomb-frame" class="data-frame" src="./data/level_0_tomb.json" onload="createTomb(this)"></iframe>
-    <script src="scripts/nocache.js"></script>
 </body>
 </html>

@@ -9,7 +9,8 @@ namespace PeakMap.Managers;
 
 public class DataGatheringManager
 {
-    
+
+    private static readonly int NUM_LEVELS = 5;
     private static bool initialized = false;
     
     public static void GatherData()
@@ -26,12 +27,12 @@ public class DataGatheringManager
         
         initialized = true;
         
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < NUM_LEVELS; i++)
         {
             ScreenshotManager.SetupLevelDimensions(i);
         }
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < NUM_LEVELS; i++)
         {
             LuggageDataManager.CreateLuggageData(i);
             BelltowersDataManager.CreateBelltowersData(i);
@@ -39,7 +40,7 @@ public class DataGatheringManager
             TombDataManager.CreateTombData(i);
         }
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < NUM_LEVELS; i++)
         {
             ScreenshotManager.TakeScreenshot(i);
         }

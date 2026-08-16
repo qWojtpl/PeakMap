@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 using Zorro.Core;
@@ -15,7 +16,7 @@ public static class ScreenshotManager
         new Vector3(0f, 100f, 75f),
         new Vector3(),
         new Vector3(0f, 100f, 350f),
-        new Vector3()
+        new Vector3(0f, 120f, -150f)
     };
 
     private static readonly List<Vector3> CameraRotations = new()
@@ -24,6 +25,7 @@ public static class ScreenshotManager
         new Vector3(30f, 0f, 0f),
         new Vector3(23f, 0f, 0f),
         new Vector3(89.9f, -89.9f, 0f),
+        new Vector3(0f, 0f, 0f)
     };
 
     private static readonly List<float> CameraFOVs = new()
@@ -31,18 +33,21 @@ public static class ScreenshotManager
         45f,
         90f,
         90f,
+        90f,
         90f
     };
 
-    public static readonly List<float> LevelWidths = new() { 0, 0, 0, 0 };
-    public static readonly List<float> LevelHeights = new() { 0, 0, 0, 0 };
+    public static readonly List<float> LevelWidths = new() { 0, 0, 0, 0, 5000 };
+    public static readonly List<float> LevelHeights = new() { 0, 0, 0, 0, 5000 };
         
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
     
-    private static List<int> _takenScreenshots = new();
+    private static readonly List<int> _takenScreenshots = new();
 
+    private static int swampCounter = 0;
+    
     public static void SetupLevelDimensions(int level)
     {
         GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
@@ -74,12 +79,22 @@ public static class ScreenshotManager
             mapObject.SetActive(true);
             segment.wallNext?.SetActive(false);
             segment.wallPrevious?.SetActive(false);
+            if (segment.biome == Biome.BiomeType.Swamp)
+            {
+                swampCounter++;
+            }
+            if (swampCounter == 2)
+            {
+                HideTempleObjects();
+            }
             PhotonNetwork.IsMessageQueueRunning = true;
         }
         else
         {
             return;
         }
+        
+        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
         
         _takenScreenshots.Add(level);
 
@@ -149,5 +164,20 @@ public static class ScreenshotManager
         tempCam.aspect = (float)ResolutionWidth / ResolutionHeight;
         return tempCam;
     }
-    
+
+    private static void HideTempleObjects()
+    {
+        PeakMapPlugin.Log.LogWarning("Hiding temple objects...");
+        
+        Transform tower = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(n => n.gameObject.name.ToLower().Contains("gloom temple"));
+
+        if (tower != null)
+        {
+            PeakMapPlugin.Log.LogWarning("Destroying temple: " + tower.gameObject.name);
+            Object.DestroyImmediate(tower.gameObject);
+        }
+        
+    }
+
 }

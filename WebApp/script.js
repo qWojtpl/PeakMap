@@ -1,6 +1,6 @@
 
 let currentLevel = 0;
-const maxLevel = 3;
+const maxLevel = 4;
 
 // Info
 
