@@ -1,5 +1,5 @@
 
-const cacheIdentifier = new Date().toLocaleDateString() + "," + (new Date().getUTCHours() < 17);
+const cacheIdentifier = new Date().toLocaleDateString() + "&before=" + (new Date().getUTCHours() < 17);
 
 function patchElements(elements) {
     for(let i = 0; i < elements.length; i++) {
