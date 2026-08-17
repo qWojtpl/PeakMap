@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
-using Peak;
 using PeakMap.Objects;
 using UnityEngine;
 using Zorro.Core;
-using Object = UnityEngine.Object;
 
 namespace PeakMap.Managers;
 
