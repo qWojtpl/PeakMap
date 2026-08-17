@@ -266,11 +266,12 @@ button:hover {
     position: absolute;
     bottom: 0;
     right: 1vmin;
-    transition: 1s;
+    transition: color 1s, opacity 0.3s;
     animation-name: reminder;
     animation-duration: 4s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    pointer-events: none;
 }
 
 @keyframes reminder {

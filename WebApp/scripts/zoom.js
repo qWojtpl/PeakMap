@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         updateZoom();
     });
-    container.addEventListener("dragstart", (e) => {
+    container.addEventListener("mousedown", (e) => {
         dragStartX = e.screenX;
         dragStartY = e.screenY;
     });
-    container.addEventListener("dragover", (e) => {
-        if(zoom == 1) {
+    document.addEventListener("mousemove", (e) => {
+        if(zoom == 1 || (e.buttons | e.button) !== 1) {
             return;
         }
         let deltaX = dragStartX - e.screenX;
@@ -48,7 +48,7 @@ function updateZoom() {
     if(zoom == 1) {
         zoomLeft = 0;
         zoomTop = 0;
-        document.getElementById("zoom-reminder").style.display = "block";
+        document.getElementById("zoom-reminder").style.opacity = 1;
     } else {
         const parent = container.parentElement || document.body;
         const rect = parent.getBoundingClientRect();
@@ -57,7 +57,7 @@ function updateZoom() {
         const maxShiftY = (rect.height * (zoom - 1)) / 2;
         zoomLeft = Math.max(-maxShiftX, Math.min(maxShiftX, zoomLeft));
         zoomTop = Math.max(-maxShiftY, Math.min(maxShiftY, zoomTop));
-        document.getElementById("zoom-reminder").style.display = "none";
+        document.getElementById("zoom-reminder").style.opacity = 0;
     }
     
     container.style.transform = `scale(${zoom})`;
