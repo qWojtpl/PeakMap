@@ -15,9 +15,11 @@ public class LuggagePatch
     [HarmonyPostfix]
     public static void AwakePostfix(Luggage __instance)
     {
-        LuggageDataManager.LuggageList.Add(new ObjectInfo
+        LocalizedText.SetLanguage((int) LanguageSetting.Language.English);
+        DataManager.LuggageList.Add(new ObjectInfo
         {
             Name = __instance.name,
+            DisplayName = __instance.GetName(),
             Position = __instance.transform.position
         });
     }

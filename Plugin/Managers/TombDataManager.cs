@@ -6,14 +6,20 @@ using Object = UnityEngine.Object;
 
 namespace PeakMap.Managers;
 
-public abstract class TombDataManager : BaseManager
+public abstract class TombDataManager
 {
     
     public static void CreateTombData(int level)
     {
-        TombTrigger tomb = Object.FindFirstObjectByType<TombTrigger>(FindObjectsInactive.Include);
+        //todo
+        /*TombTrigger tomb = Object.FindFirstObjectByType<TombTrigger>(FindObjectsInactive.Include);
 
         if (tomb == null)
+        {
+            return;
+        }
+
+        if (!tomb.isActiveAndEnabled)
         {
             return;
         }
@@ -34,7 +40,7 @@ public abstract class TombDataManager : BaseManager
                 Name = "Tomb",
                 Position = entrancePosition,
             }
-        }, "tomb");
+        }, "tomb");*/
     }
     
 }

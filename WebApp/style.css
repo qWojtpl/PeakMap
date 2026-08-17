@@ -170,7 +170,8 @@ body {
 
 .settings-entry {
     display: flex;
-    gap: 5%;
+    gap: 1vmin;
+    justify-content: center;
 }
 
 .settings-entry label {
@@ -198,8 +199,12 @@ body {
     background-image: url("./images/Belltower.png");
 }
 
-.settings-entry label[for="capybara-checkbox"] span {
+.settings-entry label[for="animals-checkbox"] span {
     background-image: url("./images/Capybara.png");
+}
+
+.settings-entry label[for="amulets-checkbox"] span {
+    background-image: url("./images/AmuletIcon.png");
 }
 
 .settings-entry input[type=checkbox] {
@@ -253,6 +258,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    text-align: center;
 }
 
 #item-popup-image {
@@ -260,6 +266,7 @@ button:hover {
     width: 10vmin;
     height: 10vmin;
     background-size: cover;
+    background-repeat: no-repeat;
     background-position: 50% -50%;
 }
 

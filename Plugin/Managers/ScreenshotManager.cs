@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Peak;
 using Photon.Pun;
 using UnityEngine;
 using Zorro.Core;
@@ -71,7 +72,8 @@ public static class ScreenshotManager
             return;
         }
 
-        MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[level];
+        MapHandler mapHandler = Singleton<MapHandler>.Instance;
+        MapHandler.MapSegment segment = mapHandler?.segments?[level];
         GameObject mapObject = segment?.segmentParent;
         if (mapObject != null)
         {
@@ -121,6 +123,15 @@ public static class ScreenshotManager
         Object.DestroyImmediate(renderTexture);
         Object.DestroyImmediate(screenshot);
         Object.DestroyImmediate(tempCamObj);
+        
+        List<ISpawner> list = segment.segmentParent
+            .GetComponentsInChildren<ISpawner>(true)
+            .ToList();
+
+        foreach (ISpawner item in list)
+        {
+            item.TrySpawnItems();
+        }
     }
 
     public static bool GetObjectScreenPosition(int level, Vector3 objectPosition, out Vector2 screenPosition)

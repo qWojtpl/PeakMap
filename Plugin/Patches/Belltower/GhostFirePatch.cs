@@ -12,7 +12,7 @@ public class GhostFirePatch
     [HarmonyPostfix]
     public static void StartPostfix(GhostFire __instance)
     {
-        BelltowersDataManager.BelltowerList.Remove(BelltowersDataManager.BelltowerList.Where(n => n.InstanceID == __instance.GetInstanceID())?.First());
+        DataManager.BelltowerList.Remove(DataManager.BelltowerList.Where(n => n.InstanceID == __instance.GetInstanceID())?.First());
     }
     
 }

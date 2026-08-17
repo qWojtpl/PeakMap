@@ -12,9 +12,10 @@ public class CapybaraPatch
     [HarmonyPostfix]
     public static void OnEnablePostfix(Capybara __instance)
     {
-        CapybaraDataManager.CapybaraList.Add(new ObjectInfo
+        DataManager.AnimalList.Add(new ObjectInfo
         {
             Name = "Capybara",
+            DisplayName = "CAPYBARA",
             Position = __instance.transform.position
         });
     }

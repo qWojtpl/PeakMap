@@ -13,12 +13,12 @@ public class LoadingScreenHandlerPatch
 
     [HarmonyPatch("LoadingRoutine")]
     [HarmonyPostfix]
-    public static void Postfix(ref IEnumerator __result)
+    public static void LoadingRoutinePostfix(ref IEnumerator __result)
     {
-        __result = Wrap(__result);
+        __result = WrapLoadingRoutine(__result);
     }
     
-    private static IEnumerator Wrap(IEnumerator original)
+    private static IEnumerator WrapLoadingRoutine(IEnumerator original)
     {
         while (original.MoveNext())
         {

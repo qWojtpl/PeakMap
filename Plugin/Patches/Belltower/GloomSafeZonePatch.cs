@@ -16,10 +16,11 @@ public class GloomSafeZonePatch
         {
             return;
         }
-        BelltowersDataManager.BelltowerList.Add(new ObjectInfo
+        DataManager.BelltowerList.Add(new ObjectInfo
         {
             InstanceID = __instance.GetInstanceID(),
             Name = __instance.name,
+            DisplayName = "BELLTOWER",
             Position = __instance.transform.position
         });
     }

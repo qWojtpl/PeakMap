@@ -23,11 +23,11 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=2"></script>
     <script src="scripts/nocache.js"></script>
-    <script src="script.js?v=1"></script>
+    <script src="scripts/script.js?v=1"></script>
 </head>
 <body>
     <div class="standard-container">
@@ -50,17 +50,23 @@
                 <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
             </div>
             <div class="settings-entry">
-                <label for="capybara-checkbox">
-                    <span></span>Capybara
+                <label for="animals-checkbox">
+                    <span></span>Animals
                 </label>
-                <input type="checkbox" id="capybara-checkbox" onchange="switchCapybara(this)" checked>
+                <input type="checkbox" id="animals-checkbox" onchange="switchAnimals(this)" checked>
             </div>
             <div class="settings-entry">
+                <label for="amulets-checkbox">
+                    <span></span>Amulets
+                </label>
+                <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
+            </div>
+            <!-- <div class="settings-entry">
                 <label for="tomb-checkbox">
                     <span></span>Tomb
                 </label>
                 <input type="checkbox" id="tomb-checkbox" onchange="switchTomb(this)" checked>
-            </div>
+            </div> -->
             <div class="settings-buttons">
                 <button onclick="previousLevel()">Previous biome</button>
                 <button onclick="nextLevel()">Next biome</button>
@@ -77,7 +83,8 @@
     <iframe id="info-frame" class="data-frame" src="./data/info.json" onload="createInfo(this)"></iframe>
     <iframe id="luggage-frame" class="data-frame" src="./data/level_0_luggage.json" onload="createLuggage(this)"></iframe>
     <iframe id="belltowers-frame" class="data-frame" src="./data/level_0_belltowers.json" onload="createBelltowers(this)"></iframe>
-    <iframe id="capybara-frame" class="data-frame" src="./data/level_0_capybara.json" onload="createCapybara(this)"></iframe>
-    <iframe id="tomb-frame" class="data-frame" src="./data/level_0_tomb.json" onload="createTomb(this)"></iframe>
+    <iframe id="animals-frame" class="data-frame" src="./data/level_0_animals.json" onload="createAnimals(this)"></iframe>
+    <iframe id="amulets-frame" class="data-frame" src="./data/level_0_amulets.json" onload="createAmulets(this)"></iframe>
+    <!-- <iframe id="tomb-frame" class="data-frame" src="./data/level_0_tomb.json" onload="createTomb(this)"></iframe> -->
 </body>
 </html>

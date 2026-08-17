@@ -12,14 +12,13 @@ public class ObjectInfo
     
     public string Name { get; set; }
     
+    public string DisplayName { get; set; }
+    
     [JsonIgnore]
     public Vector3 Position { get; set; }
     
     [JsonIgnore]
     public Vector2? PositionOnScreen { get; set; }
-    
-    [JsonProperty("Position")]
-    public float[] PositionArray => new[] {Position.x, Position.y, Position.z };
     
     [JsonProperty("PositionOnScreen")]
     public float[] PositionOnScreenArray => PositionOnScreen.HasValue ? new[] { PositionOnScreen.Value.x, PositionOnScreen.Value.y } : null;
