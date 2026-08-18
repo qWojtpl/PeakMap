@@ -11,7 +11,8 @@
 ## Current data & supported biomes
 - [x] Luggages
 - [x] Belltowers
-- [ ] Capybaras
+- [x] Capybaras, beehives, early worms
+- [x] Amulets
 - [ ] Mushrooms
 - [x] Shore, Tropics, Roots, Alpine, Mesa, Caldera, Gloom, The Cidatel
 - [ ] The Klin
