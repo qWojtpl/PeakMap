@@ -4,10 +4,17 @@ const maxLevel = 4;
 
 // Info
 
-function createInfo(frame) {
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
+function downloadAndCreateInfo() {
+    fetch("./data/info.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(json) {
+            createInfo(json);
+        });
+}
+
+function createInfo(json) {
     let lastUpdateDate = new Date(json.DataTimestamp * 1000);
     document.getElementById("settings-lastupdated").innerText = lastUpdateDate.toLocaleDateString() + " " + lastUpdateDate.toLocaleTimeString();
     const nextUpdate = document.getElementById("settings-nextupdate");
@@ -54,36 +61,49 @@ function createInfo(frame) {
     
 }
 
+downloadAndCreateInfo();
+
 // Luggage
 
 let luggage = [];
 
-function createLuggage(frame) {
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
+function createLuggage(level) {
+    const container = document.getElementById("container");
     if(!document.getElementById("luggage-checkbox").checked) {
         return;
     }
-    for(let i = 0; i < json.length; i++) {
-        luggage[i] = createPoint(
-            "luggage" + currentLevel,
-            json[i].PositionOnScreen[0], 
-            json[i].PositionOnScreen[1], 
-            json[i].DisplayName,
-            "red",
-            `${json[i].Name}.png`
-        );
+    if(typeof luggage[level] != "undefined") {
+        for(let i = 0; i < luggage[level].length; i++) {
+            container.appendChild(luggage[level][i]);
+        }
+        Promise.resolve();
+        return;
     }
+    fetch("./data/level_" + level + "_luggage.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            luggage[level] = [];
+            for(let i = 0; i < json.length; i++) {
+                luggage[level][i] = createPoint(
+                    "luggage",
+                    json[i].PositionOnScreen[0], 
+                    json[i].PositionOnScreen[1], 
+                    json[i].DisplayName,
+                    `${json[i].Name}.png`
+                );
+            }
+        });
 }
 
 function removeLuggage(level) {
-    removePoints("luggage" + level);
+    removePoints("luggage", level);
 }
 
 function switchLuggage(checkbox) {
     if(checkbox.checked) {
-        createLuggage(document.getElementById("luggage-frame"));
+        createLuggage(currentLevel);
     } else {
         removeLuggage(currentLevel);
     }
@@ -94,32 +114,43 @@ function switchLuggage(checkbox) {
 
 let belltowers = [];
 
-function createBelltowers(frame) {
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
+function createBelltowers(level) {
+    const container = document.getElementById("container");
     if(!document.getElementById("belltowers-checkbox").checked) {
         return;
     }
-    for(let i = 0; i < json.length; i++) {
-        belltowers[i] = createPoint(
-            "belltower" + currentLevel,
-            json[i].PositionOnScreen[0], 
-            json[i].PositionOnScreen[1], 
-            json[i].DisplayName,
-            "purple",
-            `${json[i].Name}.png`
-        );
+    if(typeof belltowers[level] != "undefined") {
+        for(let i = 0; i < belltowers[level].length; i++) {
+            container.appendChild(belltowers[level][i]);
+        }
+        Promise.resolve();
+        return;
     }
+    fetch("./data/level_" + level + "_belltowers.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            belltowers[level] = [];
+            for(let i = 0; i < json.length; i++) {
+                belltowers[level][i] = createPoint(
+                    "belltower",
+                    json[i].PositionOnScreen[0], 
+                    json[i].PositionOnScreen[1], 
+                    json[i].DisplayName,
+                    `${json[i].Name}.png`
+                );
+            }
+        });
 }
 
 function removeBelltowers(level) {
-    removePoints("belltower" + level);
+    removePoints("belltower", level);
 }
 
 function switchBelltowers(checkbox) {
     if(checkbox.checked) {
-        createBelltowers(document.getElementById("belltowers-frame"));
+        createBelltowers(currentLevel);
     } else {
         removeBelltowers(currentLevel);
     }
@@ -130,32 +161,43 @@ function switchBelltowers(checkbox) {
 
 let animals = [];
 
-function createAnimals(frame) {
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
+function createAnimals(level) {
+    const container = document.getElementById("container");
     if(!document.getElementById("animals-checkbox").checked) {
         return;
     }
-    for(let i = 0; i < json.length; i++) {
-        animals[i] = createPoint(
-            "animals" + currentLevel,
-            json[i].PositionOnScreen[0], 
-            json[i].PositionOnScreen[1], 
-            json[i].DisplayName,
-            "brown",
-            `${json[i].Name}.png`
-        );
+    if(typeof animals[level] != "undefined") {
+        for(let i = 0; i < animals[level].length; i++) {
+            container.appendChild(animals[level][i]);
+        }
+        Promise.resolve();
+        return;
     }
+    fetch("./data/level_" + level + "_animals.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            animals[level] = [];
+            for(let i = 0; i < json.length; i++) {
+                animals[level][i] = createPoint(
+                    "animals",
+                    json[i].PositionOnScreen[0], 
+                    json[i].PositionOnScreen[1], 
+                    json[i].DisplayName,
+                    `${json[i].Name}.png`
+                );
+            }
+        });
 }
 
 function removeAnimals(level) {
-    removePoints("animals" + level);
+    removePoints("animals", level);
 }
 
 function switchAnimals(checkbox) {
     if(checkbox.checked) {
-        createAnimals(document.getElementById("animals-frame"));
+        createAnimals(currentLevel);
     } else {
         removeAnimals(currentLevel);
     }
@@ -166,86 +208,57 @@ function switchAnimals(checkbox) {
 
 let amulets = [];
 
-function createAmulets(frame) {
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
+function createAmulets(level) {
+    const container = document.getElementById("container");
     if(!document.getElementById("amulets-checkbox").checked) {
         return;
     }
-    for(let i = 0; i < json.length; i++) {
-        amulets[i] = createPoint(
-            "amulets" + currentLevel,
-            json[i].PositionOnScreen[0], 
-            json[i].PositionOnScreen[1], 
-            json[i].DisplayName + " AMULET",
-            "gray",
-            `${json[i].Name}.png`
-        );
+    if(typeof amulets[level] != "undefined") {
+        for(let i = 0; i < amulets[level].length; i++) {
+            container.appendChild(amulets[level][i]);
+        }
+        Promise.resolve();
+        return;
     }
+    fetch("./data/level_" + level + "_amulets.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            amulets[level] = [];
+            for(let i = 0; i < json.length; i++) {
+                amulets[level][i] = createPoint(
+                    "amulets",
+                    json[i].PositionOnScreen[0], 
+                    json[i].PositionOnScreen[1], 
+                    json[i].DisplayName,
+                    `${json[i].Name}.png`
+                );
+            }
+        });
 }
 
 function removeAmulets(level) {
-    removePoints("amulets" + level);
+    removePoints("amulets", level);
 }
 
 function switchAmulets(checkbox) {
     if(checkbox.checked) {
-        createAmulets(document.getElementById("amulets-frame"));
+        createAmulets(currentLevel);
     } else {
         removeAmulets(currentLevel);
     }
     updateZoom();
 }
 
-// Tomb
-
-let tomb = [];
-
-function createTomb(frame) {
-    //todo
-    return;
-    const frameDocument = frame.contentDocument || frame.contentWindow.document;
-    const rawText = frameDocument.documentElement.textContent;
-    const json = JSON.parse(rawText);
-    if(!document.getElementById("tomb-checkbox").checked) {
-        return;
-    }
-    for(let i = 0; i < json.length; i++) {
-        tomb[i] = createPoint(
-            "tomb" + currentLevel,
-            json[i].PositionOnScreen[0], 
-            json[i].PositionOnScreen[1], 
-            json[i].DisplayName,
-            "gold",
-            `${json[i].Name}.png`
-        );
-    }
-}
-
-function removeTomb(level) {
-    removePoints("tomb" + level);
-}
-
-function switchTomb(checkbox) {
-    if(checkbox.checked) {
-        createTomb(document.getElementById("tomb-frame"));
-    } else {
-        removeTomb(currentLevel);
-    }
-    updateZoom();
-}
-
-
 // General
 
-function createPoint(clazz, x, y, name, borderColor, image) {
+function createPoint(clazz, x, y, name, image) {
     const container = document.getElementById("container");
     const element = document.createElement("div");
     element.classList.add(clazz);
     element.classList.add("point");
     element.style = `--x: ${x}; --y: ${y}`;
-    element.style.borderColor = borderColor;
     element.style.backgroundImage = `url('./images/${image}')`;
     element.addEventListener("mouseover", () => {
         document.getElementById("item-popup").style.opacity = 1;
@@ -272,7 +285,6 @@ function removeAll(level) {
     removeBelltowers(level);
     removeAnimals(level);
     removeAmulets(level);
-    removeTomb(level);
 }
 
 function previousLevel() {
@@ -294,7 +306,7 @@ function loadLevel(level) {
     }
     
     console.log("Loading level: " + level);
-
+    
     const buttons = document.getElementsByTagName("button");
     for(let i = 0; i < buttons.length; i++) {
         buttons[i].disabled = true;
@@ -315,18 +327,24 @@ function loadLevel(level) {
     newImage.onload = function() {
         requestAnimationFrame(() => {
             map.src = this.src;
-            requestAnimationFrame(() => {
-                map.loading = false;
-                document.getElementById("luggage-frame").src = "./data/level_" + level + "_luggage.json" + getURLAddition(); 
-                document.getElementById("belltowers-frame").src = "./data/level_" + level + "_belltowers.json" + getURLAddition(); 
-                document.getElementById("animals-frame").src = "./data/level_" + level + "_animals.json" + getURLAddition(); 
-                document.getElementById("amulets-frame").src = "./data/level_" + level + "_amulets.json" + getURLAddition(); 
-                // document.getElementById("tomb-frame").src = "./data/level_" + level + "_tomb.json" + getURLAddition(); 
-                for(let i = 0; i < buttons.length; i++) {
-                    buttons[i].disabled = false;
-                }
+            Promise.all([
+                createLuggage(level),
+                createBelltowers(level),
+                createAnimals(level),
+                createAmulets(level)
+            ]).then(() => {
+                requestAnimationFrame(() => {
+                    map.loading = false;
+                    for(let i = 0; i < buttons.length; i++) {
+                        buttons[i].disabled = false;
+                    }
+                });
             });
         });
     }
     newImage.src = "./data/level_" + level + ".png" + getURLAddition();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadLevel(0);
+});

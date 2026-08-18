@@ -107,6 +107,22 @@ body {
     z-index: 3;
 }
 
+.point.luggage {
+    border-color: red;
+}
+
+.point.belltower {
+    border-color: purple;
+}
+
+.point.animals {
+    border-color: brown;
+}
+
+.point.amulets {
+    border-color: gray;
+}
+
 @keyframes pointHover {
 
     0% {

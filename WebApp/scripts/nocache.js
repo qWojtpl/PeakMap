@@ -12,6 +12,5 @@ function getURLAddition() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    patchElements(document.getElementsByTagName("iframe"));
     patchElements(document.getElementsByTagName("img"));
 });
