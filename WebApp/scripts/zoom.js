@@ -50,6 +50,7 @@ function updateZoom() {
         zoomTop = 0;
         document.getElementById("zoom-reminder").style.opacity = 1;
         document.getElementById("star-reminder").style.position = "absolute";
+        document.getElementsByTagName("footer")[0].style.position = "absolute";
     } else {
         const parent = container.parentElement || document.body;
         const rect = parent.getBoundingClientRect();
@@ -60,6 +61,7 @@ function updateZoom() {
         zoomTop = Math.max(-maxShiftY, Math.min(maxShiftY, zoomTop));
         document.getElementById("zoom-reminder").style.opacity = 0;
         document.getElementById("star-reminder").style.position = "fixed";
+        document.getElementsByTagName("footer")[0].style.position = "fixed";
     }
     
     container.style.transform = `scale(${zoom})`;

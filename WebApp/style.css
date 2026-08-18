@@ -119,6 +119,10 @@ body {
     border-color: brown;
 }
 
+.point.animals[style*="EarlyWorm.png"] {
+    border-color: pink;
+}
+
 .point.amulets {
     border-color: gray;
 }
@@ -220,7 +224,7 @@ body {
 }
 
 .settings-entry label[for="amulets-checkbox"] span {
-    background-image: url("./images/AmuletIcon.png");
+    background-image: url("./images/AMULET_CLONE.png");
 }
 
 .settings-entry input[type=checkbox] {
@@ -288,7 +292,7 @@ button:hover {
 
 #zoom-reminder {
     position: absolute;
-    bottom: 0;
+    bottom: 1vmin;
     right: 1vmin;
     transition: color 1s, opacity 0.3s;
     animation-name: reminder;
@@ -316,7 +320,7 @@ button:hover {
 
 #star-reminder {
     position: absolute;
-    bottom: 0;
+    bottom: 1vmin;
     left: 1vmin;
 }
 
@@ -331,4 +335,14 @@ button:hover {
 a, a:visited {
     color: black;
     text-decoration: none;
+}
+
+footer {
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 1.2vmin;
 }

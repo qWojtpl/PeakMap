@@ -25,3 +25,7 @@
 ## Plans for the future
 - Bot which automatically uploads new data to the page
 - Uploading current run map to get precise location of mushrooms and other food
+
+## Legal & Credits
+
+This is an unofficial, open-source fan project and is not affiliated with, endorsed, or sponsored by Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro Crab, Landfall Games and/or their licensors.
