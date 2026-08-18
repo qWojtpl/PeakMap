@@ -1,5 +1,5 @@
 
-const cacheIdentifier = new Date().toLocaleDateString() + "&before2=" + (new Date().getUTCHours() < 17);
+var cacheIdentifier = "?nocache";
 
 function patchElements(elements) {
     for(let i = 0; i < elements.length; i++) {
@@ -10,7 +10,3 @@ function patchElements(elements) {
 function getURLAddition() {
     return "?nocache=" + cacheIdentifier;
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    patchElements(document.getElementsByTagName("img"));
-});

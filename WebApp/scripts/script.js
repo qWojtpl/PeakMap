@@ -5,12 +5,14 @@ const maxLevel = 4;
 // Info
 
 function downloadAndCreateInfo() {
-    fetch("./data/info.json" + getURLAddition())
+    fetch("./data/info.json" + getURLAddition() + "&now=" + new Date().getTime())
         .then(function(response) {
             return response.json();
         })
         .then(function(json) {
             createInfo(json);
+            cacheIdentifier = cacheIdentifier + "&lastUpdate=" + (json.DataTimestamp * 1000);
+            loadLevel(0);
         });
 }
 
@@ -344,7 +346,3 @@ function loadLevel(level) {
     }
     newImage.src = "./data/level_" + level + ".png" + getURLAddition();
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    loadLevel(0);
-});
