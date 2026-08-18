@@ -31,6 +31,11 @@ public class DataGatheringManager
         {
             ScreenshotManager.SetupLevelDimensions(i);
         }
+
+        for (int i = 0; i < NUM_LEVELS; i++)
+        {
+            DataManager.CreateData(i, DataManager.BelltowerList, "belltowers");
+        }
         
         for (int i = 0; i < NUM_LEVELS; i++)
         {
@@ -43,7 +48,6 @@ public class DataGatheringManager
         for (int i = 0; i < NUM_LEVELS; i++)
         {
             DataManager.CreateData(i, DataManager.LuggageList, "luggage");
-            DataManager.CreateData(i, DataManager.BelltowerList, "belltowers");
             DataManager.CreateData(i, DataManager.AnimalList, "animals");
             DataManager.CreateData(i, DataManager.AmuletList, "amulets");
             TombDataManager.CreateTombData(i);

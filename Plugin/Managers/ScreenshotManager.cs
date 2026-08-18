@@ -79,6 +79,14 @@ public static class ScreenshotManager
         {
             PhotonNetwork.IsMessageQueueRunning = false;
             mapObject.SetActive(true);
+            EnablingSubstep[] array = (from enablingSubstep in mapObject.GetComponentsInChildren<EnablingSubstep>()
+                where enablingSubstep.gameObject.activeSelf
+                select enablingSubstep).ToArray();
+            foreach(EnablingSubstep substep in array)
+            {
+                substep.gameObject.SetActive(true);
+            }
+            segment.segmentCampfire?.SetActive(true);
             segment.wallNext?.SetActive(false);
             segment.wallPrevious?.SetActive(false);
             if (segment.biome == Biome.BiomeType.Swamp)

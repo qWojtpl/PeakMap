@@ -23,9 +23,9 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
-    <script src="scripts/zoom.js?v=2"></script>
+    <script src="scripts/zoom.js?v=3"></script>
     <script src="scripts/nocache.js"></script>
     <script src="scripts/script.js?v=2"></script>
 </head>
@@ -61,12 +61,6 @@
                 </label>
                 <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
             </div>
-            <!-- <div class="settings-entry">
-                <label for="tomb-checkbox">
-                    <span></span>Tomb
-                </label>
-                <input type="checkbox" id="tomb-checkbox" onchange="switchTomb(this)" checked>
-            </div> -->
             <div class="settings-buttons">
                 <button onclick="previousLevel()">Previous biome</button>
                 <button onclick="nextLevel()">Next biome</button>
@@ -78,6 +72,9 @@
         </div>
         <div id="zoom-reminder">
             <h2>Use scroll and mouse to zoom in</h2>
+        </div>
+        <div id="star-reminder">
+            <a href="https://github.com/qWojtpl/PeakMap"><h4>Appreciate my work? Grant me a star on GitHub!</h4></a>
         </div>
     </div>
 </body>
