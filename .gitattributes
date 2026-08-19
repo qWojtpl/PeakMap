@@ -1,2 +1,1 @@
-WebApp/data/*.png filter=lfs diff=lfs merge=lfs -text
 *.png !text !filter !merge !diff
