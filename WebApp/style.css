@@ -123,8 +123,20 @@ body {
     border-color: pink;
 }
 
-.point.amulets {
-    border-color: gray;
+.point.amulets[style*="AMULET_CLONE.png"] {
+    border-color: greenyellow;
+}
+
+.point.amulets[style*="AMULET_INFINITESTAM.png"] {
+    border-color: orange;
+}
+
+.point.amulets[style*="AMULET_HEALING.png"] {
+    border-color: rgb(87, 87, 228);
+}
+
+.point.amulets[style*="AMULET_DOUBLEJUMP.png"] {
+    border-color: rgb(199, 53, 34);
 }
 
 @keyframes pointHover {
