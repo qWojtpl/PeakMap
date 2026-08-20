@@ -32,28 +32,19 @@ public class DataGatheringManager
         {
             ScreenshotManager.SetupLevelDimensions(i);
         }
-
-        for (int i = 0; i < NUM_LEVELS; i++)
-        {
-            DataManager.CreateData(i, DataManager.BelltowerList, "belltowers");
-        }
-        
-        for (int i = 0; i < NUM_LEVELS; i++)
-        {
-            ScreenshotManager.TakeScreenshot(i);
-        }
         
         AmuletDataManager.CreateAmuletData();
         AntlionDataManager.CreateAntlionData();
-
-        PeakMapPlugin.Log.LogWarning("Writing data...");
         
         for (int i = 0; i < NUM_LEVELS; i++)
         {
+            DataManager.CreateData(i, DataManager.BelltowerList, "belltowers");
+            ScreenshotManager.TakeScreenshot(i);
             DataManager.CreateData(i, DataManager.LuggageList, "luggage");
             DataManager.CreateData(i, DataManager.AnimalList, "animals");
             DataManager.CreateData(i, DataManager.AmuletList, "amulets");
             TombDataManager.CreateTombData(i);
+            ScreenshotManager.DeactivateCurrentSegment();
         }
         
         File.WriteAllText(Path.Combine(PeakMapPlugin.ModFolder, "info.json"), JsonConvert.SerializeObject(new GatherInfo

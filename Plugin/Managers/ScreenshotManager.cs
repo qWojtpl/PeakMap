@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Peak;
 using Photon.Pun;
 using UnityEngine;
 using Zorro.Core;
@@ -44,10 +43,11 @@ public static class ScreenshotManager
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
     private static int ResolutionDepth { get; set; } = 24;
-    
-    private static readonly List<int> _takenScreenshots = new();
 
     private static int swampCounter = 0;
+
+    private static GameObject currentMapObject;
+    private static EnablingSubstep[] currentEnablingSubsteps;
     
     public static void SetupLevelDimensions(int level)
     {
@@ -67,46 +67,41 @@ public static class ScreenshotManager
     
     public static void TakeScreenshot(int level)
     {
-        if (_takenScreenshots.Contains(level))
-        {
-            return;
-        }
 
         MapHandler mapHandler = Singleton<MapHandler>.Instance;
         MapHandler.MapSegment segment = mapHandler?.segments?[level];
         GameObject mapObject = segment?.segmentParent;
-        if (mapObject != null)
-        {
-            PhotonNetwork.IsMessageQueueRunning = false;
-            mapObject.SetActive(true);
-            EnablingSubstep[] array = (from enablingSubstep in mapObject.GetComponentsInChildren<EnablingSubstep>()
-                where enablingSubstep.gameObject.activeSelf
-                select enablingSubstep).ToArray();
-            foreach(EnablingSubstep substep in array)
-            {
-                substep.gameObject.SetActive(true);
-            }
-            segment.segmentCampfire?.SetActive(true);
-            segment.wallNext?.SetActive(false);
-            segment.wallPrevious?.SetActive(false);
-            if (segment.biome == Biome.BiomeType.Swamp)
-            {
-                swampCounter++;
-            }
-            if (swampCounter == 2)
-            {
-                HideTempleObjects();
-            }
-            PhotonNetwork.IsMessageQueueRunning = true;
-        }
-        else
+
+        if (mapObject == null)
         {
             return;
         }
         
-        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
+        PhotonNetwork.IsMessageQueueRunning = false;
+        mapObject.SetActive(true);
+        EnablingSubstep[] substeps = (from enablingSubstep in mapObject.GetComponentsInChildren<EnablingSubstep>()
+            where enablingSubstep.gameObject.activeSelf
+            select enablingSubstep).ToArray();
+        foreach(EnablingSubstep substep in substeps)
+        {
+            substep.gameObject.SetActive(true);
+        }
+        currentMapObject = mapObject;
+        currentEnablingSubsteps = substeps;
+        segment.segmentCampfire?.SetActive(true);
+        segment.wallNext?.SetActive(false);
+        segment.wallPrevious?.SetActive(false);
+        if (segment.biome == Biome.BiomeType.Swamp)
+        {
+            swampCounter++;
+        }
+        if (swampCounter == 2)
+        {
+            HideTempleObjects();
+        }
+        PhotonNetwork.IsMessageQueueRunning = true;
         
-        _takenScreenshots.Add(level);
+        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
 
         GameObject tempCamObj = CreateTempCameraGameObject(level);
         Camera tempCam = CreateTempCamera(level, tempCamObj);
@@ -139,6 +134,15 @@ public static class ScreenshotManager
         foreach (ISpawner item in list)
         {
             item.TrySpawnItems();
+        }
+    }
+
+    public static void DeactivateCurrentSegment()
+    {
+        currentMapObject.SetActive(false);
+        foreach(EnablingSubstep substep in currentEnablingSubsteps)
+        {
+            substep.gameObject.SetActive(false);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -10,14 +11,16 @@ public class ObjectInfo
     [JsonIgnore]
     public int? InstanceID { get; set; }
     
+    [JsonIgnore] [CanBeNull] public Component ReferenceComponent { get; set; }
+    
     public string Name { get; set; }
     
     public string DisplayName { get; set; }
     
     [JsonIgnore]
     public Vector3 Position { get; set; }
-    
-    [JsonIgnore]
+
+    [JsonIgnore] 
     public Vector2? PositionOnScreen { get; set; }
     
     [JsonProperty("PositionOnScreen")]

@@ -23,6 +23,13 @@ public abstract class DataManager
             {
                 info.PositionOnScreen = positionOnScreen;
             }
+            if (info.ReferenceComponent != null)
+            {
+                if (!info.ReferenceComponent.gameObject.activeInHierarchy)
+                {
+                    info.PositionOnScreen = null;
+                }
+            }
         }
 
         float previousWidth = -500;

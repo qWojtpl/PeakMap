@@ -18,6 +18,7 @@ public class LuggagePatch
         LocalizedText.SetLanguage((int) LanguageSetting.Language.English);
         DataManager.LuggageList.Add(new ObjectInfo
         {
+            ReferenceComponent = __instance,
             Name = __instance.name,
             DisplayName = __instance.GetName(),
             Position = __instance.transform.position
