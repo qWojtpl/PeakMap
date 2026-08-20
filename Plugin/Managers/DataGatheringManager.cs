@@ -39,12 +39,12 @@ public class DataGatheringManager
         for (int i = 0; i < NUM_LEVELS; i++)
         {
             DataManager.CreateData(i, DataManager.BelltowerList, "belltowers");
-            ScreenshotManager.TakeScreenshot(i);
+            ScreenshotManager.CreateFor(i);
             DataManager.CreateData(i, DataManager.LuggageList, "luggage");
             DataManager.CreateData(i, DataManager.AnimalList, "animals");
             DataManager.CreateData(i, DataManager.AmuletList, "amulets");
             TombDataManager.CreateTombData(i);
-            ScreenshotManager.DeactivateCurrentSegment();
+            ScreenshotManager.Flush();
         }
         
         File.WriteAllText(Path.Combine(PeakMapPlugin.ModFolder, "info.json"), JsonConvert.SerializeObject(new GatherInfo

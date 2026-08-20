@@ -47,6 +47,7 @@ public static class ScreenshotManager
     private static int swampCounter = 0;
 
     private static GameObject currentMapObject;
+    private static MapHandler.MapSegment currentSegment;
     private static EnablingSubstep[] currentEnablingSubsteps;
     
     public static void SetupLevelDimensions(int level)
@@ -65,9 +66,8 @@ public static class ScreenshotManager
         PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level] + ", with height " + LevelHeights[level]);
     }
     
-    public static void TakeScreenshot(int level)
+    public static void CreateFor(int level)
     {
-
         MapHandler mapHandler = Singleton<MapHandler>.Instance;
         MapHandler.MapSegment segment = mapHandler?.segments?[level];
         GameObject mapObject = segment?.segmentParent;
@@ -77,21 +77,40 @@ public static class ScreenshotManager
             return;
         }
         
-        PhotonNetwork.IsMessageQueueRunning = false;
-        mapObject.SetActive(true);
-        EnablingSubstep[] substeps = (from enablingSubstep in mapObject.GetComponentsInChildren<EnablingSubstep>()
+        currentMapObject = mapObject;
+        currentEnablingSubsteps = (from enablingSubstep in mapObject.GetComponentsInChildren<EnablingSubstep>()
             where enablingSubstep.gameObject.activeSelf
-            select enablingSubstep).ToArray();
-        foreach(EnablingSubstep substep in substeps)
+            select enablingSubstep).ToArray();;
+        currentSegment = segment;
+        
+        PrepareMap();
+        
+        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
+
+        GameObject tempCamObj = CreateTempCameraGameObject(CameraPositions[level], CameraRotations[level]);
+        Camera tempCam = CreateTempCamera(CameraFOVs[level], tempCamObj);
+
+        TakeScreenshot(tempCam, level + "");
+        
+        
+        
+        Object.DestroyImmediate(tempCamObj);
+        SpawnMapObjectItems();
+    }
+
+    private static void PrepareMap()
+    {
+        PhotonNetwork.IsMessageQueueRunning = false;
+        currentMapObject.SetActive(true);
+        
+        foreach(EnablingSubstep substep in currentEnablingSubsteps)
         {
             substep.gameObject.SetActive(true);
         }
-        currentMapObject = mapObject;
-        currentEnablingSubsteps = substeps;
-        segment.segmentCampfire?.SetActive(true);
-        segment.wallNext?.SetActive(false);
-        segment.wallPrevious?.SetActive(false);
-        if (segment.biome == Biome.BiomeType.Swamp)
+        currentSegment.segmentCampfire?.SetActive(true);
+        currentSegment.wallNext?.SetActive(false);
+        currentSegment.wallPrevious?.SetActive(false);
+        if (currentSegment.biome == Biome.BiomeType.Swamp)
         {
             swampCounter++;
         }
@@ -100,12 +119,10 @@ public static class ScreenshotManager
             HideTempleObjects();
         }
         PhotonNetwork.IsMessageQueueRunning = true;
-        
-        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
+    }
 
-        GameObject tempCamObj = CreateTempCameraGameObject(level);
-        Camera tempCam = CreateTempCamera(level, tempCamObj);
-        
+    private static void TakeScreenshot(Camera tempCam, string fileSuffix)
+    {
         RenderTexture renderTexture = new RenderTexture(ResolutionWidth, ResolutionHeight, ResolutionDepth);
         tempCam.targetTexture = renderTexture;
         
@@ -117,7 +134,7 @@ public static class ScreenshotManager
         screenshot.Apply();
         
         byte[] bytes = screenshot.EncodeToJPG(92);
-        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + ".jpg");
+        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + fileSuffix + ".jpg");
         File.WriteAllBytes(fullPath, bytes);
         
         tempCam.targetTexture = null;
@@ -125,9 +142,11 @@ public static class ScreenshotManager
         
         Object.DestroyImmediate(renderTexture);
         Object.DestroyImmediate(screenshot);
-        Object.DestroyImmediate(tempCamObj);
-        
-        List<ISpawner> list = segment.segmentParent
+    }
+
+    private static void SpawnMapObjectItems()
+    {
+        List<ISpawner> list = currentMapObject
             .GetComponentsInChildren<ISpawner>(true)
             .ToList();
 
@@ -137,7 +156,7 @@ public static class ScreenshotManager
         }
     }
 
-    public static void DeactivateCurrentSegment()
+    public static void Flush()
     {
         currentMapObject.SetActive(false);
         foreach(EnablingSubstep substep in currentEnablingSubsteps)
@@ -148,8 +167,8 @@ public static class ScreenshotManager
 
     public static bool GetObjectScreenPosition(int level, Vector3 objectPosition, out Vector2 screenPosition)
     {
-        GameObject tempCamObj = CreateTempCameraGameObject(level);
-        Camera tempCam = CreateTempCamera(level, tempCamObj);
+        GameObject tempCamObj = CreateTempCameraGameObject(CameraPositions[level], CameraRotations[level]);
+        Camera tempCam = CreateTempCamera(CameraFOVs[level], tempCamObj);
 
         Vector3 viewportPoint = tempCam.WorldToViewportPoint(objectPosition);
         
@@ -168,22 +187,22 @@ public static class ScreenshotManager
         return false;
     }
 
-    private static GameObject CreateTempCameraGameObject(int level)
+    private static GameObject CreateTempCameraGameObject(Vector3 cameraPosition, Vector3 cameraRotation)
     {
         return new GameObject("TempCamera")
         {
             transform = {
-                position = CameraPositions[level],
-                eulerAngles = CameraRotations[level]
+                position = cameraPosition,
+                eulerAngles = cameraRotation
             }
         };
     }
 
-    private static Camera CreateTempCamera(int level, GameObject tempCamObj)
+    private static Camera CreateTempCamera(float fov, GameObject tempCamObj)
     {
         Camera tempCam = tempCamObj.AddComponent<Camera>();
         tempCam.clearFlags = CameraClearFlags.Skybox;
-        tempCam.fieldOfView = CameraFOVs[level];
+        tempCam.fieldOfView = fov;
         tempCam.aspect = (float)ResolutionWidth / ResolutionHeight;
         return tempCam;
     }
