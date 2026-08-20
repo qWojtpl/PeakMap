@@ -290,11 +290,29 @@ function removeAll(level) {
 }
 
 function previousLevel() {
-    loadLevel(currentLevel - 1);
+    let level = currentLevel;
+    if((currentLevel + "").includes("_")) {
+        level = parseInt(currentLevel.split("_")[0]);
+    }
+    loadLevel(level - 1);
+}
+
+function switchAngle() {
+    let level;
+    if((currentLevel + "").includes("_")) {
+        level = parseInt(currentLevel.split("_")[0]);
+    } else {
+        level = currentLevel + "_side";
+    }
+    loadLevel(level);
 }
 
 function nextLevel() {
-    loadLevel(currentLevel + 1);
+    let level = currentLevel;
+    if((currentLevel + "").includes("_")) {
+        level = parseInt(currentLevel.split("_")[0]);
+    }
+    loadLevel(level + 1);
 }
 
 function loadLevel(level) {
@@ -309,9 +327,21 @@ function loadLevel(level) {
     
     console.log("Loading level: " + level);
     
-    const buttons = document.getElementsByTagName("button");
+    const switchAngleButton = document.getElementById("switch-angle-button");
+    //
+    const buttons = new Array(document.getElementsByTagName("button"));
+    let index = buttons.indexOf(switchAngleButton);
+    buttons.splice(index, 1);
+    //
+
     for(let i = 0; i < buttons.length; i++) {
         buttons[i].disabled = true;
+    }
+
+    if(level == 3 || level == 4) {
+        switchAngleButton.disabled = true;
+    } else {
+        switchAngleButton.disabled = false;
     }
 
     zoom = 1;
@@ -344,5 +374,5 @@ function loadLevel(level) {
             });
         });
     }
-    newImage.src = "./data/level_" + level + ".png" + getURLAddition();
+    newImage.src = "./data/level_" + level + ".jpg" + getURLAddition();
 }

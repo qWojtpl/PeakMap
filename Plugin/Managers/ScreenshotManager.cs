@@ -121,8 +121,8 @@ public static class ScreenshotManager
         screenshot.ReadPixels(new Rect(0, 0, ResolutionWidth, ResolutionHeight), 0, 0);
         screenshot.Apply();
         
-        byte[] bytes = screenshot.EncodeToPNG();
-        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + ".png");
+        byte[] bytes = screenshot.EncodeToJPG(92);
+        string fullPath = Path.Combine(PeakMapPlugin.ModFolder, "level_" + level + ".jpg");
         File.WriteAllBytes(fullPath, bytes);
         
         tempCam.targetTexture = null;

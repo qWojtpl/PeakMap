@@ -111,6 +111,18 @@ body {
     border-color: red;
 }
 
+.point.luggage[style*="LuggageSmall.png"] {
+    border-color: #da7c20;
+}
+
+.point.luggage[style*="LuggageBig.png"] {
+    border-color: #ece2dc;
+}
+
+.point.luggage[style*="LuggageEpic.png"] {
+    border-color: orangered;
+}
+
 .point.belltower {
     border-color: purple;
 }
@@ -245,12 +257,23 @@ body {
 
 .settings-buttons {
     display: flex;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
     width: 75%;
     gap: 5%;
     margin-top: 1vmin;
+    margin-bottom: 1vmin;
+}
+
+.settings-angle-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 2vmin;
+}
+
+.settings-angle-buttons button {
+    width: 50%;
 }
 
 #settings p {
@@ -273,6 +296,15 @@ button:hover {
     cursor: pointer;
     animation-name: buttonHover;
     animation-duration: 0.8s;
+}
+
+button[disabled] {
+    background-color: #9eaa89;
+}
+
+button[disabled]:hover {
+    animation-name: none;
+    cursor: not-allowed;
 }
 
 #item-popup {

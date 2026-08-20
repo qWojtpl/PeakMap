@@ -23,16 +23,16 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=4"></script>
     <script src="scripts/nocache.js?v=2"></script>
-    <script src="scripts/script.js?v=3"></script>
+    <script src="scripts/script.js?v=4"></script>
 </head>
 <body>
     <div class="standard-container">
         <div class="standard-container" id="container">
-            <img id="map" src="./data/level_0.png" alt="Map" draggable=false>
+            <img id="map" src="./data/level_0.jpg" alt="Map" draggable=false>
         </div>
         <div id="settings">
             <p>Last updated:<br> <b id="settings-lastupdated">...</b></p>
@@ -64,6 +64,9 @@
             <div class="settings-buttons">
                 <button onclick="previousLevel()">Previous biome</button>
                 <button onclick="nextLevel()">Next biome</button>
+            </div>
+            <div class="settings-angle-buttons" style="display:none;">
+                <button id="switch-angle-button" onclick="switchAngle()">Switch angle</button>
             </div>
         </div>
         <div id="item-popup">
