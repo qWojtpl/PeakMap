@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using PeakMap.Objects;
 using UnityEngine;
@@ -43,8 +44,10 @@ public class DataGatheringManager
         }
         
         AmuletDataManager.CreateAmuletData();
+        AntlionDataManager.CreateAntlionData();
 
         PeakMapPlugin.Log.LogWarning("Writing data...");
+        
         for (int i = 0; i < NUM_LEVELS; i++)
         {
             DataManager.CreateData(i, DataManager.LuggageList, "luggage");

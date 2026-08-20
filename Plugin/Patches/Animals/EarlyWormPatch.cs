@@ -1,24 +1,24 @@
 using HarmonyLib;
+using Peak;
 using PeakMap.Managers;
 using PeakMap.Objects;
 
-namespace PeakMap.Patches;
+namespace PeakMap.Patches.Animals;
 
-[HarmonyPatch(typeof(Capybara))]
-public class CapybaraPatch
+[HarmonyPatch(typeof(EarlyWorm))]
+public class EarlyWormPatch
 {
 
     [HarmonyPatch("OnEnable")]
     [HarmonyPostfix]
-    public static void OnEnablePostfix(Capybara __instance)
+    public static void OnEnablePostfix(EarlyWorm __instance)
     {
         DataManager.AnimalList.Add(new ObjectInfo
         {
-            Name = "Capybara",
-            DisplayName = "CAPYBARA",
+            Name = "EarlyWorm",
+            DisplayName = "EARLY WORM",
             Position = __instance.transform.position
         });
     }
-    
-    
+
 }
