@@ -72,16 +72,15 @@ let luggage = [];
 function createLuggage(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("luggage-checkbox").checked) {
-        return;
+        return Promise.resolve();
     }
     if(typeof luggage[level] != "undefined") {
         for(let i = 0; i < luggage[level].length; i++) {
             container.appendChild(luggage[level][i]);
         }
-        Promise.resolve();
-        return;
+        return Promise.resolve();
     }
-    fetch("./data/level_" + level + "_luggage.json" + getURLAddition())
+    return fetch("./data/level_" + level + "_luggage.json" + getURLAddition())
         .then(function(response) {
             return response.json();
         }) 
@@ -128,16 +127,15 @@ let belltowers = [];
 function createBelltowers(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("belltowers-checkbox").checked) {
-        return;
+        return Promise.resolve();
     }
     if(typeof belltowers[level] != "undefined") {
         for(let i = 0; i < belltowers[level].length; i++) {
             container.appendChild(belltowers[level][i]);
         }
-        Promise.resolve();
-        return;
+        return Promise.resolve();
     }
-    fetch("./data/level_" + level + "_belltowers.json" + getURLAddition())
+    return fetch("./data/level_" + level + "_belltowers.json" + getURLAddition())
         .then(function(response) {
             return response.json();
         }) 
@@ -176,16 +174,15 @@ let animals = [];
 function createAnimals(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("animals-checkbox").checked) {
-        return;
+        return Promise.resolve();
     }
     if(typeof animals[level] != "undefined") {
         for(let i = 0; i < animals[level].length; i++) {
             container.appendChild(animals[level][i]);
         }
-        Promise.resolve();
-        return;
+        return Promise.resolve();
     }
-    fetch("./data/level_" + level + "_animals.json" + getURLAddition())
+    return fetch("./data/level_" + level + "_animals.json" + getURLAddition())
         .then(function(response) {
             return response.json();
         }) 
@@ -224,16 +221,15 @@ let amulets = [];
 function createAmulets(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("amulets-checkbox").checked) {
-        return;
+        return Promise.resolve();
     }
     if(typeof amulets[level] != "undefined") {
         for(let i = 0; i < amulets[level].length; i++) {
             container.appendChild(amulets[level][i]);
         }
-        Promise.resolve();
-        return;
+        return Promise.resolve();
     }
-    fetch("./data/level_" + level + "_amulets.json" + getURLAddition())
+    return fetch("./data/level_" + level + "_amulets.json" + getURLAddition())
         .then(function(response) {
             return response.json();
         }) 
@@ -272,16 +268,15 @@ let tombs = [];
 function createTombs(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("tombs-checkbox").checked) {
-        return;
+        return Promise.resolve();
     }
     if(typeof tombs[level] != "undefined") {
         for(let i = 0; i < tombs[level].length; i++) {
             container.appendChild(tombs[level][i]);
         }
-        Promise.resolve();
-        return;
+        return Promise.resolve();
     }
-    fetch("./data/level_" + level + "_tombs.json" + getURLAddition())
+    return fetch("./data/level_" + level + "_tombs.json" + getURLAddition())
         .then(function(response) {
             return response.json();
         }) 
@@ -438,12 +433,12 @@ function loadLevel(level) {
                 createAmulets(level),
                 createTombs(level)
             ]).then(() => {
+                refreshAdditionalFilter();
                 requestAnimationFrame(() => {
                     map.loading = false;
                     for(let i = 0; i < buttons.length; i++) {
                         buttons[i].disabled = false;
                     }
-                    refreshAdditionalFilter();
                 });
             });
         });
