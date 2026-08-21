@@ -253,6 +253,53 @@ function switchAmulets(checkbox) {
     updateZoom();
 }
 
+// Tomb
+
+let tombs = [];
+
+function createTombs(level) {
+    const container = document.getElementById("container");
+    if(!document.getElementById("tombs-checkbox").checked) {
+        return;
+    }
+    if(typeof tombs[level] != "undefined") {
+        for(let i = 0; i < tombs[level].length; i++) {
+            container.appendChild(tombs[level][i]);
+        }
+        Promise.resolve();
+        return;
+    }
+    fetch("./data/level_" + level + "_tombs.json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            tombs[level] = [];
+            for(let i = 0; i < json.length; i++) {
+                tombs[level][i] = createPoint(
+                    "tombs",
+                    json[i].PositionOnScreen[0], 
+                    json[i].PositionOnScreen[1], 
+                    json[i].DisplayName,
+                    `${json[i].Name}.png`
+                );
+            }
+        });
+}
+
+function removeTombs(level) {
+    removePoints("tombs", level);
+}
+
+function switchTombs(checkbox) {
+    if(checkbox.checked) {
+        createTombs(currentLevel);
+    } else {
+        removeTombs(currentLevel);
+    }
+    updateZoom();
+}
+
 // General
 
 function createPoint(clazz, x, y, name, image) {
@@ -287,6 +334,7 @@ function removeAll(level) {
     removeBelltowers(level);
     removeAnimals(level);
     removeAmulets(level);
+    removeTombs(level);
 }
 
 function previousLevel() {
@@ -363,7 +411,8 @@ function loadLevel(level) {
                 createLuggage(level),
                 createBelltowers(level),
                 createAnimals(level),
-                createAmulets(level)
+                createAmulets(level),
+                createTombs(level)
             ]).then(() => {
                 requestAnimationFrame(() => {
                     map.loading = false;

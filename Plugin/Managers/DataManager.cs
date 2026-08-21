@@ -15,6 +15,7 @@ public abstract class DataManager
     public static readonly List<ObjectInfo> BelltowerList = new();
     public static readonly List<ObjectInfo> AnimalList = new();
     public static readonly List<ObjectInfo> AmuletList = new();
+    public static readonly List<ObjectInfo> TombList = new();
     
     public static void CreateData(int level, List<ObjectInfo> objects, string fileSuffix, bool withSide = false)
     {

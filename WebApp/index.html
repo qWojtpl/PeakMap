@@ -23,11 +23,11 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=4"></script>
     <script src="scripts/nocache.js?v=2"></script>
-    <script src="scripts/script.js?v=4"></script>
+    <script src="scripts/script.js?v=5"></script>
 </head>
 <body>
     <div class="standard-container">
@@ -61,12 +61,18 @@
                 </label>
                 <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
             </div>
+            <div class="settings-entry">
+                <label for="tombs-checkbox">
+                    <span></span>Tomb
+                </label>
+                <input type="checkbox" id="tombs-checkbox" onchange="switchTombs(this)" checked>
+            </div>
             <div class="settings-buttons">
                 <button onclick="previousLevel()">Previous biome</button>
                 <button onclick="nextLevel()">Next biome</button>
             </div>
             <div class="settings-angle-buttons">
-                <button id="switch-angle-button" onclick="switchAngle()">Switch angle (beta)</button>
+                <button id="switch-angle-button" onclick="switchAngle()">Change angle (beta)</button>
             </div>
         </div>
         <div id="item-popup">

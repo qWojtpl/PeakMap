@@ -151,6 +151,10 @@ body {
     border-color: rgb(199, 53, 34);
 }
 
+.point.tombs {
+    border-color: purple;
+}
+
 @keyframes pointHover {
 
     0% {
@@ -244,11 +248,15 @@ body {
 }
 
 .settings-entry label[for="animals-checkbox"] span {
-    background-image: url("./images/Capybara.png");
+    background-image: url("./images/EarlyWorm.png");
 }
 
 .settings-entry label[for="amulets-checkbox"] span {
     background-image: url("./images/AMULET_CLONE.png");
+}
+
+.settings-entry label[for="tombs-checkbox"] span {
+    background-image: url("./images/Tomb.png");
 }
 
 .settings-entry input[type=checkbox] {

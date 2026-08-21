@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using PeakMap.Objects;
 using UnityEngine;
@@ -35,6 +34,7 @@ public class DataGatheringManager
         
         AmuletDataManager.CreateAmuletData();
         AntlionDataManager.CreateAntlionData();
+        TombDataManager.CreateTombData();
         
         for (int i = 0; i < NUM_LEVELS; i++)
         {
@@ -43,7 +43,7 @@ public class DataGatheringManager
             DataManager.CreateData(i, DataManager.LuggageList, "luggage", i < 3);
             DataManager.CreateData(i, DataManager.AnimalList, "animals", i < 3);
             DataManager.CreateData(i, DataManager.AmuletList, "amulets", i < 3);
-            TombDataManager.CreateTombData(i);
+            DataManager.CreateData(i, DataManager.TombList, "tombs", i < 3);
             ScreenshotManager.Flush();
         }
         
