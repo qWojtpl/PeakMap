@@ -23,11 +23,12 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=9">
+    <link rel="stylesheet" href="style.css?v=10">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=4"></script>
     <script src="scripts/nocache.js?v=2"></script>
-    <script src="scripts/script.js?v=5"></script>
+    <script src="scripts/additionalSettings.js"></script>
+    <script src="scripts/script.js?v=6"></script>
 </head>
 <body>
     <div class="standard-container">
@@ -39,31 +40,32 @@
             <p>Next update: <b id="settings-nextupdate">...</b></p>
             <div class="settings-entry">
                 <label for="luggage-checkbox">
-                    <span></span>Luggage
+                    <span class="icon"></span>Luggage
                 </label>
                 <input type="checkbox" id="luggage-checkbox" onchange="switchLuggage(this)" checked>
+                <div class="settings-extend" for="luggage"></div>
             </div>
             <div class="settings-entry">
                 <label for="belltowers-checkbox">
-                    <span></span>Belltowers
+                    <span class="icon"></span>Belltowers
                 </label>
                 <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
             </div>
             <div class="settings-entry">
                 <label for="animals-checkbox">
-                    <span></span>Animals
+                    <span class="icon"></span>Animals
                 </label>
                 <input type="checkbox" id="animals-checkbox" onchange="switchAnimals(this)" checked>
             </div>
             <div class="settings-entry">
                 <label for="amulets-checkbox">
-                    <span></span>Amulets
+                    <span class="icon"></span>Amulets
                 </label>
                 <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
             </div>
             <div class="settings-entry">
                 <label for="tombs-checkbox">
-                    <span></span>Tomb
+                    <span class="icon"></span>Tomb
                 </label>
                 <input type="checkbox" id="tombs-checkbox" onchange="switchTombs(this)" checked>
             </div>
@@ -73,6 +75,12 @@
             </div>
             <div class="settings-angle-buttons">
                 <button id="switch-angle-button" onclick="switchAngle()">Change angle (beta)</button>
+            </div>
+        </div>
+        <div id="additional-settings">
+            <p id="additional-settings-title"></p>
+            <div id="additional-settings-container">
+
             </div>
         </div>
         <div id="item-popup">

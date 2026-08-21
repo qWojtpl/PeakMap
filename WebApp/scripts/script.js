@@ -93,23 +93,32 @@ function createLuggage(level) {
                     json[i].PositionOnScreen[0], 
                     json[i].PositionOnScreen[1], 
                     json[i].DisplayName,
+                    json[i].Name.replaceAll(" ", "_"),
                     `${json[i].Name}.png`
                 );
             }
         });
 }
 
-function removeLuggage(level) {
-    removePoints("luggage", level);
+function removeLuggage() {
+    removePoints("luggage");
 }
 
 function switchLuggage(checkbox) {
     if(checkbox.checked) {
         createLuggage(currentLevel);
     } else {
-        removeLuggage(currentLevel);
+        removeLuggage();
     }
     updateZoom();
+}
+
+function createLuggageSettings() {
+    createAdditionalSettingsEntry("luggage", "Luggage", "LuggageSmall.png", "LuggageSmall", createLuggage);
+    createAdditionalSettingsEntry("luggage", "Big luggage", "LuggageBig.png", "LuggageBig", createLuggage);
+    createAdditionalSettingsEntry("luggage", "Explorer's luggage", "LuggageEpic.png", "LuggageEpic", createLuggage);
+    createAdditionalSettingsEntry("luggage", "Ancient luggage", "LuggageAncient.png", "LuggageAncient", createLuggage);
+    createAdditionalSettingsEntry("luggage", "Clown luggage", "LuggageClown.png", "LuggageClown", createLuggage);
 }
 
 // Belltowers
@@ -140,21 +149,22 @@ function createBelltowers(level) {
                     json[i].PositionOnScreen[0], 
                     json[i].PositionOnScreen[1], 
                     json[i].DisplayName,
+                    json[i].Name.replaceAll(" ", "_"),
                     `${json[i].Name}.png`
                 );
             }
         });
 }
 
-function removeBelltowers(level) {
-    removePoints("belltower", level);
+function removeBelltowers() {
+    removePoints("belltower");
 }
 
 function switchBelltowers(checkbox) {
     if(checkbox.checked) {
         createBelltowers(currentLevel);
     } else {
-        removeBelltowers(currentLevel);
+        removeBelltowers();
     }
     updateZoom();
 }
@@ -187,21 +197,22 @@ function createAnimals(level) {
                     json[i].PositionOnScreen[0], 
                     json[i].PositionOnScreen[1], 
                     json[i].DisplayName,
+                    json[i].Name.replaceAll(" ", "_"),
                     `${json[i].Name}.png`
                 );
             }
         });
 }
 
-function removeAnimals(level) {
-    removePoints("animals", level);
+function removeAnimals() {
+    removePoints("animals");
 }
 
 function switchAnimals(checkbox) {
     if(checkbox.checked) {
         createAnimals(currentLevel);
     } else {
-        removeAnimals(currentLevel);
+        removeAnimals();
     }
     updateZoom();
 }
@@ -234,21 +245,22 @@ function createAmulets(level) {
                     json[i].PositionOnScreen[0], 
                     json[i].PositionOnScreen[1], 
                     json[i].DisplayName,
+                    json[i].Name.replaceAll(" ", "_"),
                     `${json[i].Name}.png`
                 );
             }
         });
 }
 
-function removeAmulets(level) {
-    removePoints("amulets", level);
+function removeAmulets() {
+    removePoints("amulets");
 }
 
 function switchAmulets(checkbox) {
     if(checkbox.checked) {
         createAmulets(currentLevel);
     } else {
-        removeAmulets(currentLevel);
+        removeAmulets();
     }
     updateZoom();
 }
@@ -281,32 +293,34 @@ function createTombs(level) {
                     json[i].PositionOnScreen[0], 
                     json[i].PositionOnScreen[1], 
                     json[i].DisplayName,
+                    json[i].Name.replaceAll(" ", "_"),
                     `${json[i].Name}.png`
                 );
             }
         });
 }
 
-function removeTombs(level) {
-    removePoints("tombs", level);
+function removeTombs() {
+    removePoints("tombs");
 }
 
 function switchTombs(checkbox) {
     if(checkbox.checked) {
         createTombs(currentLevel);
     } else {
-        removeTombs(currentLevel);
+        removeTombs();
     }
     updateZoom();
 }
 
 // General
 
-function createPoint(clazz, x, y, name, image) {
+function createPoint(group, x, y, name, special, image) {
     const container = document.getElementById("container");
-    const element = document.createElement("div");
-    element.classList.add(clazz);
+    let element = document.createElement("div");
+    element.classList.add(group);
     element.classList.add("point");
+    element.classList.add(special);
     element.style = `--x: ${x}; --y: ${y}`;
     element.style.backgroundImage = `url('./images/${image}')`;
     element.addEventListener("mouseover", () => {
@@ -321,11 +335,21 @@ function createPoint(clazz, x, y, name, image) {
     return element;
 }
 
-function removePoints(clazz) {
+function removePoints(group) {
     const container = document.getElementById("container");
-    const elements = Array.from(document.getElementsByClassName(clazz));
+    const elements = Array.from(document.getElementsByClassName(group));
     elements.forEach(element => {
         container.removeChild(element);
+    });
+}
+
+function removePointsWithSpecial(group, special) {
+    const container = document.getElementById("container");
+    const elements = Array.from(document.getElementsByClassName(group));
+    elements.forEach(element => {
+        if(Array.from(element.classList).includes(special)) {
+            container.removeChild(element);
+        }
     });
 }
 
@@ -419,6 +443,7 @@ function loadLevel(level) {
                     for(let i = 0; i < buttons.length; i++) {
                         buttons[i].disabled = false;
                     }
+                    refreshAdditionalFilter();
                 });
             });
         });

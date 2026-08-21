@@ -111,15 +111,15 @@ body {
     border-color: red;
 }
 
-.point.luggage[style*="LuggageSmall.png"] {
+.point.luggage.LuggageSmall {
     border-color: #da7c20;
 }
 
-.point.luggage[style*="LuggageBig.png"] {
+.point.luggage.LuggageBig {
     border-color: #ece2dc;
 }
 
-.point.luggage[style*="LuggageEpic.png"] {
+.point.luggage.LuggageEpic {
     border-color: orangered;
 }
 
@@ -131,23 +131,23 @@ body {
     border-color: brown;
 }
 
-.point.animals[style*="EarlyWorm.png"] {
+.point.animals.EarlyWorm {
     border-color: pink;
 }
 
-.point.amulets[style*="AMULET_CLONE.png"] {
+.point.amulets.AMULET_CLONE {
     border-color: greenyellow;
 }
 
-.point.amulets[style*="AMULET_INFINITESTAM.png"] {
+.point.amulets.AMULET_INFINITESTAM {
     border-color: orange;
 }
 
-.point.amulets[style*="AMULET_HEALING.png"] {
+.point.amulets.AMULET_HEALING {
     border-color: rgb(87, 87, 228);
 }
 
-.point.amulets[style*="AMULET_DOUBLEJUMP.png"] {
+.point.amulets.AMULET_DOUBLEJUMP {
     border-color: rgb(199, 53, 34);
 }
 
@@ -205,7 +205,7 @@ body {
     z-index: 4;
     position: absolute;
     backdrop-filter: blur(15px);
-    border-radius: 2px;
+    border-bottom-right-radius: 2px;
     border: 1px solid black;
     top: 0;
     left: 0;
@@ -230,7 +230,7 @@ body {
     margin-left: 1vmin;
 }
 
-.settings-entry label span {
+span.icon {
     width: 3vmin;
     height: 3vmin;
     display: inline-block;
@@ -286,6 +286,49 @@ body {
 
 #settings p {
     margin-top: 0;
+}
+
+#additional-settings {
+    position: absolute;
+    width: 20vmin;
+    height: fit-content;
+    left: 25vmin;
+    top: -1px;
+    border: 1px solid black;
+    display: none;
+    backdrop-filter: blur(15px);
+    border-bottom-right-radius: 2px;
+}
+
+#additional-settings-title {
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+}
+
+#additional-settings-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#additional-settings-container .settings-entry label {
+    width: 70%;
+    font-size: 1.3vmin;
+}
+
+.settings-extend {
+    position: absolute;
+    left: 22.5vmin;
+    transition: .2s;
+}
+
+.settings-extend::after {
+    content: "➤";
+}
+
+.settings-extend:hover {
+    color: rgb(186, 186, 0);
+    cursor: pointer;
 }
 
 button {

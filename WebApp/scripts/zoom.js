@@ -80,7 +80,9 @@ function updateZoom() {
     }
     if(zoom == 1) {
         document.getElementById("settings").style.position = "absolute";
+        document.getElementById("additional-settings").style.position = "absolute";
     } else {
         document.getElementById("settings").style.position = "fixed";
+        document.getElementById("additional-settings").style.position = "fixed";
     }
 }
