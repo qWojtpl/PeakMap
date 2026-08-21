@@ -109,6 +109,7 @@ function switchLuggage(checkbox) {
     } else {
         removeLuggage();
     }
+    refreshAdditionalFilter();
     updateZoom();
 }
 
