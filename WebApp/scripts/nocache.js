@@ -1,5 +1,5 @@
 
-var cacheIdentifier = "?nocache";
+var cacheIdentifier = "";
 
 function patchElements(elements) {
     for(let i = 0; i < elements.length; i++) {
@@ -8,5 +8,5 @@ function patchElements(elements) {
 }
 
 function getURLAddition() {
-    return "?nocache=" + cacheIdentifier;
+    return "?nocache" + cacheIdentifier;
 }

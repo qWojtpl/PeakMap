@@ -123,6 +123,10 @@ body {
     border-color: orangered;
 }
 
+.point.luggage.scout_statue {
+    border-color: rgb(100, 99, 109);
+}
+
 .point.belltower {
     border-color: purple;
 }
