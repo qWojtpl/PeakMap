@@ -374,6 +374,7 @@ button[disabled]:hover {
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    pointer-events: none;
 }
 
 #item-popup-image {

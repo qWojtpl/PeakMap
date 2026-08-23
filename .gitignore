@@ -3,3 +3,4 @@ Plugin/obj/*
 Plugin/bin/*
 *.sln
 *.user
+*.pem
