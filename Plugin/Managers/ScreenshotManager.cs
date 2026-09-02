@@ -45,6 +45,7 @@ public static class ScreenshotManager
     private static int ResolutionDepth { get; set; } = 24;
 
     private static int _swampCounter = 0;
+    private static int _volcanoCounter = 0;
 
     private static GameObject _currentMapObject;
     private static MapHandler.MapSegment _currentSegment;
@@ -52,17 +53,27 @@ public static class ScreenshotManager
     
     public static void SetupLevelDimensions(int level)
     {
-        GameObject campfire = Singleton<MapHandler>.Instance?.segments?[level]?.segmentCampfire;
+        MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[level];
+        Vector3? campfire = segment?.segmentCampfire?.transform.position;
 
         if (campfire == null)
         {
             return;
         }
-            
-        CameraPositions[level + 1] += new Vector3(0f, campfire.transform.position.y + 100, campfire.transform.position.z + 25f);
-        LevelWidths[level] = campfire.transform.position.z + 10f;
-        LevelHeights[level] = campfire.transform.position.y;
-            
+        
+        if (segment.biome == Biome.BiomeType.Volcano && level == 3) // Klin patch
+        {
+            campfire = DataManager.LuggageList
+                .Where(n => n.Name.ToLower().Equals("scout statue"))
+                .MaxBy(n => n.Position.z)
+                .Position;
+            PeakMapPlugin.Log.LogWarning("Updated campfire location for the klin to " + campfire);
+        }
+        
+        CameraPositions[level + 1] += new Vector3(0f, campfire.Value.y + 100, campfire.Value.z + 25f);
+        
+        LevelWidths[level] = campfire.Value.z + 10f;
+        LevelHeights[level] = campfire.Value.y;
         PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level] + ", with height " + LevelHeights[level]);
     }
     
@@ -86,6 +97,7 @@ public static class ScreenshotManager
         PrepareMap();
         
         PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
+        PeakMapPlugin.Log.LogWarning("Camera position: " + CameraPositions[level] + " with rotation " + CameraRotations[level] + " and FOV " + CameraFoVs[level]);
 
         GameObject tempCamObj = CreateTempCameraGameObject(CameraPositions[level], CameraRotations[level]);
         Camera tempCam = CreateTempCamera(CameraFoVs[level], tempCamObj);
@@ -135,10 +147,18 @@ public static class ScreenshotManager
         if (_currentSegment.biome == Biome.BiomeType.Swamp)
         {
             _swampCounter++;
+        } else if (_currentSegment.biome == Biome.BiomeType.Volcano)
+        {
+            _volcanoCounter++;
         }
         if (_swampCounter == 2)
         {
             HideTempleObjects();
+        }
+
+        if (_volcanoCounter == 2)
+        {
+            HideVolcanoObjects();
         }
         PhotonNetwork.IsMessageQueueRunning = true;
     }
@@ -244,4 +264,9 @@ public static class ScreenshotManager
         
     }
 
+    private static void HideVolcanoObjects()
+    {
+        PeakMapPlugin.Log.LogWarning("Hiding volcano objects...");    
+    }
+    
 }

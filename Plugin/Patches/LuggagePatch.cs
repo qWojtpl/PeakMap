@@ -10,12 +10,18 @@ namespace PeakMap.Patches;
 [HarmonyPatch(typeof(Luggage))]
 public class LuggagePatch
 {
+
+    private static bool _languageSet = false;
     
     [HarmonyPatch("Awake")]
     [HarmonyPostfix]
     public static void AwakePostfix(Luggage __instance)
     {
-        LocalizedText.SetLanguage((int) LanguageSetting.Language.English);
+        if (!_languageSet)
+        {
+            LocalizedText.SetLanguage((int) LanguageSetting.Language.English);
+            _languageSet = true;
+        }
         DataManager.LuggageList.Add(new ObjectInfo
         {
             ReferenceComponent = __instance,
