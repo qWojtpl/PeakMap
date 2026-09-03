@@ -38,12 +38,8 @@ public class DataGatheringManager
         
         for (int i = 0; i < NUM_LEVELS; i++)
         {
-            DataManager.CreateData(i, DataManager.BelltowerList, "belltowers", i < 3);
             ScreenshotManager.CreateFor(i, i < 3);
-            DataManager.CreateData(i, DataManager.LuggageList, "luggage", i < 3);
-            DataManager.CreateData(i, DataManager.AnimalList, "animals", i < 3);
-            DataManager.CreateData(i, DataManager.AmuletList, "amulets", i < 3);
-            DataManager.CreateData(i, DataManager.TombList, "tombs", i < 3);
+            DataManager.CreateData(i, DataManager.LevelInfo, i < 3);
             ScreenshotManager.Flush();
         }
         

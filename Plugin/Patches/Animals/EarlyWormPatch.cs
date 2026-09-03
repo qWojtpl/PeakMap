@@ -13,7 +13,7 @@ public class EarlyWormPatch
     [HarmonyPostfix]
     public static void OnEnablePostfix(EarlyWorm __instance)
     {
-        DataManager.AnimalList.Add(new ObjectInfo
+        DataManager.LevelInfo.Animals.Add(new ObjectInfo
         {
             Name = "EarlyWorm",
             DisplayName = "EARLY WORM",

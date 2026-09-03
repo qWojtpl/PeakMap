@@ -14,7 +14,7 @@ public abstract class AmuletDataManager
                      FindObjectsInactive.Include,
                      FindObjectsSortMode.None).Where(n => n.name.ToLower().Contains("amulet")))
         {
-            DataManager.AmuletList.Add(new ObjectInfo
+            DataManager.LevelInfo.Amulets.Add(new ObjectInfo
             {
                 Name = item.itemName,
                 DisplayName = item.GetName(),

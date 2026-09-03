@@ -16,7 +16,7 @@ public class ItemComponentPatch
     {
         if (__instance is Beehive)
         {
-            DataManager.AnimalList.Add(new ObjectInfo
+            DataManager.LevelInfo.Animals.Add(new ObjectInfo
             {
                 Name = "Beehive",
                 DisplayName = "BEEHIVE",

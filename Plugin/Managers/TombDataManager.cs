@@ -43,13 +43,13 @@ public abstract class TombDataManager
             return;
         }
         
-        if (entrance.childCount == 0)
+        if (entrance.GetChild(0).childCount != 2)
         {
             PeakMapPlugin.Log.LogError("Tomb seems to be closed!");
             return;
         }
         
-        DataManager.TombList.Add(new ObjectInfo
+        DataManager.LevelInfo.Tombs.Add(new ObjectInfo
         {
             Name = "Tomb",
             DisplayName = "TOMB",

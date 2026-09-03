@@ -16,7 +16,7 @@ public class GloomSafeZonePatch
         {
             return;
         }
-        DataManager.BelltowerList.Add(new ObjectInfo
+        DataManager.LevelInfo.Belltowers.Add(new ObjectInfo
         {
             InstanceID = __instance.GetInstanceID(),
             Name = __instance.name,

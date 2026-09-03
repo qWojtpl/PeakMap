@@ -22,7 +22,7 @@ public class LuggagePatch
             LocalizedText.SetLanguage((int) LanguageSetting.Language.English);
             _languageSet = true;
         }
-        DataManager.LuggageList.Add(new ObjectInfo
+        DataManager.LevelInfo.Luggage.Add(new ObjectInfo
         {
             ReferenceComponent = __instance,
             Name = __instance.name,

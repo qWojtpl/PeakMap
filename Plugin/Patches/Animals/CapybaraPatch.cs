@@ -13,11 +13,11 @@ public class CapybaraPatch
     [HarmonyPostfix]
     public static void OnEnablePostfix(Capybara __instance)
     {
-        if (DataManager.AnimalList.Any(n => n.InstanceID == __instance.GetInstanceID()))
+        if (DataManager.LevelInfo.Animals.Any(n => n.InstanceID == __instance.GetInstanceID()))
         {
             return;
         }
-        DataManager.AnimalList.Add(new ObjectInfo
+        DataManager.LevelInfo.Animals.Add(new ObjectInfo
         {
             InstanceID = __instance.GetInstanceID(),
             Name = "Capybara",

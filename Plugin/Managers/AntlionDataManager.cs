@@ -11,7 +11,7 @@ public class AntlionDataManager
         foreach(Transform antlion in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                     .Where(n => n.name.Equals("AntlionHead")))
         {
-            DataManager.AnimalList.Add(new ObjectInfo
+            DataManager.LevelInfo.Animals.Add(new ObjectInfo
             {
                 Name = "Antlion",
                 DisplayName = "ANTLION",

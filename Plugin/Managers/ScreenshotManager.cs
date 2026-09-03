@@ -63,7 +63,7 @@ public static class ScreenshotManager
         
         if (segment.biome == Biome.BiomeType.Volcano && level == 3) // Klin patch
         {
-            campfire = DataManager.LuggageList
+            campfire = DataManager.LevelInfo.Luggage
                 .Where(n => n.Name.ToLower().Equals("scout statue"))
                 .MaxBy(n => n.Position.z)
                 .Position;
