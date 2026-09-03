@@ -67,6 +67,7 @@ public static class ScreenshotManager
                 .Where(n => n.Name.ToLower().Equals("scout statue"))
                 .MaxBy(n => n.Position.z)
                 .Position;
+            campfire = new Vector3(campfire.Value.x, campfire.Value.y, campfire.Value.z + 250f);
             PeakMapPlugin.Log.LogWarning("Updated campfire location for the klin to " + campfire);
         }
         
@@ -266,7 +267,29 @@ public static class ScreenshotManager
 
     private static void HideVolcanoObjects()
     {
-        PeakMapPlugin.Log.LogWarning("Hiding volcano objects...");    
+        PeakMapPlugin.Log.LogWarning("Hiding volcano objects...");
+
+        Transform volcano = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(n => n.gameObject.name.ToLower().Equals("volcanomodel"));
+
+        if (volcano != null)
+        {
+            PeakMapPlugin.Log.LogWarning("Destroying volcano: " + volcano.gameObject.name);
+            Object.DestroyImmediate(volcano.gameObject);
+        }
+        
+        List<Transform> rocks = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .Where(n => n.gameObject.name.ToLower().Contains("rock_round") || n.gameObject.name.ToLower().Contains("rockfinal")).ToList();
+
+        foreach (Transform rock in rocks)
+        {
+            if (rock == null)
+            {
+                continue;
+            }
+            PeakMapPlugin.Log.LogWarning("Destroying rock: " + rock.gameObject.name);
+            Object.DestroyImmediate(rock.gameObject);
+        }
     }
     
 }
