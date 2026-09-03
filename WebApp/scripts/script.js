@@ -1,6 +1,7 @@
 
 let currentLevel = 0;
 const maxLevel = 4;
+let levelJson;
 
 // Info
 
@@ -72,31 +73,25 @@ let luggage = [];
 function createLuggage(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("luggage-checkbox").checked) {
-        return Promise.resolve();
+        return;
     }
     if(typeof luggage[level] != "undefined") {
         for(let i = 0; i < luggage[level].length; i++) {
             container.appendChild(luggage[level][i]);
         }
-        return Promise.resolve();
+        return;
     }
-    return fetch("./data/level_" + level + "_luggage.json" + getURLAddition())
-        .then(function(response) {
-            return response.json();
-        }) 
-        .then(function(json) {
-            luggage[level] = [];
-            for(let i = 0; i < json.length; i++) {
-                luggage[level][i] = createPoint(
-                    "luggage",
-                    json[i].PositionOnScreen[0], 
-                    json[i].PositionOnScreen[1], 
-                    json[i].DisplayName,
-                    json[i].Name.replaceAll(" ", "_"),
-                    `${json[i].Name}.png`
-                );
-            }
-        });
+    luggage[level] = [];
+    for(let i = 0; i < levelJson.Luggage.length; i++) {
+        luggage[level][i] = createPoint(
+            "luggage",
+            levelJson.Luggage[i].PositionOnScreen[0], 
+            levelJson.Luggage[i].PositionOnScreen[1], 
+            levelJson.Luggage[i].DisplayName,
+            levelJson.Luggage[i].Name.replaceAll(" ", "_"),
+            `${levelJson.Luggage[i].Name}.png`
+        );
+    }
 }
 
 function removeLuggage() {
@@ -128,31 +123,25 @@ let belltowers = [];
 function createBelltowers(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("belltowers-checkbox").checked) {
-        return Promise.resolve();
+        return;
     }
     if(typeof belltowers[level] != "undefined") {
         for(let i = 0; i < belltowers[level].length; i++) {
             container.appendChild(belltowers[level][i]);
         }
-        return Promise.resolve();
+        return;
     }
-    return fetch("./data/level_" + level + "_belltowers.json" + getURLAddition())
-        .then(function(response) {
-            return response.json();
-        }) 
-        .then(function(json) {
-            belltowers[level] = [];
-            for(let i = 0; i < json.length; i++) {
-                belltowers[level][i] = createPoint(
-                    "belltower",
-                    json[i].PositionOnScreen[0], 
-                    json[i].PositionOnScreen[1], 
-                    json[i].DisplayName,
-                    json[i].Name.replaceAll(" ", "_"),
-                    `${json[i].Name}.png`
-                );
-            }
-        });
+    belltowers[level] = [];
+    for(let i = 0; i < levelJson.Belltowers.length; i++) {
+        belltowers[level][i] = createPoint(
+            "belltower",
+            levelJson.Belltowers[i].PositionOnScreen[0], 
+            levelJson.Belltowers[i].PositionOnScreen[1], 
+            levelJson.Belltowers[i].DisplayName,
+            levelJson.Belltowers[i].Name.replaceAll(" ", "_"),
+            `${levelJson.Belltowers[i].Name}.png`
+        );
+    }
 }
 
 function removeBelltowers() {
@@ -175,31 +164,25 @@ let animals = [];
 function createAnimals(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("animals-checkbox").checked) {
-        return Promise.resolve();
+        return;
     }
     if(typeof animals[level] != "undefined") {
         for(let i = 0; i < animals[level].length; i++) {
             container.appendChild(animals[level][i]);
         }
-        return Promise.resolve();
+        return;
     }
-    return fetch("./data/level_" + level + "_animals.json" + getURLAddition())
-        .then(function(response) {
-            return response.json();
-        }) 
-        .then(function(json) {
-            animals[level] = [];
-            for(let i = 0; i < json.length; i++) {
-                animals[level][i] = createPoint(
-                    "animals",
-                    json[i].PositionOnScreen[0], 
-                    json[i].PositionOnScreen[1], 
-                    json[i].DisplayName,
-                    json[i].Name.replaceAll(" ", "_"),
-                    `${json[i].Name}.png`
-                );
-            }
-        });
+    animals[level] = [];
+    for(let i = 0; i < levelJson.Animals.length; i++) {
+        animals[level][i] = createPoint(
+            "animals",
+            levelJson.Animals[i].PositionOnScreen[0], 
+            levelJson.Animals[i].PositionOnScreen[1], 
+            levelJson.Animals[i].DisplayName,
+            levelJson.Animals[i].Name.replaceAll(" ", "_"),
+            `${levelJson.Animals[i].Name}.png`
+        );
+    }
 }
 
 function removeAnimals() {
@@ -222,31 +205,25 @@ let amulets = [];
 function createAmulets(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("amulets-checkbox").checked) {
-        return Promise.resolve();
+        return;
     }
     if(typeof amulets[level] != "undefined") {
         for(let i = 0; i < amulets[level].length; i++) {
             container.appendChild(amulets[level][i]);
         }
-        return Promise.resolve();
+        return;
     }
-    return fetch("./data/level_" + level + "_amulets.json" + getURLAddition())
-        .then(function(response) {
-            return response.json();
-        }) 
-        .then(function(json) {
-            amulets[level] = [];
-            for(let i = 0; i < json.length; i++) {
-                amulets[level][i] = createPoint(
-                    "amulets",
-                    json[i].PositionOnScreen[0], 
-                    json[i].PositionOnScreen[1], 
-                    json[i].DisplayName,
-                    json[i].Name.replaceAll(" ", "_"),
-                    `${json[i].Name}.png`
-                );
-            }
-        });
+    amulets[level] = [];
+    for(let i = 0; i < levelJson.Amulets.length; i++) {
+        amulets[level][i] = createPoint(
+            "amulets",
+            levelJson.Amulets[i].PositionOnScreen[0], 
+            levelJson.Amulets[i].PositionOnScreen[1], 
+            levelJson.Amulets[i].DisplayName,
+            levelJson.Amulets[i].Name.replaceAll(" ", "_"),
+            `${levelJson.Amulets[i].Name}.png`
+        );
+    }
 }
 
 function removeAmulets() {
@@ -269,31 +246,25 @@ let tombs = [];
 function createTombs(level) {
     const container = document.getElementById("container");
     if(!document.getElementById("tombs-checkbox").checked) {
-        return Promise.resolve();
+        return;
     }
     if(typeof tombs[level] != "undefined") {
         for(let i = 0; i < tombs[level].length; i++) {
             container.appendChild(tombs[level][i]);
         }
-        return Promise.resolve();
+        return;
     }
-    return fetch("./data/level_" + level + "_tombs.json" + getURLAddition())
-        .then(function(response) {
-            return response.json();
-        }) 
-        .then(function(json) {
-            tombs[level] = [];
-            for(let i = 0; i < json.length; i++) {
-                tombs[level][i] = createPoint(
-                    "tombs",
-                    json[i].PositionOnScreen[0], 
-                    json[i].PositionOnScreen[1], 
-                    json[i].DisplayName,
-                    json[i].Name.replaceAll(" ", "_"),
-                    `${json[i].Name}.png`
-                );
-            }
-        });
+    tombs[level] = [];
+    for(let i = 0; i < levelJson.Tombs.length; i++) {
+        tombs[level][i] = createPoint(
+            "tombs",
+            levelJson.Tombs[i].PositionOnScreen[0], 
+            levelJson.Tombs[i].PositionOnScreen[1], 
+            levelJson.Tombs[i].DisplayName,
+            levelJson.Tombs[i].Name.replaceAll(" ", "_"),
+            `${levelJson.Tombs[i].Name}.png`
+        );
+    }
 }
 
 function removeTombs() {
@@ -428,11 +399,7 @@ function loadLevel(level) {
         requestAnimationFrame(() => {
             map.src = this.src;
             Promise.all([
-                createLuggage(level),
-                createBelltowers(level),
-                createAnimals(level),
-                createAmulets(level),
-                createTombs(level)
+                loadLevelJson(level)
             ]).then(() => {
                 refreshAdditionalFilter();
                 requestAnimationFrame(() => {
@@ -445,4 +412,19 @@ function loadLevel(level) {
         });
     }
     newImage.src = "./data/level_" + level + ".jpg" + getURLAddition();
+}
+
+function loadLevelJson(level) {
+    return fetch("./data/level_" + level + ".json" + getURLAddition())
+        .then(function(response) {
+            return response.json();
+        }) 
+        .then(function(json) {
+            levelJson = json;
+            createLuggage(level);
+            createBelltowers(level);
+            createAnimals(level);
+            createAmulets(level);
+            createTombs(level);
+        });
 }
