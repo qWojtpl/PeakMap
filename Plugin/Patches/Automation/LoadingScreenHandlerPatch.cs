@@ -11,8 +11,6 @@ namespace PeakMap.Patches.Automation;
 public class LoadingScreenHandlerPatch
 {
 
-    private static bool _found = false;
-
     [HarmonyPatch("LoadingRoutine")]
     [HarmonyPostfix]
     public static void LoadingRoutinePostfix(ref IEnumerator __result)
@@ -26,27 +24,22 @@ public class LoadingScreenHandlerPatch
         {
             yield return original.Current;
         }
+        
+        Item passportItem = Object.FindObjectsByType<Item>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .FirstOrDefault(n => n.name.Equals("Passport(Clone)"));
 
-        if (!_found)
+        if (passportItem != null)
         {
-            Item passportItem = Object.FindObjectsByType<Item>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .FirstOrDefault(n => n.name.Equals("Passport(Clone)"));
-
-            if (passportItem != null)
-            {
-                _found = true;
-                PeakMapPlugin.Log.LogWarning("Found passport, loading scene...");
-                Object.FindFirstObjectByType<AirportCheckInKiosk>(FindObjectsInactive.Include).StartGame(0);
-            }
+            PeakMapPlugin.Log.LogWarning("Found passport, loading scene...");
+            Object.FindFirstObjectByType<AirportCheckInKiosk>(FindObjectsInactive.Include).StartGame(0);
         }
         else
         {
-            // Next scene
-            _found = false;
+            PeakMapPlugin.Log.LogWarning("Passport not found, loading next scene...");
             GameHandler.GetService<ConnectionService>().StateMachine.SwitchState<DisconnectingState>();
             NetworkConnector.LeaveRoom();
-            DataGatheringManager.Available = true;
             DataManager.LevelInfo.Clear();
+            DataGatheringManager.Available = true;
         }
     }
     

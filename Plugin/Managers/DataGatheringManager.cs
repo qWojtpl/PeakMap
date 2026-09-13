@@ -8,7 +8,7 @@ public class DataGatheringManager
 {
 
     private static readonly int NUM_LEVELS = 5;
-    public static bool Available { get; set; }
+    public static bool Available { get; set; } = true;
     
     public static void GatherData()
     {
@@ -21,7 +21,7 @@ public class DataGatheringManager
         {
             return;
         }
-        
+
         Available = false;
         
         Directory.CreateDirectory(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentScene));
