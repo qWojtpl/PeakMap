@@ -28,12 +28,12 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=13">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=5"></script>
     <script src="scripts/nocache.js?v=2"></script>
     <script src="scripts/additionalSettings.js?v=2"></script>
-    <script src="scripts/script.js?v=11"></script>
+    <script src="scripts/script.js?v=12"></script>
 </head>
 
 <body>
@@ -47,6 +47,9 @@
                 <button class="mobile-only" id="settings-toggle-btn" onclick="toggleSettings(this)">Settings ▼</button>
             </div>
             <div id="settings-content">
+                <div class="settings-entry">
+                    <select id="date-picker" onchange="switchDate(this.value)"></select>
+                </div>
                 <div class="settings-entry">
                     <p>Last updated:<br> <b id="settings-lastupdated">...</b></p>
                     <p>Next update: <b id="settings-nextupdate">...</b></p>
