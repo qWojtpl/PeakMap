@@ -4,8 +4,18 @@ const maxLevel = 4;
 let nextMapUtcHour = 17;
 let levelJson;
 let sceneName;
+let dayLevels;
+let todayDateKey;
 
 // Info
+
+function getTodayDateKey() {
+    let now = new Date();
+    if (now.getUTCHours() < nextMapUtcHour) {
+        now.setUTCDate(now.getUTCDate() - 1);
+    }
+    return now.getUTCDate() + "-" + (now.getUTCMonth() + 1) + "-" + now.getUTCFullYear();
+}
 
 function downloadAndCreateInfo() {
     fetch("./data/info.json" + getURLAddition() + "&now=" + new Date().getTime())
@@ -13,13 +23,10 @@ function downloadAndCreateInfo() {
             return response.json();
         })
         .then(function (json) {
-            let now = new Date();
-            if (now.getUTCHours() < nextMapUtcHour) {
-                now.setUTCDate(now.getUTCDate() - 1);
-            }
-            let date = now.getUTCDate() + "-" + (now.getUTCMonth() + 1) + "-" + now.getUTCFullYear();
-            console.log("Scene date: " + date);
-            if (!json.DayLevels.hasOwnProperty(date)) {
+            dayLevels = json.DayLevels;
+            todayDateKey = getTodayDateKey();
+            console.log("Scene date: " + todayDateKey);
+            if (!dayLevels.hasOwnProperty(todayDateKey)) {
                 console.log("No data for current scene");
                 sceneName = "Level_1";
                 document.getElementById("map").loading = true;
@@ -33,12 +40,14 @@ function downloadAndCreateInfo() {
                 });
                 return;
             }
-            sceneName = json.DayLevels[date];
+            sceneName = dayLevels[todayDateKey];
             createInfo();
+            createDatePicker();
             console.log("Current scene name: " + sceneName);
+            let now = new Date();
             now.setUTCHours(nextMapUtcHour, 0, 0, 0);
             document.getElementById("settings-lastupdated").innerText = now.toLocaleDateString() + " " + now.toLocaleTimeString();
-            cacheIdentifier = cacheIdentifier + "&sceneName=" + sceneName + "&sceneDate=" + date;
+            cacheIdentifier = cacheIdentifier + "&sceneName=" + sceneName + "&sceneDate=" + todayDateKey;
             loadLevel(0);
         });
 }
@@ -80,7 +89,35 @@ function createInfo() {
 
         nextUpdate.innerText = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }, 1000);
+}
 
+function parseKey(key) {
+    const [d, m, y] = key.split("-");
+    return new Date(y, m - 1, d);
+}
+
+function createDatePicker() {
+    const picker = document.getElementById("date-picker");
+    const sorted = Object.keys(dayLevels).sort((a, b) => parseKey(a) - parseKey(b));
+
+    sorted.forEach(key => {
+        const opt = document.createElement("option");
+        opt.value = key;
+        let label = parseKey(key).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+        if (key === todayDateKey) label += " (today)";
+        label += ` (${dayLevels[key]})`;
+        opt.innerText = label;
+        picker.appendChild(opt);
+    });
+    picker.value = todayDateKey;
+}
+
+function switchDate(dateKey) {
+    if (dayLevels[dateKey] === sceneName) return;
+    removeAll(currentLevel);
+    sceneName = dayLevels[dateKey];
+    console.log("Switching to scene: " + sceneName + " (" + dateKey + ")");
+    loadLevel(0);
 }
 
 downloadAndCreateInfo();

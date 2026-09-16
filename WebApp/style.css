@@ -385,6 +385,25 @@ button[disabled]:hover {
     cursor: not-allowed;
 }
 
+select {
+    width: 100%;
+    background-color: #BEFF48;
+    color: black;
+    font-family: "Darumadrop One", sans-serif;
+    font-weight: 400;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: 0.1s all;
+    will-change: transform;
+}
+
+select:hover,
+select:focus {
+    scale: 1.05;
+}
+
 #item-popup {
     width: 20vmin;
     height: 15vmin;
@@ -673,6 +692,11 @@ footer {
 
     #hide-ui-entry {
         justify-content: center;
+    }
+
+    select:hover,
+    select:focus {
+        scale: 1;
     }
 
     #bottom-container:not(.expanded) #bottom-widgets,
