@@ -40,7 +40,7 @@ function downloadAndCreateInfo() {
                 });
                 return;
             }
-            sceneName = dayLevels[todayDateKey];
+            sceneName = dayLevels[todayDateKey].Level;
             createInfo();
             createDatePicker();
             console.log("Current scene name: " + sceneName);
@@ -105,7 +105,7 @@ function createDatePicker() {
         opt.value = key;
         let label = parseKey(key).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
         if (key === todayDateKey) label += " (today)";
-        label += ` (${dayLevels[key]})`;
+        label += ` (${dayLevels[key].Level})`;
         opt.innerText = label;
         picker.appendChild(opt);
     });
@@ -113,9 +113,9 @@ function createDatePicker() {
 }
 
 function switchDate(dateKey) {
-    if (dayLevels[dateKey] === sceneName) return;
+    if (dayLevels[dateKey].Level === sceneName) return;
     removeAll(currentLevel);
-    sceneName = dayLevels[dateKey];
+    sceneName = dayLevels[dateKey].Level;
     console.log("Switching to scene: " + sceneName + " (" + dateKey + ")");
     loadLevel(0);
 }
