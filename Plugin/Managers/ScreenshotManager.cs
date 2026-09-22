@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using PeakMap.Objects;
 using PeakMap.Patches.Automation;
 using Photon.Pun;
 using UnityEngine;
@@ -319,6 +320,15 @@ public static class ScreenshotManager
         LevelWidths[4] = 5000;
         _swampCounter = 0;
         _volcanoCounter = 0;
+    }
+
+    public static void FillBiomes(DayInfo dayInfo)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[i];
+            dayInfo.Biomes.Add(segment?.biome.ToString());
+        }
     }
     
 }

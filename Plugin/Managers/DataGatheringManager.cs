@@ -1,4 +1,5 @@
 using System.IO;
+using PeakMap.Objects;
 using PeakMap.Patches.Automation;
 using Zorro.Core;
 
@@ -26,10 +27,19 @@ public class DataGatheringManager
         
         Directory.CreateDirectory(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentScene));
         
+        DayInfo dayInfo = new DayInfo
+        {
+            Level = AirportCheckInKioskPatch.CurrentScene
+        };
+
+        AirportCheckInKioskPatch.SceneDayInfo[AirportCheckInKioskPatch.CurrentScene] = dayInfo;
+        
         for (int i = 0; i < NUM_LEVELS; i++)
         {
             ScreenshotManager.SetupLevelDimensions(i);
         }
+        
+        ScreenshotManager.FillBiomes(dayInfo);
         
         AmuletDataManager.CreateAmuletData();
         AntlionDataManager.CreateAntlionData();

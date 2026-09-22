@@ -5,6 +5,6 @@ namespace PeakMap.Objects;
 public class GatherInfo
 {
 
-    public Dictionary<string, string> DayLevels = new();
+    public Dictionary<string, DayInfo> DayLevels = new();
 
 }

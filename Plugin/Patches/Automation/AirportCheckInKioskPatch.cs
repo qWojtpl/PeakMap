@@ -17,6 +17,7 @@ public class AirportCheckInKioskPatch
     private static string TodayScene { get; set; }
     private static int _sceneCounter = 0;
     public static string CurrentScene { get; private set; }
+    public static Dictionary<string, DayInfo> SceneDayInfo { get; } = new();
 
     public static void Prefix(ref string sceneName)
     {
@@ -35,14 +36,14 @@ public class AirportCheckInKioskPatch
 
         if (_sceneCounter == AllScenes.Count)
         {
-            Dictionary<string, string> dayLevels = new();
+            Dictionary<string, DayInfo> dayLevels = new();
             
             int start = AllScenes.IndexOf(TodayScene);
             int counter = start;
             DateTime date = DateTime.UtcNow;
             while (true)
             {
-                dayLevels.Add(date.Day + "-" + date.Month + "-" + date.Year, AllScenes[counter]);
+                dayLevels.Add(date.Day + "-" + date.Month + "-" + date.Year, SceneDayInfo[AllScenes[counter]]);
                 date = date.AddDays(1);
                 counter++;
                 if (counter == AllScenes.Count)
