@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using BepInEx;
 using HarmonyLib;
 using Newtonsoft.Json;
 using PeakMap.Objects;
@@ -23,14 +25,34 @@ public class AirportCheckInKioskPatch
     {
         if (TodayScene == null)
         {
-            for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+            foreach (string bundlePath in Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, "maps"), "*.assetbundle"))
             {
-                string name = SceneUtility.GetScenePathByBuildIndex(i);
-                if(name.Contains("/Generated/"))
+                string bundleName = Path.GetFileName(bundlePath);
+
+                AssetBundle bundle = AssetBundle.GetAllLoadedAssetBundles()
+                    .FirstOrDefault(b => b.name == bundleName);
+
+                bool alreadyLoaded = bundle != null;
+
+                bundle ??= AssetBundle.LoadFromFile(bundlePath);
+
+                if (bundle == null)
                 {
-                    AllScenes.Add(name.Split("/Generated/")[1].Replace(".unity", ""));
+                    continue;
+                }
+
+                foreach (string scenePath in bundle.GetAllScenePaths())
+                {
+                    PeakMapPlugin.Log.LogInfo(scenePath);
+                    AllScenes.Add(Path.GetFileNameWithoutExtension(scenePath));
+                }
+
+                if (!alreadyLoaded)
+                {
+                    bundle.Unload(false);
                 }
             }
+
             TodayScene = sceneName;
         }
 

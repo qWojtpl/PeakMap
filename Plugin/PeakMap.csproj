@@ -30,6 +30,9 @@
       <Reference Include="UnityEngine">
         <HintPath>bin\UnityEngine.dll</HintPath>
       </Reference>
+      <Reference Include="UnityEngine.AssetBundleModule">
+        <HintPath>bin\UnityEngine.AssetBundleModule.dll</HintPath>
+      </Reference>
       <Reference Include="UnityEngine.CoreModule">
         <HintPath>bin\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
