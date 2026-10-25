@@ -62,7 +62,7 @@ function createAdditionalSettingsEntry(group, name, image, special, createPoints
     checkbox.addEventListener("change", () => {
         removePoints(name);
         Promise.all([
-            createPointsFunction(currentLevel)
+            createPointsFunction(currentBiome)
         ]).then(() => {
             refreshAdditionalFilter();
         });

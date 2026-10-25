@@ -1,10 +1,10 @@
 
-let currentLevel = 0;
-const maxLevel = 4;
+let currentBiome = 0;
+const maxBiome = 4;
 let nextMapUtcHour = 17;
-let levelJson;
-let sceneName;
-let dayLevels;
+let biomeJson;
+let levelName;
+let levels;
 let todayDateKey;
 
 // Info
@@ -23,14 +23,22 @@ function downloadAndCreateInfo() {
             return response.json();
         })
         .then(function (json) {
-            dayLevels = json.DayLevels;
+            dayLevels = json.LevelBiomes;
             todayDateKey = getTodayDateKey();
             console.log("Scene date: " + todayDateKey);
-            if (!dayLevels.hasOwnProperty(todayDateKey)) {
+            const todayDateKeySplit = todayDateKey.split("-");
+            const startDateSplit = json.StartDate.split("-");
+            const diffTime = Math.abs(
+                new Date(Date.UTC(todayDateKeySplit[2], todayDateKeySplit[1] - 1, todayDateKeySplit[0])) - 
+                new Date(Date.UTC(startDateSplit[2], startDateSplit[1] - 1, startDateSplit[0])));
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            levelName = "Level_" + (parseInt(json.StartLevel.split("_")[1]) + diffDays) % 208;
+            console.log("Current level name: " + levelName);
+            if (!dayLevels.hasOwnProperty(levelName)) {
                 console.log("No data for current scene");
-                sceneName = "Level_1";
+                levelName = "Level_1";
                 document.getElementById("map").loading = true;
-                document.getElementById("map").src = "data/Level_1/level_0.jpg";
+                document.getElementById("map").src = "data/Level_1/biome_0.jpg";
                 document.getElementById("no-data-yet").style.display = "flex";
                 document.getElementById("settings-nextupdate").innerText = "SOON!";
 
@@ -40,15 +48,13 @@ function downloadAndCreateInfo() {
                 });
                 return;
             }
-            sceneName = dayLevels[todayDateKey].Level;
             createInfo();
-            createDatePicker();
-            console.log("Current scene name: " + sceneName);
+            // createDatePicker();
             let now = new Date();
             now.setUTCHours(nextMapUtcHour, 0, 0, 0);
             document.getElementById("settings-lastupdated").innerText = now.toLocaleDateString() + " " + now.toLocaleTimeString();
-            cacheIdentifier = cacheIdentifier + "&sceneName=" + sceneName + "&sceneDate=" + todayDateKey;
-            loadLevel(0);
+            cacheIdentifier = cacheIdentifier + "&levelName=" + levelName + "&sceneDate=" + todayDateKey;
+            loadBiome(0);
         });
 }
 
@@ -96,28 +102,28 @@ function parseKey(key) {
     return new Date(y, m - 1, d);
 }
 
-function createDatePicker() {
-    const picker = document.getElementById("date-picker");
-    const sorted = Object.keys(dayLevels).sort((a, b) => parseKey(a) - parseKey(b));
+// function createDatePicker() {
+//     const picker = document.getElementById("date-picker");
+//     const sorted = Object.keys(dayLevels).sort((a, b) => parseKey(a) - parseKey(b));
 
-    sorted.forEach(key => {
-        const opt = document.createElement("option");
-        opt.value = key;
-        let label = parseKey(key).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-        if (key === todayDateKey) label += " (today)";
-        label += ` (${dayLevels[key].Level})`;
-        opt.innerText = label;
-        picker.appendChild(opt);
-    });
-    picker.value = todayDateKey;
-}
+//     sorted.forEach(key => {
+//         const opt = document.createElement("option");
+//         opt.value = key;
+//         let label = parseKey(key).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+//         if (key === todayDateKey) label += " (today)";
+//         label += ` (${dayLevels[key].Level})`;
+//         opt.innerText = label;
+//         picker.appendChild(opt);
+//     });
+//     picker.value = todayDateKey;
+// }
 
 function switchDate(dateKey) {
-    if (dayLevels[dateKey].Level === sceneName) return;
-    removeAll(currentLevel);
-    sceneName = dayLevels[dateKey].Level;
-    console.log("Switching to scene: " + sceneName + " (" + dateKey + ")");
-    loadLevel(0);
+    if (dayLevels[dateKey].Level === levelName) return;
+    removeAll(currentBiome);
+    levelName = dayLevels[dateKey].Level;
+    console.log("Switching to level: " + levelName + " (" + dateKey + ")");
+    loadBiome(0);
 }
 
 downloadAndCreateInfo();
@@ -126,12 +132,12 @@ downloadAndCreateInfo();
 
 let luggage = [];
 
-function createLuggage(level) {
+function createLuggage(biome) {
     const container = document.getElementById("container");
     if (!document.getElementById("luggage-checkbox").checked) {
         return;
     }
-    let identifier = sceneName + "_" + level;
+    let identifier = levelName + "_" + biome;
     if (typeof luggage[identifier] != "undefined") {
         for (let i = 0; i < luggage[identifier].length; i++) {
             container.appendChild(luggage[identifier][i]);
@@ -139,14 +145,14 @@ function createLuggage(level) {
         return;
     }
     luggage[identifier] = [];
-    for (let i = 0; i < levelJson.Luggage.length; i++) {
+    for (let i = 0; i < biomeJson.Luggage.length; i++) {
         luggage[identifier][i] = createPoint(
             "luggage",
-            levelJson.Luggage[i].PositionOnScreen[0],
-            levelJson.Luggage[i].PositionOnScreen[1],
-            levelJson.Luggage[i].DisplayName,
-            levelJson.Luggage[i].Name.replaceAll(" ", "_"),
-            `${levelJson.Luggage[i].Name}.png`
+            biomeJson.Luggage[i].PositionOnScreen[0],
+            biomeJson.Luggage[i].PositionOnScreen[1],
+            biomeJson.Luggage[i].DisplayName,
+            biomeJson.Luggage[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Luggage[i].Name}.png`
         );
     }
 }
@@ -157,7 +163,7 @@ function removeLuggage() {
 
 function switchLuggage(checkbox) {
     if (checkbox.checked) {
-        createLuggage(currentLevel);
+        createLuggage(currentBiome);
     } else {
         removeLuggage();
     }
@@ -179,12 +185,12 @@ function createLuggageSettings() {
 
 let belltowers = [];
 
-function createBelltowers(level) {
+function createBelltowers(biome) {
     const container = document.getElementById("container");
     if (!document.getElementById("belltowers-checkbox").checked) {
         return;
     }
-    let identifier = sceneName + "_" + level;
+    let identifier = levelName + "_" + biome;
     if (typeof belltowers[identifier] != "undefined") {
         for (let i = 0; i < belltowers[identifier].length; i++) {
             container.appendChild(belltowers[identifier][i]);
@@ -192,14 +198,14 @@ function createBelltowers(level) {
         return;
     }
     belltowers[identifier] = [];
-    for (let i = 0; i < levelJson.Belltowers.length; i++) {
+    for (let i = 0; i < biomeJson.Belltowers.length; i++) {
         belltowers[identifier][i] = createPoint(
             "belltower",
-            levelJson.Belltowers[i].PositionOnScreen[0],
-            levelJson.Belltowers[i].PositionOnScreen[1],
-            levelJson.Belltowers[i].DisplayName,
-            levelJson.Belltowers[i].Name.replaceAll(" ", "_"),
-            `${levelJson.Belltowers[i].Name}.png`
+            biomeJson.Belltowers[i].PositionOnScreen[0],
+            biomeJson.Belltowers[i].PositionOnScreen[1],
+            biomeJson.Belltowers[i].DisplayName,
+            biomeJson.Belltowers[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Belltowers[i].Name}.png`
         );
     }
 }
@@ -210,7 +216,7 @@ function removeBelltowers() {
 
 function switchBelltowers(checkbox) {
     if (checkbox.checked) {
-        createBelltowers(currentLevel);
+        createBelltowers(currentBiome);
     } else {
         removeBelltowers();
     }
@@ -221,12 +227,12 @@ function switchBelltowers(checkbox) {
 
 let animals = [];
 
-function createAnimals(level) {
+function createAnimals(biome) {
     const container = document.getElementById("container");
     if (!document.getElementById("animals-checkbox").checked) {
         return;
     }
-    let identifier = sceneName + "_" + level;
+    let identifier = levelName + "_" + biome;
     if (typeof animals[identifier] != "undefined") {
         for (let i = 0; i < animals[identifier].length; i++) {
             container.appendChild(animals[identifier][i]);
@@ -234,14 +240,14 @@ function createAnimals(level) {
         return;
     }
     animals[identifier] = [];
-    for (let i = 0; i < levelJson.Animals.length; i++) {
+    for (let i = 0; i < biomeJson.Animals.length; i++) {
         animals[identifier][i] = createPoint(
             "animals",
-            levelJson.Animals[i].PositionOnScreen[0],
-            levelJson.Animals[i].PositionOnScreen[1],
-            levelJson.Animals[i].DisplayName,
-            levelJson.Animals[i].Name.replaceAll(" ", "_"),
-            `${levelJson.Animals[i].Name}.png`
+            biomeJson.Animals[i].PositionOnScreen[0],
+            biomeJson.Animals[i].PositionOnScreen[1],
+            biomeJson.Animals[i].DisplayName,
+            biomeJson.Animals[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Animals[i].Name}.png`
         );
     }
 }
@@ -252,7 +258,7 @@ function removeAnimals() {
 
 function switchAnimals(checkbox) {
     if (checkbox.checked) {
-        createAnimals(currentLevel);
+        createAnimals(currentBiome);
     } else {
         removeAnimals();
     }
@@ -263,12 +269,12 @@ function switchAnimals(checkbox) {
 
 let amulets = [];
 
-function createAmulets(level) {
+function createAmulets(biome) {
     const container = document.getElementById("container");
     if (!document.getElementById("amulets-checkbox").checked) {
         return;
     }
-    let identifier = sceneName + "_" + level;
+    let identifier = levelName + "_" + biome;
     if (typeof amulets[identifier] != "undefined") {
         for (let i = 0; i < amulets[identifier].length; i++) {
             container.appendChild(amulets[identifier][i]);
@@ -276,14 +282,14 @@ function createAmulets(level) {
         return;
     }
     amulets[identifier] = [];
-    for (let i = 0; i < levelJson.Amulets.length; i++) {
+    for (let i = 0; i < biomeJson.Amulets.length; i++) {
         amulets[identifier][i] = createPoint(
             "amulets",
-            levelJson.Amulets[i].PositionOnScreen[0],
-            levelJson.Amulets[i].PositionOnScreen[1],
-            levelJson.Amulets[i].DisplayName,
-            levelJson.Amulets[i].Name.replaceAll(" ", "_"),
-            `${levelJson.Amulets[i].Name}.png`
+            biomeJson.Amulets[i].PositionOnScreen[0],
+            biomeJson.Amulets[i].PositionOnScreen[1],
+            biomeJson.Amulets[i].DisplayName,
+            biomeJson.Amulets[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Amulets[i].Name}.png`
         );
     }
 }
@@ -294,7 +300,7 @@ function removeAmulets() {
 
 function switchAmulets(checkbox) {
     if (checkbox.checked) {
-        createAmulets(currentLevel);
+        createAmulets(currentBiome);
     } else {
         removeAmulets();
     }
@@ -305,12 +311,12 @@ function switchAmulets(checkbox) {
 
 let tombs = [];
 
-function createTombs(level) {
+function createTombs(biome) {
     const container = document.getElementById("container");
     if (!document.getElementById("tombs-checkbox").checked) {
         return;
     }
-    let identifier = sceneName + "_" + level;
+    let identifier = levelName + "_" + biome;
     if (typeof tombs[identifier] != "undefined") {
         for (let i = 0; i < tombs[identifier].length; i++) {
             container.appendChild(tombs[identifier][i]);
@@ -318,14 +324,14 @@ function createTombs(level) {
         return;
     }
     tombs[identifier] = [];
-    for (let i = 0; i < levelJson.Tombs.length; i++) {
+    for (let i = 0; i < biomeJson.Tombs.length; i++) {
         tombs[identifier][i] = createPoint(
             "tombs",
-            levelJson.Tombs[i].PositionOnScreen[0],
-            levelJson.Tombs[i].PositionOnScreen[1],
-            levelJson.Tombs[i].DisplayName,
-            levelJson.Tombs[i].Name.replaceAll(" ", "_"),
-            `${levelJson.Tombs[i].Name}.png`
+            biomeJson.Tombs[i].PositionOnScreen[0],
+            biomeJson.Tombs[i].PositionOnScreen[1],
+            biomeJson.Tombs[i].DisplayName,
+            biomeJson.Tombs[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Tombs[i].Name}.png`
         );
     }
 }
@@ -336,7 +342,7 @@ function removeTombs() {
 
 function switchTombs(checkbox) {
     if (checkbox.checked) {
-        createTombs(currentLevel);
+        createTombs(currentBiome);
     } else {
         removeTombs();
     }
@@ -383,38 +389,38 @@ function removePointsWithSpecial(group, special) {
     });
 }
 
-function removeAll(level) {
-    removeLuggage(level);
-    removeBelltowers(level);
-    removeAnimals(level);
-    removeAmulets(level);
-    removeTombs(level);
+function removeAll(biome) {
+    removeLuggage(biome);
+    removeBelltowers(biome);
+    removeAnimals(biome);
+    removeAmulets(biome);
+    removeTombs(biome);
 }
 
-function previousLevel() {
-    let level = currentLevel;
-    if ((currentLevel + "").includes("_")) {
-        level = parseInt(currentLevel.split("_")[0]);
+function previousBiome() {
+    let biome = currentBiome;
+    if ((currentBiome + "").includes("_")) {
+        biome = parseInt(currentBiome.split("_")[0]);
     }
-    loadLevel(level - 1);
+    loadBiome(biome - 1);
 }
 
 function switchAngle() {
-    let level;
-    if ((currentLevel + "").includes("_")) {
-        level = parseInt(currentLevel.split("_")[0]);
+    let biome;
+    if ((currentBiome + "").includes("_")) {
+        biome = parseInt(currentBiome.split("_")[0]);
     } else {
-        level = currentLevel + "_side";
+        biome = currentBiome + "_side";
     }
-    loadLevel(level);
+    loadBiome(biome);
 }
 
-function nextLevel() {
-    let level = currentLevel;
-    if ((currentLevel + "").includes("_")) {
-        level = parseInt(currentLevel.split("_")[0]);
+function nextBiome() {
+    let biome = currentBiome;
+    if ((currentBiome + "").includes("_")) {
+        biome = parseInt(currentBiome.split("_")[0]);
     }
-    loadLevel(level + 1);
+    loadBiome(biome + 1);
 }
 
 function toggleUI(button) {
@@ -438,17 +444,17 @@ function toggleBottomUI(button) {
     }
 }
 
-function loadLevel(level) {
-    if (level < 0) {
-        loadLevel(maxLevel);
+function loadBiome(biome) {
+    if (biome < 0) {
+        loadBiome(maxBiome);
         return;
     }
-    if (level > maxLevel) {
-        loadLevel(0);
+    if (biome > maxBiome) {
+        loadBiome(0);
         return;
     }
 
-    console.log("Loading level: " + level);
+    console.log("Loading biome: " + biome);
 
     const switchAngleButton = document.getElementById("switch-angle-button");
     //
@@ -458,7 +464,7 @@ function loadLevel(level) {
         button.disabled = true;
     });
 
-    if (level == 3 || level == 4) {
+    if (biome == 3 || biome == 4) {
         switchAngleButton.disabled = true;
     } else {
         switchAngleButton.disabled = false;
@@ -467,9 +473,9 @@ function loadLevel(level) {
     zoom = 1;
     updateZoom();
 
-    removeAll(currentLevel);
+    removeAll(currentBiome);
 
-    currentLevel = level;
+    currentBiome = biome;
 
     let map = document.getElementById("map");
     map.loading = true;
@@ -478,7 +484,7 @@ function loadLevel(level) {
         requestAnimationFrame(() => {
             map.src = this.src;
             Promise.all([
-                loadLevelJson(level)
+                loadBiomeJson(biome)
             ]).then(() => {
                 refreshAdditionalFilter();
                 requestAnimationFrame(() => {
@@ -490,21 +496,21 @@ function loadLevel(level) {
             });
         });
     }
-    newImage.src = "./data/" + sceneName + "/level_" + level + ".jpg" + getURLAddition();
+    newImage.src = "./data/" + levelName + "/biome_" + biome + ".jpg" + getURLAddition();
 }
 
-function loadLevelJson(level) {
-    return fetch("./data/" + sceneName + "/level_" + level + ".json" + getURLAddition())
+function loadBiomeJson(biome) {
+    return fetch("./data/" + levelName + "/biome_" + biome + ".json" + getURLAddition())
         .then(function (response) {
             return response.json();
         })
         .then(function (json) {
-            levelJson = json;
-            createLuggage(level);
-            createBelltowers(level);
-            createAnimals(level);
-            createAmulets(level);
-            createTombs(level);
+            biomeJson = json;
+            createLuggage(biome);
+            createBelltowers(biome);
+            createAnimals(biome);
+            createAmulets(biome);
+            createTombs(biome);
             updateZoom();
         });
 }

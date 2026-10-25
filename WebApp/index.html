@@ -47,9 +47,9 @@
                 <button class="mobile-only" id="settings-toggle-btn" onclick="toggleSettings(this)">Settings ▼</button>
             </div>
             <div id="settings-content">
-                <div class="settings-entry">
+                <!-- <div class="settings-entry">
                     <select id="date-picker" onchange="switchDate(this.value)"></select>
-                </div>
+                </div> -->
                 <div class="settings-entry">
                     <p>Last updated:<br> <b id="settings-lastupdated">...</b></p>
                     <p>Next update: <b id="settings-nextupdate">...</b></p>
@@ -89,8 +89,8 @@
                 </div>
                 <div class="settings-entry">
                     <div class="settings-buttons">
-                        <button onclick="previousLevel()">Previous biome</button>
-                        <button onclick="nextLevel()">Next biome</button>
+                        <button onclick="previousBiome()">Previous biome</button>
+                        <button onclick="nextBiome()">Next biome</button>
                     </div>
                     <div class="settings-angle-buttons">
                         <button id="switch-angle-button" onclick="switchAngle()">Change angle (beta)</button>
