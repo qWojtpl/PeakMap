@@ -70,7 +70,7 @@ public abstract class DataManager
         
         float previousWidth = -500;
         if(level > 0) {
-            previousWidth = ScreenshotManager.LevelWidths[level - 1];
+            previousWidth = ScreenshotManager.BiomeWidths[level - 1];
         }
 
         LevelInfo serializableInfo = new LevelInfo
@@ -83,7 +83,7 @@ public abstract class DataManager
         };
 
         File.WriteAllText(
-            Path.Combine(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentScene), "level_" + level + filePrefix + ".json"), 
+            Path.Combine(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentLevel), "biome_" + level + filePrefix + ".json"), 
             JsonConvert.SerializeObject(serializableInfo)
         );
     }
@@ -91,8 +91,8 @@ public abstract class DataManager
     private static List<ObjectInfo> FilterWidth(int level, float previousWidth, List<ObjectInfo> objects)
     {
         return objects.Where(n => n.PositionOnScreen != null)
-            .Where(n => n.Position.z <= ScreenshotManager.LevelWidths[level] && n.Position.z > previousWidth)
-            .Where(n => n.Position.y <= ScreenshotManager.LevelHeights[level] + 10f).ToList();
+            .Where(n => n.Position.z <= ScreenshotManager.BiomeWidths[level] && n.Position.z > previousWidth)
+            .Where(n => n.Position.y <= ScreenshotManager.BiomeHeights[level] + 10f).ToList();
     }
     
 }

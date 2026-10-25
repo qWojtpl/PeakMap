@@ -22,7 +22,6 @@
 - Automatically gathers data about luggages, belltowers etc. from the biomes
 - Screenshot of the map will be taken automatically
 - All the files will be saved in `plugins` directory
-- Plugin should be run as soon as patch drops, to ensure correct day-level sequence
 
 ## Plans for the future
 - Bot which automatically uploads new data to the page

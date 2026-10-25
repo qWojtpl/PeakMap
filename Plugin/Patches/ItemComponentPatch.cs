@@ -1,8 +1,6 @@
 using HarmonyLib;
-using Peak;
 using PeakMap.Managers;
 using PeakMap.Objects;
-using Zorro.Core;
 
 namespace PeakMap.Patches;
 

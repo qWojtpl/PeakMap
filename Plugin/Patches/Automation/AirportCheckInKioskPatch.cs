@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using BepInEx;
 using HarmonyLib;
 using Newtonsoft.Json;
 using PeakMap.Objects;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace PeakMap.Patches.Automation;
 
@@ -15,15 +14,15 @@ namespace PeakMap.Patches.Automation;
 public class AirportCheckInKioskPatch
 {
 
-    private static List<string> AllScenes { get; } = new();
-    private static string TodayScene { get; set; }
-    private static int _sceneCounter = 0;
-    public static string CurrentScene { get; private set; }
-    public static Dictionary<string, DayInfo> SceneDayInfo { get; } = new();
+    private static List<string> AllLevels { get; } = new();
+    private static string TodayLevel { get; set; }
+    private static int _levelCounter = 0;
+    public static string CurrentLevel { get; private set; }
+    public static Dictionary<string, List<string>> LevelBiomes { get; } = new();
 
     public static void Prefix(ref string sceneName)
     {
-        if (TodayScene == null)
+        if (TodayLevel == null)
         {
             foreach (string bundlePath in Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, "maps"), "*.assetbundle"))
             {
@@ -43,8 +42,7 @@ public class AirportCheckInKioskPatch
 
                 foreach (string scenePath in bundle.GetAllScenePaths())
                 {
-                    PeakMapPlugin.Log.LogInfo(scenePath);
-                    AllScenes.Add(Path.GetFileNameWithoutExtension(scenePath));
+                    AllLevels.Add(Path.GetFileNameWithoutExtension(scenePath));
                 }
 
                 if (!alreadyLoaded)
@@ -53,42 +51,30 @@ public class AirportCheckInKioskPatch
                 }
             }
 
-            TodayScene = sceneName;
+            TodayLevel = sceneName;
+            PeakMapPlugin.Log.LogInfo($"Loaded {AllLevels.Count} scenes, today scene: {TodayLevel}");
         }
 
-        if (_sceneCounter == AllScenes.Count)
+        if (_levelCounter == AllLevels.Count)
         {
-            Dictionary<string, DayInfo> dayLevels = new();
-            
-            int start = AllScenes.IndexOf(TodayScene);
-            int counter = start;
             DateTime date = DateTime.UtcNow;
-            while (true)
+            if (date.Hour < 17)
             {
-                dayLevels.Add(date.Day + "-" + date.Month + "-" + date.Year, SceneDayInfo[AllScenes[counter]]);
-                date = date.AddDays(1);
-                counter++;
-                if (counter == AllScenes.Count)
-                {
-                    counter = 0;
-                }
-
-                if (counter == start)
-                {
-                    break;
-                }
+                date = date.AddDays(-1);
             }
             File.WriteAllText(Path.Combine(PeakMapPlugin.ModFolder, "info.json"), JsonConvert.SerializeObject(new GatherInfo
             {
-                DayLevels = dayLevels
+                StartLevel = TodayLevel,
+                StartDate = date.Day + "-" + date.Month + "-" + date.Year,
+                LevelBiomes = LevelBiomes,
             }));
             Application.Quit();
             return;
         }
         
-        sceneName = AllScenes[_sceneCounter];
-        CurrentScene = sceneName;
-        _sceneCounter++;
+        sceneName = AllLevels[_levelCounter];
+        CurrentLevel = sceneName;
+        _levelCounter++;
     }
     
 }

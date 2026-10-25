@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using PeakMap.Objects;
 using PeakMap.Patches.Automation;
 using Photon.Pun;
 using UnityEngine;
@@ -39,8 +38,8 @@ public static class ScreenshotManager
         90f
     };
 
-    public static readonly List<float> LevelWidths = new() { 0, 0, 0, 0, 5000 };
-    public static readonly List<float> LevelHeights = new() { 0, 0, 0, 0, 5000 };
+    public static readonly List<float> BiomeWidths = new() { 0, 0, 0, 0, 5000 };
+    public static readonly List<float> BiomeHeights = new() { 0, 0, 0, 0, 5000 };
         
     private static int ResolutionWidth { get; set; } = 7680;
     private static int ResolutionHeight { get; set; } = 4320;
@@ -53,9 +52,9 @@ public static class ScreenshotManager
     private static MapHandler.MapSegment _currentSegment;
     private static EnablingSubstep[] _currentEnablingSubsteps;
     
-    public static void SetupLevelDimensions(int level)
+    public static void SetupLevelDimensions(int biome)
     {
-        MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[level];
+        MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[biome];
         Vector3? campfire = segment?.segmentCampfire?.transform.position;
 
         if (campfire == null)
@@ -63,7 +62,7 @@ public static class ScreenshotManager
             return;
         }
         
-        if (segment.biome == Biome.BiomeType.Volcano && level == 3) // Klin patch
+        if (segment.biome == Biome.BiomeType.Volcano && biome == 3) // Klin patch
         {
             campfire = DataManager.LevelInfo.Luggage
                 .Where(n => n.Name.ToLower().Equals("scout statue"))
@@ -73,17 +72,17 @@ public static class ScreenshotManager
             PeakMapPlugin.Log.LogWarning("Updated campfire location for the klin to " + campfire);
         }
         
-        CameraPositions[level + 1] += new Vector3(0f, campfire.Value.y + 100, campfire.Value.z + 25f);
+        CameraPositions[biome + 1] += new Vector3(0f, campfire.Value.y + 100, campfire.Value.z + 25f);
         
-        LevelWidths[level] = campfire.Value.z + 10f;
-        LevelHeights[level] = campfire.Value.y;
-        PeakMapPlugin.Log.LogWarning("New level width for " + level + " is " + LevelWidths[level] + ", with height " + LevelHeights[level]);
+        BiomeWidths[biome] = campfire.Value.z + 10f;
+        BiomeHeights[biome] = campfire.Value.y;
+        PeakMapPlugin.Log.LogWarning("New biome width for biome " + biome + " is " + BiomeWidths[biome] + ", with height " + BiomeHeights[biome]);
     }
     
-    public static void CreateFor(int level, bool withSide = false)
+    public static void CreateFor(int biome, bool withSide = false)
     {
         MapHandler mapHandler = Singleton<MapHandler>.Instance;
-        MapHandler.MapSegment segment = mapHandler?.segments?[level];
+        MapHandler.MapSegment segment = mapHandler?.segments?[biome];
         GameObject mapObject = segment?.segmentParent;
 
         if (mapObject == null)
@@ -99,19 +98,19 @@ public static class ScreenshotManager
         
         PrepareMap();
         
-        PeakMapPlugin.Log.LogWarning("Taking screenshot of level " + level + "...");
-        PeakMapPlugin.Log.LogWarning("Camera position: " + CameraPositions[level] + " with rotation " + CameraRotations[level] + " and FOV " + CameraFoVs[level]);
+        PeakMapPlugin.Log.LogWarning("Taking screenshot of biome " + biome + "...");
+        PeakMapPlugin.Log.LogWarning("Camera position: " + CameraPositions[biome] + " with rotation " + CameraRotations[biome] + " and FOV " + CameraFoVs[biome]);
 
-        GameObject tempCamObj = CreateTempCameraGameObject(CameraPositions[level], CameraRotations[level]);
-        Camera tempCam = CreateTempCamera(CameraFoVs[level], tempCamObj);
+        GameObject tempCamObj = CreateTempCameraGameObject(CameraPositions[biome], CameraRotations[biome]);
+        Camera tempCam = CreateTempCamera(CameraFoVs[biome], tempCamObj);
 
-        TakeScreenshot(tempCam, level + "");
+        TakeScreenshot(tempCam, biome + "");
 
         if (withSide)
         {
-            GameObject tempSideCamObj = CreateTempCameraGameObject(GetSideCameraPosition(level), GetSideCameraRotation());
+            GameObject tempSideCamObj = CreateTempCameraGameObject(GetSideCameraPosition(biome), GetSideCameraRotation());
             Camera tempSideCam = CreateTempCamera(60, tempSideCamObj);
-            TakeScreenshot(tempSideCam, level + "_side");
+            TakeScreenshot(tempSideCam, biome + "_side");
             Object.DestroyImmediate(tempSideCamObj);
         }
         
@@ -119,15 +118,15 @@ public static class ScreenshotManager
         SpawnMapObjectItems();
     }
 
-    public static Vector3 GetSideCameraPosition(int level)
+    public static Vector3 GetSideCameraPosition(int biome)
     {
         float previousWidth = -200;
-        if (level > 0)
+        if (biome > 0)
         {
-            previousWidth = LevelWidths[level - 1];
+            previousWidth = BiomeWidths[biome - 1];
         }
 
-        return new Vector3(280f, LevelHeights[level] + 100, (previousWidth + LevelWidths[level]) / 2);
+        return new Vector3(280f, BiomeHeights[biome] + 100, (previousWidth + BiomeWidths[biome]) / 2);
     }
 
     public static Vector3 GetSideCameraRotation()
@@ -179,7 +178,7 @@ public static class ScreenshotManager
         screenshot.Apply();
         
         byte[] bytes = screenshot.EncodeToJPG(92);
-        string fullPath = Path.Combine(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentScene), "level_" + fileSuffix + ".jpg");
+        string fullPath = Path.Combine(Path.Combine(PeakMapPlugin.ModFolder, AirportCheckInKioskPatch.CurrentLevel), "biome_" + fileSuffix + ".jpg");
         File.WriteAllBytes(fullPath, bytes);
         
         tempCam.targetTexture = null;
@@ -289,7 +288,6 @@ public static class ScreenshotManager
             {
                 continue;
             }
-            PeakMapPlugin.Log.LogWarning("Destroying rock: " + rock.gameObject.name);
             Object.DestroyImmediate(rock.gameObject);
         }
     }
@@ -313,21 +311,20 @@ public static class ScreenshotManager
         CameraFoVs[4] = 90f;
         for (int i = 0; i < 4; i++)
         {
-            LevelWidths[i] = 0;
-            LevelHeights[i] = 0;
+            BiomeWidths[i] = 0;
+            BiomeHeights[i] = 0;
         }
-        LevelWidths[4] = 5000;
-        LevelWidths[4] = 5000;
+        BiomeWidths[4] = 5000;
         _swampCounter = 0;
         _volcanoCounter = 0;
     }
 
-    public static void FillBiomes(DayInfo dayInfo)
+    public static void FillBiomeNames(List<string> biomes)
     {
         for (int i = 0; i < 4; i++)
         {
             MapHandler.MapSegment segment = Singleton<MapHandler>.Instance?.segments?[i];
-            dayInfo.Biomes.Add(segment?.biome.ToString());
+            biomes.Add(segment?.biome.ToString());
         }
     }
     
