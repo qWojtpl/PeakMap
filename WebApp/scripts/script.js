@@ -349,6 +349,49 @@ function switchTombs(checkbox) {
     updateZoom();
 }
 
+let mushrooms = [];
+
+function createMushrooms(biome) {
+    const container = document.getElementById("container");
+    if (!document.getElementById("mushrooms-checkbox").checked) {
+        return;
+    }
+    if (typeof biomeJson.Mushrooms == "undefined") {
+        return;
+    }
+    let identifier = levelName + "_" + biome;
+    if (typeof mushrooms[identifier] != "undefined") {
+        for (let i = 0; i < mushrooms[identifier].length; i++) {
+            container.appendChild(mushrooms[identifier][i]);
+        }
+        return;
+    }
+    mushrooms[identifier] = [];
+    for (let i = 0; i < biomeJson.Mushrooms.length; i++) {
+        mushrooms[identifier][i] = createPoint(
+            "mushrooms",
+            biomeJson.Mushrooms[i].PositionOnScreen[0],
+            biomeJson.Mushrooms[i].PositionOnScreen[1],
+            biomeJson.Mushrooms[i].DisplayName,
+            biomeJson.Mushrooms[i].Name.replaceAll(" ", "_"),
+            `${biomeJson.Mushrooms[i].Name}.png`
+        );
+    }
+}
+
+function removeMushrooms() {
+    removePoints("mushrooms");
+}
+
+function switchMushrooms(checkbox) {
+    if (checkbox.checked) {
+        createMushrooms(currentBiome);
+    } else {
+        removeMushrooms();
+    }
+    updateZoom();
+}
+
 // General
 
 function createPoint(group, x, y, name, special, image) {
@@ -395,6 +438,7 @@ function removeAll(biome) {
     removeAnimals(biome);
     removeAmulets(biome);
     removeTombs(biome);
+    removeMushrooms(biome);
 }
 
 function previousBiome() {
@@ -511,6 +555,7 @@ function loadBiomeJson(biome) {
             createAnimals(biome);
             createAmulets(biome);
             createTombs(biome);
+            createMushrooms(biome);
             updateZoom();
         });
 }

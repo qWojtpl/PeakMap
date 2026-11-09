@@ -171,6 +171,16 @@ body:has(#map[loading=true])::after {
     border-color: purple;
 }
 
+.point.mushrooms {
+    width: 2vmin;
+    height: 2vmin;
+    border-width: 0.2vmin;
+}
+
+.point.mushrooms.Mushroom {
+    border-color: #ff9e3d;
+}
+
 .data-frame {
     display: none;
 }
@@ -275,6 +285,10 @@ span.icon {
 .settings-entry label[for="tombs-checkbox"] span {
     background-image: url("./images/Tomb.png");
     background-size: 200%;
+}
+
+.settings-entry label[for="mushrooms-checkbox"] span {
+    background-image: url("./images/Mushroom.png");
 }
 
 .settings-entry input[type=checkbox] {
