@@ -29,11 +29,24 @@
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
     <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="3d/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+        }
+    }
+    </script>
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=5"></script>
     <script src="scripts/nocache.js?v=2"></script>
     <script src="scripts/additionalSettings.js?v=2"></script>
     <script src="scripts/script.js?v=13"></script>
+    <script type="module">
+        import * as view3d from "./3d/main.js";
+        window.view3d = view3d;
+    </script>
 </head>
 
 <body>
@@ -94,6 +107,9 @@
                     </div>
                     <div class="settings-angle-buttons">
                         <button id="switch-angle-button" onclick="switchAngle()">Change angle (beta)</button>
+                    </div>
+                    <div class="settings-angle-buttons">
+                        <button id="view-3d-button" onclick="toggle3DView()">3D view (beta)</button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,169 @@
+#view3d,
+#overlay {
+  position: fixed;
+  inset: 0;
+}
+
+#view3d {
+  z-index: 0;
+}
+
+#overlay {
+  pointer-events: none;
+}
+
+body:not(.mode-3d) .only-3d,
+body.mode-3d #container,
+body.mode-3d #no-data-yet,
+body.mode-3d .settings-angle-buttons:has(#switch-angle-button),
+#additional-settings,
+#settings-luggage-entry,
+#settings-content > .settings-entry:has(> input[id$="-checkbox"]) {
+  display: none !important;
+}
+
+body.mode-3d #item-popup {
+  position: fixed;
+}
+
+body.mode-3d #item-popup-image {
+  background-size: contain;
+  background-position: center;
+}
+
+#tiles .tile.empty {
+  opacity: 0.35;
+  cursor: default;
+}
+
+#tiles .tile.empty:hover {
+  scale: 1;
+}
+
+body.mode-3d:not(.ui-hidden) #settings-content {
+  max-height: calc(100dvh - 110px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #beff48 transparent;
+  scrollbar-gutter: stable;
+  margin-right: -12px;
+  padding-right: 2px;
+}
+
+#biome3d {
+  margin-bottom: 0.3rem;
+}
+
+#tiles .settings-entry {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 4px 10px 8px;
+  margin-bottom: 0.4rem;
+}
+
+.tile-group {
+  grid-column: 1 / -1;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+#tiles .tile {
+  position: relative;
+  display: flex;
+  aspect-ratio: 1;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#tiles .tile img {
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.45);
+}
+
+#tiles .tile.on {
+  border-color: var(--ring);
+}
+
+#tiles .tile.on img {
+  filter: none;
+}
+
+#tiles .tile .count {
+  position: absolute;
+  right: 4px;
+  bottom: 1px;
+  color: white;
+  font-size: 0.8rem;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+#berry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#berry img {
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+
+#berry .good {
+  color: #beff48;
+}
+
+#berry .bad {
+  color: #ff6a4d;
+}
+
+#berry .note {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+.ui-hidden #berry {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.mode-3d.loading::after {
+  content: "";
+  position: fixed;
+  top: 9vmin;
+  right: 0;
+  width: 12vmin;
+  height: 12vmin;
+  pointer-events: none;
+  background: url("icons/BingBong.png") center / contain no-repeat;
+  animation: mapLoading 0.8s linear infinite;
+  z-index: 5;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 1280px) {
+  #tiles .settings-entry {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  body.mode-3d #settings.settings-expanded #settings-content {
+    max-height: calc(100dvh - 160px);
+    overflow-y: auto;
+    margin-right: 0;
+  }
+
+  #berry {
+    width: 90%;
+    box-sizing: border-box;
+  }
+}

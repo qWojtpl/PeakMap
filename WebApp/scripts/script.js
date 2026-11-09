@@ -123,6 +123,10 @@ function switchDate(dateKey) {
     removeAll(currentBiome);
     levelName = dayLevels[dateKey].Level;
     console.log("Switching to level: " + levelName + " (" + dateKey + ")");
+    if (is3DActive()) {
+        view3d.setLevel(levelName);
+        return;
+    }
     loadBiome(0);
 }
 
@@ -398,6 +402,10 @@ function removeAll(biome) {
 }
 
 function previousBiome() {
+    if (is3DActive()) {
+        view3d.step(-1);
+        return;
+    }
     let biome = currentBiome;
     if ((currentBiome + "").includes("_")) {
         biome = parseInt(currentBiome.split("_")[0]);
@@ -416,11 +424,41 @@ function switchAngle() {
 }
 
 function nextBiome() {
+    if (is3DActive()) {
+        view3d.step(1);
+        return;
+    }
     let biome = currentBiome;
     if ((currentBiome + "").includes("_")) {
         biome = parseInt(currentBiome.split("_")[0]);
     }
     loadBiome(biome + 1);
+}
+
+let view3d = null;
+
+function is3DActive() {
+    return view3d != null && view3d.isActive();
+}
+
+async function toggle3DView() {
+    const button = document.getElementById("view-3d-button");
+    if (is3DActive()) {
+        const biome = view3d.deactivate();
+        button.innerText = "3D view (beta)";
+        loadBiome(biome);
+        return;
+    }
+    button.disabled = true;
+    try {
+        if (view3d == null) {
+            view3d = window.view3d || await import(new URL("3d/main.js", document.baseURI).href);
+        }
+        button.innerText = "2D view";
+        await view3d.activate(levelName, parseInt(currentBiome));
+    } finally {
+        button.disabled = false;
+    }
 }
 
 function toggleUI(button) {
@@ -487,6 +525,9 @@ function loadBiome(biome) {
                 loadBiomeJson(biome)
             ]).then(() => {
                 refreshAdditionalFilter();
+                if (window.view3d) {
+                    window.view3d.apply2dTiles();
+                }
                 requestAnimationFrame(() => {
                     map.loading = false;
                     for (let i = 0; i < buttons.length; i++) {
