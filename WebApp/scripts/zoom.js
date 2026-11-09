@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // zoom toward cursor position
     document.addEventListener("wheel", (e) => {
+        if (is3DActive()) {
+            return;
+        }
         e.preventDefault();
         const factor = e.deltaY < 0 ? (1 + STEP) : (1 - STEP);
         zoomAt(e.clientX, e.clientY, factor);
@@ -34,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("mousemove", (e) => {
-        if (!dragStartX || (e.buttons | e.button) !== 1) {
+        if (!dragStartX || (e.buttons | e.button) !== 1 || is3DActive()) {
             return;
         }
         panX += e.clientX - dragStartX;
