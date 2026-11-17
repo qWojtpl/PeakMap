@@ -28,12 +28,12 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
     <script src="scripts/zoom.js?v=5"></script>
     <script src="scripts/nocache.js?v=2"></script>
     <script src="scripts/additionalSettings.js?v=2"></script>
-    <script src="scripts/script.js?v=13"></script>
+    <script src="scripts/script.js?v=14"></script>
 </head>
 
 <body>
@@ -47,12 +47,13 @@
                 <button class="mobile-only" id="settings-toggle-btn" onclick="toggleSettings(this)">Settings ▼</button>
             </div>
             <div id="settings-content">
-                <!-- <div class="settings-entry">
-                    <select id="date-picker" onchange="switchDate(this.value)"></select>
-                </div> -->
-                <div class="settings-entry">
-                    <p>Last updated:<br> <b id="settings-lastupdated">...</b></p>
-                    <p>Next update: <b id="settings-nextupdate">...</b></p>
+                <div id="settings-day-entry" class="settings-entry">
+                    <p><b id="settings-day-date">...</b><br><span id="settings-day-level">...</span></p>
+                    <div class="settings-buttons">
+                        <button id="previous-day-button" onclick="previousDay()">Previous day</button>
+                        <button id="next-day-button" onclick="nextDay()">Next day</button>
+                    </div>
+                    <p id="settings-day-countdown">Next island in <b id="settings-nextupdate">...</b></p>
                 </div>
                 <div id="settings-luggage-entry" class="settings-entry">
                     <label for="luggage-checkbox">
@@ -125,6 +126,10 @@
                 Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro
                 Crab, Landfall Games and/or their licensors.
             </footer>
+        </div>
+        <div id="map-load-error" style="display:none;">
+            <h1>This map failed to load</h1>
+            <button onclick="retryMapLoad()">Retry</button>
         </div>
         <div id="no-data-yet" style="display:none;">
             <h1>Current data isn't available yet, sorry ;c</h1>
