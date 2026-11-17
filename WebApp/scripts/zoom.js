@@ -20,8 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initZoom(true);
 
+    function isMapActive() {
+        return !document.body.dataset.activeTab || document.body.dataset.activeTab === "map";
+    }
+
     // zoom toward cursor position
     document.addEventListener("wheel", (e) => {
+        if (!isMapActive()) {
+            return;
+        }
         e.preventDefault();
         const factor = e.deltaY < 0 ? (1 + STEP) : (1 - STEP);
         zoomAt(e.clientX, e.clientY, factor);
@@ -29,12 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // mouse drag
     container.addEventListener("mousedown", (e) => {
+        if (!isMapActive()) {
+            return;
+        }
         dragStartX = e.clientX;
         dragStartY = e.clientY;
     });
 
     document.addEventListener("mousemove", (e) => {
-        if (!dragStartX || (e.buttons | e.button) !== 1) {
+        if (!isMapActive() || !dragStartX || (e.buttons | e.button) !== 1) {
             return;
         }
         panX += e.clientX - dragStartX;
@@ -50,12 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // mobile touch drag and pinch zoom
     container.addEventListener("touchstart", (e) => {
+        if (!isMapActive()) {
+            return;
+        }
         e.preventDefault();
         lastTouches = e.touches;
     }, { passive: false });
 
     document.addEventListener("touchmove", (e) => {
-        if (!lastTouches || lastTouches.length === 0) {
+        if (!isMapActive() || !lastTouches || lastTouches.length === 0) {
             return;
         }
         if (e.touches.length === 2 && lastTouches.length === 2) {
@@ -104,12 +117,12 @@ function zoomAt(cx, cy, factor) {
 
 function initZoom(resetState = false) {
     const container = document.getElementById("container");
-    if (!container) {
+    if (!container || container.offsetWidth === 0) {
         return;
     }
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const cw = container.offsetWidth || vw;
+    const cw = container.offsetWidth;
     const ch = container.offsetHeight || vh;
 
     // zoom to fit max viewport unit (width for landscape, height for portrait) and set that as the minimum zoom
@@ -139,10 +152,11 @@ function applyZoom() {
 
     container.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
 
-    const zoomReminder = document.getElementById("zoom-reminder");
-    if (zoomReminder) {
-        zoomReminder.style.display = zoom > minZoom + 0.01 ? 'none' : 'block';
-    }
+    const zoomReminders = document.querySelectorAll("#zoom-reminder, #touch-zoom-reminder");
+    const shouldHide = zoom > minZoom + 0.01;
+    zoomReminders.forEach((reminder) => {
+        reminder.style.setProperty("display", shouldHide ? "none" : "", shouldHide ? "important" : "");
+    });
 
     let points = document.getElementsByClassName("point");
     let size = 4 - zoom;

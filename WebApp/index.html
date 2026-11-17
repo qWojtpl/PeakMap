@@ -4,16 +4,12 @@
 <head>
     <!-- Meta -->
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="description"
-        content="Check the daily map with item locations for the PEAK game. Interactive map updated daily!">
-    <meta name="keywords"
-        content="PEAK, PEAK Game, PEAK Map, PEAK Daily Map, PEAK map today, PEAK item locations, PEAK interactive map, PEAK guide, PEAK items, PEAK game daily reset, PEAK map update, PEAK tomb location, PEAK locations, PEAK current map, PEAK biomes today, PEAK biomes, PEAK maps, current PEAK map, PEAK tomb today, PEAK new map, PEAK daily, PEAK map viewer, PEAK biome tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Check the daily map with item locations for the PEAK game. Interactive map updated daily!">
+    <meta name="keywords" content="PEAK, PEAK Game, PEAK Map, PEAK Daily Map, PEAK map today, PEAK item locations, PEAK interactive map, PEAK guide, PEAK items, PEAK game daily reset, PEAK map update, PEAK tomb location, PEAK locations, PEAK current map, PEAK biomes today, PEAK biomes, PEAK maps, current PEAK map, PEAK tomb today, PEAK new map, PEAK daily, PEAK map viewer, PEAK biome tracker">
     <meta property="og:site_name" content="PEAK Daily Map">
     <meta property="og:title" content="PEAK Game - Daily Map & Item Locations">
-    <meta property="og:description"
-        content="Check the daily map with item locations for the PEAK game. Interactive map updated daily!">
+    <meta property="og:description" content="Check the daily map with item locations for the PEAK game. Interactive map updated daily!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://qwojtpl.github.io/PeakMap/WebApp">
     <meta name="robots" content="index, follow">
@@ -28,104 +24,281 @@
     </script>
     <title>PEAK Game - Daily Map & Item Locations</title>
     <!-- Scripts & CSS -->
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
     <link rel="icon" type="image/x-icon" href="./images/BingBong.png">
-    <script src="scripts/zoom.js?v=5"></script>
+    <script src="scripts/zoom.js?v=6"></script>
     <script src="scripts/nocache.js?v=2"></script>
     <script src="scripts/additionalSettings.js?v=2"></script>
-    <script src="scripts/script.js?v=13"></script>
+    <script src="scripts/script.js?v=15"></script>
 </head>
 
-<body>
+<body data-active-tab="map">
+    <div class="overlay desktop-only" id="update-overlay" data-version="1.0" style="display: none !important;">
+        <div>
+            <img src="./images/BingBong.png">
+        </div>
+        <div>
+            <h1>Hey there!</h1>
+            <p>You might notice a fresh look around the site, including a tab bar for options and a calendar view, plus a new biomes bar for easier switching. If you prefer the classic layout, you can easily switch back via the "Classic UI" setting in the Options tab.</p>
+        </div>
+        <div>
+            <button class="primary" onclick="dismissOverlay('update-overlay'); switchTab('options')">Bring me there!</button>
+            <button class="secondary" onclick="dismissOverlay('update-overlay')">Dismiss / I'll get used to it ;)</button>
+        </div>
+    </div>
+
+    <div id="date-picker-popover" class="popover" popover hidden>
+        <div class="tab-switcher">
+            <button class="tab active" onclick="switchPopoverMode('date')">From Date</button>
+            <button class="tab" onclick="switchPopoverMode('level')">From Level</button>
+        </div>
+        <div class="popover-content">
+            <div id="popover-date-mode" class="popover-mode">
+                <h2>Pick a Date</h2>
+                <div>
+                    <label for="date-day-input">Day</label>
+                    <input type="number" min="1" max="31" id="date-day-input" placeholder="20">
+                </div>
+                <div>
+                    <label for="date-month-input">Month</label>
+                    <input type="number" min="1" max="12" id="date-month-input" placeholder="11">
+                </div>
+                <div>
+                    <label for="date-year-input">Year</label>
+                    <input type="number" min="2026" id="date-year-input" placeholder="2026">
+                </div>
+            </div>
+            <div id="popover-level-mode" class="popover-mode" style="display: none;">
+                <h2>Pick a Level</h2>
+                <div>
+                    <label for="level-input">Level Number</label>
+                    <input type="number" id="level-input">
+                </div>
+            </div>
+            <p id="popover-error" style="display: none; color: #ff6b6b; margin-top: 0.75rem;">No data available!</p>
+        </div>
+        <div class="popover-controls">
+            <button onclick="submitPopover()">Go!</button>
+            <button popovertarget="date-picker-popover">Close</button>
+        </div>
+    </div>
     <div class="standard-container">
         <div class="standard-container" id="container">
             <img id="map" alt="Map" src="images/blackmap.jpg" draggable=false>
         </div>
-        <div id="settings" class="settings-expanded">
-            <div id="hide-ui-entry" class="settings-entry">
-                <button class="desktop-only" onclick="toggleUI(this)">Hide UI</button>
-                <button class="mobile-only" id="settings-toggle-btn" onclick="toggleSettings(this)">Settings ▼</button>
-            </div>
-            <div id="settings-content">
-                <!-- <div class="settings-entry">
-                    <select id="date-picker" onchange="switchDate(this.value)"></select>
-                </div> -->
-                <div class="settings-entry">
-                    <p>Last updated:<br> <b id="settings-lastupdated">...</b></p>
-                    <p>Next update: <b id="settings-nextupdate">...</b></p>
-                </div>
-                <div id="settings-luggage-entry" class="settings-entry">
-                    <label for="luggage-checkbox">
-                        <span class="icon"></span>Luggage
-                    </label>
-                    <div>
-                        <div class="settings-extend" for="luggage"></div>
-                        <input type="checkbox" id="luggage-checkbox" onchange="switchLuggage(this)" checked>
+        <div class="topbars">
+            <header id="topbar">
+                <nav id="topbar-nav" class="tab-switcher">
+                    <button class="tab nav-tab active" data-tab="map" onclick="switchTab('map')">
+                        <span class="material-symbols-rounded">map</span>
+                        <span class="tab-text">Map</span>
+                    </button>
+                    <button class="tab nav-tab" data-tab="calendar" onclick="switchTab('calendar')">
+                        <span class="material-symbols-rounded">calendar_month</span>
+                        <span class="tab-text">Calendar</span>
+                    </button>
+                    <button class="tab nav-tab" data-tab="options" onclick="switchTab('options')">
+                        <span class="material-symbols-rounded">settings</span>
+                        <span class="tab-text">Options</span>
+                    </button>
+                </nav>
+            </header>
+            <header id="biome-bar" class="modern-only">
+                <nav id="biome-nav" class="tab-switcher">
+                    <button class="tab biome-nav-btn" onclick="previousBiome()"><span class="arrow">&lt;</span></button>
+                    <div id="biome-tabs-scroll">
+                        <button class="tab biome-tab active" data-tab="0" onclick="switchBiome(0)">Biome 1</button>
+                        <button class="tab biome-tab" data-tab="1" onclick="switchBiome(1)">Biome 2</button>
+                        <button class="tab biome-tab" data-tab="2" onclick="switchBiome(2)">Biome 3</button>
+                        <button class="tab biome-tab" data-tab="3" onclick="switchBiome(3)">Biome 4</button>
+                        <button class="tab biome-tab" data-tab="4" onclick="switchBiome(4)">Biome 5</button>
                     </div>
-                </div>
-                <div class="settings-entry">
-                    <label for="belltowers-checkbox">
-                        <span class="icon"></span>Belltowers
-                    </label>
-                    <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
-                </div>
-                <div class="settings-entry">
-                    <label for="animals-checkbox">
-                        <span class="icon"></span>Animals
-                    </label>
-                    <input type="checkbox" id="animals-checkbox" onchange="switchAnimals(this)" checked>
-                </div>
-                <div class="settings-entry">
-                    <label for="amulets-checkbox">
-                        <span class="icon"></span>Amulets
-                    </label>
-                    <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
-                </div>
-                <div class="settings-entry">
-                    <label for="tombs-checkbox">
-                        <span class="icon"></span>Tomb
-                    </label>
-                    <input type="checkbox" id="tombs-checkbox" onchange="switchTombs(this)" checked>
-                </div>
-                <div class="settings-entry">
-                    <div class="settings-buttons">
+                    <button class="tab biome-nav-btn" onclick="nextBiome()"><span class="arrow">&gt;</span></button>
+                </nav>
+            </header>
+        </div>
+
+        <main id="tab-viewport">
+            <div id="tab-map" class="tab-content">
+                <div class="topbar-controls">
+                    <div class="button-group mobile-only legacy-only">
                         <button onclick="previousBiome()">Previous biome</button>
                         <button onclick="nextBiome()">Next biome</button>
                     </div>
-                    <div class="settings-angle-buttons">
-                        <button id="switch-angle-button" onclick="switchAngle()">Change angle (beta)</button>
+                    <div class="button-group">
+                        <button id="switch-angle-button" onclick="switchAngle()">Change angle</button>
+                        <button id="map-filters-btn" class="mobile-only" onclick="toggleMapFilters()"><span class="material-symbols-rounded btn-icon">tune</span></button>
+                        <button id="hide-ui-btn" onclick="toggleUI(this)"><span class="material-symbols-rounded btn-icon" id="show-icon" style="display: none;">visibility_off</span><span class="material-symbols-rounded btn-icon" id="hide-icon">visibility</span><span class="btn-text">Hide UI</span></button>
+                    </div>
+                </div>
+
+                <div id="settings">
+                    <div id="settings-luggage-entry" class="settings-entry">
+                        <label for="luggage-checkbox">
+                            <span class="icon"></span>
+                            Luggage
+                        </label>
+                        <div>
+                            <div class="settings-extend" for="luggage"></div>
+                            <input type="checkbox" id="luggage-checkbox" onchange="switchLuggage(this)" checked>
+                        </div>
+                    </div>
+                    <div class="settings-entry">
+                        <label for="belltowers-checkbox">
+                            <span class="icon"></span>Belltowers
+                        </label>
+                        <input type="checkbox" id="belltowers-checkbox" onchange="switchBelltowers(this)" checked>
+                    </div>
+                    <div class="settings-entry">
+                        <label for="animals-checkbox">
+                            <span class="icon"></span>Animals
+                        </label>
+                        <input type="checkbox" id="animals-checkbox" onchange="switchAnimals(this)" checked>
+                    </div>
+                    <div class="settings-entry">
+                        <label for="amulets-checkbox">
+                            <span class="icon"></span>Amulets
+                        </label>
+                        <input type="checkbox" id="amulets-checkbox" onchange="switchAmulets(this)" checked>
+                    </div>
+                    <div class="settings-entry">
+                        <label for="tombs-checkbox">
+                            <span class="icon"></span>Tomb
+                        </label>
+                        <input type="checkbox" id="tombs-checkbox" onchange="switchTombs(this)" checked>
+                    </div>
+
+                    <div id="additional-settings" class="ui-hidden">
+                        <p id="additional-settings-title"></p>
+                        <div id="additional-settings-container"></div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="additional-settings" class="ui-hidden">
-            <p id="additional-settings-title"></p>
-            <div id="additional-settings-container">
 
+            <div id="tab-calendar" class="tab-content" style="display: none;">
+                <div class="tab-page">
+                    <div class="calendar-select">
+                        <div class="calendar-buttons">
+                            <button onclick="shiftSelectedDate(-1)"><span class="arrow">&lt;</span>Previous Day</button>
+                            <button onclick="goToToday()">Today<span class="arrow"></span></button>
+                            <button popovertarget="date-picker-popover">Pick a Date<span class="arrow"></span></button>
+                            <button onclick="shiftSelectedDate(1)">Next Day<span class="arrow">&gt;</span></button>
+                        </div>
+                        <div class="calendar-days">
+                            <!--generated by js -->
+                        </div>
+                    </div>
+                    <div class="calendar-header">
+                        <h1>Calendar</h1>
+                        <div id="update-info">
+                            <span>
+                                <p>Last updated:</p>
+                                <b id="settings-lastupdated">...</b>
+                            </span>
+                            <span>
+                                <p>Next update:</p>
+                                <b id="settings-nextupdate">...</b>
+                            </span>
+                        </div>
+                        <p id="biome-rotation">...</p>
+                    </div>
+                    <div id="biomes-container">
+                        <div id="biomes">
+                            <div class="biome" id="biome-3">
+                                <h2>Name</h2>
+                            </div>
+                            <div class="biome" id="biome-2">
+                                <h2>Name</h2>
+                            </div>
+                            <div class="biome" id="biome-3">
+                                <h2>Name</h2>
+                            </div>
+                        </div>
+                        <div id="final-biomes">
+                            <div class="biome-wide" id="biome-4">
+                                <h2>Name</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="item-popup" class="ui-panel">
-            <span id="item-popup-image"></span>
-            <p id="item-popup-name"></p>
-        </div>
-        <div id="bottom-container" class="expanded">
-            <button id="bottom-expand" class="mobile-only" onclick="toggleBottomUI(this)">Info ▼</button>
+
+            <div id="tab-options" class="tab-content" style="display: none;">
+                <div class="tab-page">
+                    <h1>Options</h1>
+                    <div class="options-list">
+
+                        <div class="option desktop-only">
+                            <div>
+                                <span class="help-icon" data-tooltip="Toggles between the classic and modern UI, changing things like the biome bars visibility.">?</span>
+                                <label for="ui-toggle">UI Version</label>
+                            </div>
+                            <select id="ui-toggle" onchange="switchOptionUI(this.value)">
+                                <option value="modern">Modern UI (Default)</option>
+                                <option value="legacy">Classic UI</option>
+                            </select>
+                        </div>
+                        <div class="option">
+                            <div>
+                                <span class="help-icon" data-tooltip="Changes the default page shown after the page is loaded.">?</span>
+                                <label for="start-page-toggle">Default page</label>
+                            </div>
+                            <select id="start-page-toggle" onchange="switchOptionPage(this.value)">
+                                <option value="map">Map (Default)</option>
+                                <option value="calendar">Calendar</option>
+                            </select>
+                        </div>
+                        <div class="option mobile-only" style="display: none !important;">
+                            <div>
+                                <span class="help-icon" data-tooltip="Changes where the global tab bar is located on mobile">?</span>
+                                <label for="tab-bar-location-toggle">Global tab bar location (TODO)</label>
+                            </div>
+                            <select id="tab-bar-location-toggle" onchange="switchOptionTabLocation(this.value)">
+                                <option value="bottom">Bottom (Default)</option>
+                                <option value="top">Top</option>
+                            </select>
+                        </div>
+                        <footer id="footer-mobile" class="mobile-panel mobile-only">
+                            This is an unofficial, open-source fan project and is not affiliated with, endorsed, or sponsored by Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro Crab, Landfall Games and/or their licensors.
+                        </footer>
+                        <div id="star-reminder-mobile" class="mobile-panel mobile-only">
+                            <a href="https://github.com/qWojtpl/PeakMap">
+                                <h4>Appreciate my work? Grant me a star on GitHub!</h4>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="bottom-container">
             <div id="bottom-widgets">
-                <div id="star-reminder" class="ui-panel">
+                <div id="star-reminder" class="ui-panel desktop-only">
                     <a href="https://github.com/qWojtpl/PeakMap">
                         <h4>Appreciate my work? Grant me a star on GitHub!</h4>
                     </a>
                 </div>
-                <div id="zoom-reminder" class="ui-panel">
-                    <h2>Use scroll and mouse or pinch and drag to zoom in</h2>
+                <div id="zoom-popup-group" class="desktop-only">
+                    <div id="item-popup" class="ui-panel">
+                        <span id="item-popup-image"></span>
+                        <p id="item-popup-name"></p>
+                    </div>
+                    <div id="zoom-reminder" class="ui-panel desktop-only">
+                        <h2>Use scroll and mouse to zoom</h2>
+                    </div>
+                </div>
+                <div class="mobile-widgets mobile-only">
+                    <div id="touch-zoom-reminder" class="ui-panel mobile-only">
+                        <h2>Use pinch and drag to zoom</h2>
+                    </div>
                 </div>
             </div>
-            <footer id="footer">
-                This is an unofficial, open-source fan project and is not affiliated with, endorsed, or sponsored by
-                Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro
-                Crab, Landfall Games and/or their licensors.
+            <footer id="footer" class="desktop-only">
+                This is an unofficial, open-source fan project and is not affiliated with, endorsed, or sponsored by Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro Crab, Landfall Games and/or their licensors.
             </footer>
         </div>
+
         <div id="no-data-yet" style="display:none;">
             <h1>Current data isn't available yet, sorry ;c</h1>
             <h1>Check later!</h1>
