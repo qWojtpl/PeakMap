@@ -6,6 +6,12 @@ let biomeJson;
 let levelName;
 let levels;
 let todayDateKey;
+const levelCount = 208;
+const dayMs = 1000 * 60 * 60 * 24;
+let startLevelIndex;
+let startUtcDay;
+let todayUtcDay;
+let dayOffset = 0;
 
 // Info
 
@@ -26,13 +32,10 @@ function downloadAndCreateInfo() {
             dayLevels = json.LevelBiomes;
             todayDateKey = getTodayDateKey();
             console.log("Scene date: " + todayDateKey);
-            const todayDateKeySplit = todayDateKey.split("-");
-            const startDateSplit = json.StartDate.split("-");
-            const diffTime = Math.abs(
-                new Date(Date.UTC(todayDateKeySplit[2], todayDateKeySplit[1] - 1, todayDateKeySplit[0])) - 
-                new Date(Date.UTC(startDateSplit[2], startDateSplit[1] - 1, startDateSplit[0])));
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            levelName = "Level_" + (parseInt(json.StartLevel.split("_")[1]) + diffDays) % 208;
+            startLevelIndex = parseInt(json.StartLevel.split("_")[1]);
+            startUtcDay = dateKeyToUtcDay(json.StartDate);
+            todayUtcDay = dateKeyToUtcDay(todayDateKey);
+            levelName = levelNameForDay(0);
             console.log("Current level name: " + levelName);
             if (!dayLevels.hasOwnProperty(levelName)) {
                 console.log("No data for current scene");
@@ -46,13 +49,11 @@ function downloadAndCreateInfo() {
                 buttons.forEach(button => {
                     button.disabled = true;
                 });
+                updateDayNavigation();
                 return;
             }
             createInfo();
-            // createDatePicker();
-            let now = new Date();
-            now.setUTCHours(nextMapUtcHour, 0, 0, 0);
-            document.getElementById("settings-lastupdated").innerText = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+            updateDayNavigation();
             cacheIdentifier = cacheIdentifier + "&levelName=" + levelName + "&sceneDate=" + todayDateKey;
             loadBiome(0);
         });
@@ -97,33 +98,51 @@ function createInfo() {
     }, 1000);
 }
 
-function parseKey(key) {
-    const [d, m, y] = key.split("-");
-    return new Date(y, m - 1, d);
+function dateKeyToUtcDay(key) {
+    const [d, m, y] = key.split("-").map(Number);
+    return Date.UTC(y, m - 1, d) / dayMs;
 }
 
-// function createDatePicker() {
-//     const picker = document.getElementById("date-picker");
-//     const sorted = Object.keys(dayLevels).sort((a, b) => parseKey(a) - parseKey(b));
+function levelNameForDay(offset) {
+    const index = startLevelIndex + todayUtcDay + offset - startUtcDay;
+    return "Level_" + ((index % levelCount) + levelCount) % levelCount;
+}
 
-//     sorted.forEach(key => {
-//         const opt = document.createElement("option");
-//         opt.value = key;
-//         let label = parseKey(key).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-//         if (key === todayDateKey) label += " (today)";
-//         label += ` (${dayLevels[key].Level})`;
-//         opt.innerText = label;
-//         picker.appendChild(opt);
-//     });
-//     picker.value = todayDateKey;
-// }
+function hasDataForDay(offset) {
+    return dayLevels.hasOwnProperty(levelNameForDay(offset));
+}
 
-function switchDate(dateKey) {
-    if (dayLevels[dateKey].Level === levelName) return;
+function updateDayNavigation() {
+    const start = new Date((todayUtcDay + dayOffset) * dayMs + nextMapUtcHour * 60 * 60 * 1000);
+    const format = { weekday: "short", day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" };
+    let label = "From " + start.toLocaleString(undefined, format);
+    if (dayOffset === 0) label += " (today)";
+    const name = levelNameForDay(dayOffset);
+    document.getElementById("settings-day-date").innerText = label;
+    document.getElementById("settings-day-level").innerText = dayLevels.hasOwnProperty(name)
+        ? name + " · " + dayLevels[name].join(", ")
+        : name + " · no data";
+    document.getElementById("previous-day-button").disabled = !hasDataForDay(dayOffset - 1);
+    document.getElementById("next-day-button").disabled = !hasDataForDay(dayOffset + 1);
+}
+
+function switchDay(offset) {
+    if (!hasDataForDay(offset)) return;
+    dayOffset = offset;
+    document.getElementById("no-data-yet").style.display = "none";
     removeAll(currentBiome);
-    levelName = dayLevels[dateKey].Level;
-    console.log("Switching to level: " + levelName + " (" + dateKey + ")");
+    levelName = levelNameForDay(offset);
+    console.log("Switching to level: " + levelName + " (day offset " + offset + ")");
+    updateDayNavigation();
     loadBiome(0);
+}
+
+function previousDay() {
+    switchDay(dayOffset - 1);
+}
+
+function nextDay() {
+    switchDay(dayOffset + 1);
 }
 
 downloadAndCreateInfo();
@@ -477,8 +496,20 @@ function loadBiome(biome) {
 
     currentBiome = biome;
 
+    document.getElementById("map-load-error").style.display = "none";
     let map = document.getElementById("map");
     map.loading = true;
+    const failLoad = function () {
+        console.error("Failed to load map: " + levelName + " biome " + biome);
+        removeAll(biome);
+        map.src = "images/blackmap.jpg";
+        map.loading = false;
+        document.getElementById("map-load-error").style.display = "flex";
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = false;
+        }
+        updateDayNavigation();
+    }
     let newImage = new Image();
     newImage.onload = function () {
         requestAnimationFrame(() => {
@@ -492,11 +523,17 @@ function loadBiome(biome) {
                     for (let i = 0; i < buttons.length; i++) {
                         buttons[i].disabled = false;
                     }
+                    updateDayNavigation();
                 });
-            });
+            }).catch(failLoad);
         });
     }
+    newImage.onerror = failLoad;
     newImage.src = "./data/" + levelName + "/biome_" + biome + ".jpg" + getURLAddition();
+}
+
+function retryMapLoad() {
+    loadBiome(currentBiome);
 }
 
 function loadBiomeJson(biome) {
