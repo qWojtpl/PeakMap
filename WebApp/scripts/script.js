@@ -9,6 +9,21 @@ let todayDateKey;
 
 // Info
 
+function checkEmbed() {
+    const inIframe = window.self !== window.top;
+    if(inIframe) {
+        let body = document.getElementsByTagName("body")[0];
+        body.innerHTML = "";
+        body.style.backgroundColor = "red";
+        let element = document.createElement("no-data-yet");
+        element.style.display = "flex";
+        element.innerHTML = "<h2>This site is embedding original site: <a href='https://qwojtpl.github.io/PeakMap/WebApp/' target='_blank' rel='noopener noreferrer'>https://qwojtpl.github.io/PeakMap/WebApp/</a>. Click to use original site!</h2>";
+        body.appendChild(element);
+        return false;
+    }
+    return true;
+}
+
 function getTodayDateKey() {
     let now = new Date();
     if (now.getUTCHours() < nextMapUtcHour) {
@@ -127,6 +142,10 @@ function switchDate(dateKey) {
 }
 
 downloadAndCreateInfo();
+
+document.addEventListener("DOMContentLoaded", () => {
+    checkEmbed();
+});
 
 // Luggage
 
