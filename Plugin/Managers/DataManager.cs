@@ -44,6 +44,7 @@ public abstract class DataManager
         objects.AddRange(levelInfo.Animals);
         objects.AddRange(levelInfo.Amulets);
         objects.AddRange(levelInfo.Tombs);
+        objects.AddRange(levelInfo.Mushrooms);
         
         foreach (ObjectInfo info in objects)
         {
@@ -79,7 +80,8 @@ public abstract class DataManager
             Belltowers = FilterWidth(level, previousWidth, levelInfo.Belltowers),
             Animals = FilterWidth(level, previousWidth, levelInfo.Animals),
             Amulets = FilterWidth(level, previousWidth, levelInfo.Amulets),
-            Tombs = FilterWidth(level, previousWidth, levelInfo.Tombs)
+            Tombs = FilterWidth(level, previousWidth, levelInfo.Tombs),
+            Mushrooms = FilterWidth(level, previousWidth, levelInfo.Mushrooms)
         };
 
         File.WriteAllText(
