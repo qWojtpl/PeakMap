@@ -14,7 +14,7 @@
 - [x] Capybaras, beehives, early worms, antlions
 - [x] Amulets
 - [x] Tomb
-- [ ] Mushrooms
+- [x] Mushrooms
 - [x] Shore, Tropics, Roots, Alpine, Mesa, Caldera, Gloom, The Cidatel, The Klin
 
 ## Plugin

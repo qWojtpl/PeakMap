@@ -10,6 +10,7 @@ public class LevelInfo
     public List<ObjectInfo> Animals = new();
     public List<ObjectInfo> Amulets = new();
     public List<ObjectInfo> Tombs = new();
+    public List<ObjectInfo> Mushrooms = new();
 
     public void Clear()
     {
@@ -18,6 +19,7 @@ public class LevelInfo
         Animals.Clear();
         Amulets.Clear();
         Tombs.Clear();
+        Mushrooms.Clear();
     }
     
 }

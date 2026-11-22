@@ -40,6 +40,7 @@ public class DataGatheringManager
         AmuletDataManager.CreateAmuletData();
         AntlionDataManager.CreateAntlionData();
         TombDataManager.CreateTombData();
+        MushroomDataManager.CreateMushroomData();
         
         for (int i = 0; i < NUM_LEVELS; i++)
         {
