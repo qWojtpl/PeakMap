@@ -77,7 +77,7 @@ let selectedDateKey;
 
 function checkEmbed() {
     const inIframe = window.self !== window.top;
-    if(inIframe) {
+    if (inIframe) {
         let body = document.getElementsByTagName("body")[0];
         body.innerHTML = "";
         body.style.backgroundColor = "red";
@@ -137,7 +137,6 @@ function downloadAndCreateInfo() {
             updateBiomeRotationText(levelName);
             let now = new Date();
             now.setUTCHours(nextMapUtcHour, 0, 0, 0);
-            document.getElementById("settings-lastupdated").innerText = now.toLocaleDateString() + " " + now.toLocaleTimeString();
             cacheIdentifier = cacheIdentifier + "&levelName=" + levelName + "&sceneDate=" + todayDateKey;
             loadBiome(0);
         });
@@ -392,7 +391,7 @@ function updateCalendarBiomeCards(level) {
 function updateBiomeRotationText(level) {
     const rotation = getBiomeNames(level).display;
     const text = document.getElementById("biome-rotation");
-    text.textContent = "Current Biome Rotation: " + rotation.join(" → ");
+    text.textContent = "Biome Rotation: " + rotation.join(" → ");
 }
 
 // move the selected date forward or backward and refresh the cards
@@ -850,23 +849,23 @@ function isMobile() {
     return window.matchMedia("(max-width: 960px)").matches;
 }
 
+function toggleIcon(icon, defaultStateName, toggledStateName, requireMobile) {
+    if (requireMobile && !isMobile()) return;
+    icon.textContent = icon.textContent == defaultStateName ? toggledStateName : defaultStateName;
+}
+
 function toggleUI(button) {
     const label = button.querySelector(".btn-text");
-    const hideIcon = button.querySelector("#hide-icon");
-    const showIcon = button.querySelector("#show-icon");
+    const icon = button.querySelector(".btn-icon");
     const isHidden = document.body.classList.toggle("ui-hidden");
     if (label) label.textContent = isHidden ? "Show UI" : "Hide UI";
-    if (isMobile()) {
-        if (hideIcon) hideIcon.style.display = isHidden ? "none" : "inline";
-        if (showIcon) showIcon.style.display = isHidden ? "inline" : "none";
-    } else {
-        if (hideIcon) hideIcon.style.display = "none";
-        if (showIcon) showIcon.style.display = "none";
-    }
+    if (icon) toggleIcon(icon, "visibility", "visibility_off", true);
 }
 
 function toggleMapFilters() {
+    const icon = document.querySelector("#map-filters-btn .btn-icon");
     document.getElementById("settings")?.classList.toggle("mobile-open");
+    if (icon) toggleIcon(icon, "tune", "close", true);
 }
 
 function syncTopbarHeight() {

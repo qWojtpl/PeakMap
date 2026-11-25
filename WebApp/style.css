@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Darumadrop+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=calendar_month,map,settings,visibility_off,visibility,star,tune&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=calendar_month,map,settings,visibility_off,visibility,star,tune,close&display=swap');
 
 :root {
     interpolate-size: allow-keywords;
@@ -49,7 +49,7 @@ body:not([data-active-tab="map"]) {
     }
 
     #footer {
-        display: none;
+        display: none !important;
     }
 
     #bottom-widgets {
@@ -63,7 +63,9 @@ body:not([data-active-tab="map"]) {
 
 body[data-active-tab="map"] {
     #footer {
-        display: block;
+        display: flex;
+        justify-content: center;
+        text-wrap: pretty;
     }
 }
 
@@ -329,7 +331,7 @@ span.arrow {
     backdrop-filter: blur(8px);
     box-sizing: border-box;
     isolation: isolate;
-    width: max-content;
+    width: 100%;
 }
 
 .topbar-controls .button-group {
@@ -367,7 +369,7 @@ span.arrow {
     padding-top: calc(var(--topbar-height) + 8px);
     padding-left: 12px;
     padding-right: 12px;
-    width: 100%;
+    width: max-content;
     height: fit-content;
 }
 
@@ -1238,8 +1240,8 @@ footer {
 .ui-hidden #star-reminder,
 .ui-hidden #footer,
 .ui-hidden #touch-zoom-reminder {
-    max-height: 0;
-    opacity: 0;
+    max-height: 0 !important;
+    opacity: 0 !important;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
@@ -1376,6 +1378,7 @@ body:not(.legacy-ui) {
     #tab-map {
         padding-top: 32px;
         transition: padding 0.2s ease-in-out;
+        width: 100%;
     }
 
     #tab-calendar {
@@ -1606,28 +1609,39 @@ body:not(.legacy-ui) {
 
     #settings {
         display: none;
+        opacity: 0;
         position: fixed;
+        z-index: 10;
+        padding: 1.5rem;
         top: calc(20px + 1rem + 1.25rem + 32px);
         margin-top: 8px;
-        width: 100%;
-        max-width: 0;
+        left: 12px;
         right: 12px;
-        z-index: 10;
-        padding: 1rem 2rem;
+        width: auto;
+        gap: 0.75rem;
+        max-height: 0;
 
         background-color: rgba(0, 0, 0, 0.6);
         border-radius: 8px;
         backdrop-filter: blur(8px);
         color: white;
         align-items: center;
+        transition: all 0.2s ease, display 0.2s allow-discrete;
     }
 
     #settings.mobile-open {
         display: flex;
-        gap: 0.75rem
+        opacity: 1;
+        max-height: max-content;
+
+        @starting-style {
+            opacity: 0;
+            max-height: 0;
+        }
     }
 
     .settings-entry {
+
         width: 100%;
         font-size: 1.2rem;
         background-color: transparent;
@@ -1684,10 +1698,6 @@ body:not(.legacy-ui) {
     #item-popup-image {
         width: 48px;
         height: 48px;
-    }
-
-    #footer {
-        display: none !important;
     }
 
     select:hover,

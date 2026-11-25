@@ -128,7 +128,7 @@
                     <div class="button-group">
                         <button id="switch-angle-button" onclick="switchAngle()">Change angle</button>
                         <button id="map-filters-btn" class="mobile-only" onclick="toggleMapFilters()"><span class="material-symbols-rounded btn-icon">tune</span></button>
-                        <button id="hide-ui-btn" onclick="toggleUI(this)"><span class="material-symbols-rounded btn-icon" id="show-icon" style="display: none;">visibility_off</span><span class="material-symbols-rounded btn-icon" id="hide-icon">visibility</span><span class="btn-text">Hide UI</span></button>
+                        <button id="hide-ui-btn" onclick="toggleUI(this)"><span class="material-symbols-rounded btn-icon" id="hide-icon">visibility</span><span class="btn-text">Hide UI</span></button>
                     </div>
                 </div>
 
@@ -192,15 +192,11 @@
                         <h1>Calendar</h1>
                         <div id="update-info">
                             <span>
-                                <p>Last updated:</p>
-                                <b id="settings-lastupdated">...</b>
-                            </span>
-                            <span>
                                 <p>Next update:</p>
                                 <b id="settings-nextupdate">...</b>
                             </span>
                         </div>
-                        <p id="biome-rotation">...</p>
+                        <p id="biome-rotation">Biome rotation: ...</p>
                     </div>
                     <div id="biomes-container">
                         <div id="biomes">
@@ -248,7 +244,7 @@
                                 <option value="calendar">Calendar</option>
                             </select>
                         </div>
-                        <div class="option mobile-only" style="display: none !important;">
+                        <!-- <div class="option mobile-only">
                             <div>
                                 <span class="help-icon" data-tooltip="Changes where the global tab bar is located on mobile">?</span>
                                 <label for="tab-bar-location-toggle">Global tab bar location (TODO)</label>
@@ -257,7 +253,7 @@
                                 <option value="bottom">Bottom (Default)</option>
                                 <option value="top">Top</option>
                             </select>
-                        </div>
+                        </div> -->
                         <footer id="footer-mobile" class="mobile-panel mobile-only">
                             This is an unofficial, open-source fan project and is not affiliated with, endorsed, or sponsored by Aggro Crab or Landfall Games. All game assets, icons, screenshots, and trademarks are property of Aggro Crab, Landfall Games and/or their licensors.
                         </footer>
